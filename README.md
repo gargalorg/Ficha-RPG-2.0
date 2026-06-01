@@ -1,3 +1,7 @@
+# PROJETO ORIGINAL 
+https://github.com/yuyukiin/ficha-editavel-justice-league-unlimited-rpg
+
+
 # 🦇 Ficha Editável: Justice League Unlimited RPG
 
 Este repositório hospeda uma **Ficha de Personagem Interativa e Inteligente** para o sistema de RPG **Justice League Unlimited (JLU)**.
