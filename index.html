@@ -8,8 +8,9 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 </head>
+<body>
 
-    <div class="pax-bar">
+<div class="pax-bar">
     <div class="bar-left">
         <div class="pax-info">
             <span class="pax-label">RANK</span> 
@@ -36,7 +37,7 @@
         <button id="crisisBtn" class="crisis-btn" onclick="toggleCrisis()">⚠️ CRISE</button>
     </div>
 </div>
-    
+
 <div class="dossier-container">
     <header>
         <div>
@@ -179,26 +180,6 @@
                 <option value="Presciência de Combate (Viajante)|0|Pág. 18|Action">Presciência de Combate</option>
                 <option value="Intervenção do Eu Futuro (Viajante)|2|Pág. 18|Action">Intervenção do Eu Futuro</option>
             </optgroup>
-            <optgroup label="Conhecimentos (4 PAX)">
-                <option value="Acadêmico|4|Pág. 29|fix">Acadêmico</option>
-                <option value="Acrobacia|4|Pág. 30|fix">Acrobacia</option>
-                <option value="Medicina|4|Pág. 30|fix">Medicina</option>
-                <option value="Subterfúgio|4|Pág. 30|fix">Subterfúgio</option>
-                <option value="Tech|4|Pág. 30|fix">Tech</option>
-            </optgroup>
-            <optgroup label="Traços (4 PAX)">
-                <option value="Beleza Rara|4|Pág. 31|fix">Beleza Rara</option>
-                <option value="Poliglota|4|Pág. 31|fix">Poliglota</option>
-                <option value="Contato Confiável|4|Pág. 31|fix">Contato Confiável</option>
-                <option value="Casca Grossa|4|Pág. 31|fix">Casca Grossa</option>
-                <option value="Frase de Efeito|4|Pág. 31|fix">Frase de Efeito</option>
-                <option value="Gadgets de Bolso|4|Pág. 31|fix">Gadgets de Bolso</option>
-                <option value="Voz da Multidão|4|Pág. 32|fix">Voz da Multidão</option>
-                <option value="Influencer|4|Pág. 32|fix">Influencer</option>
-                <option value="Identidade Secreta|4|Pág. 32|fix">Identidade Secreta</option>
-                <option value="Dupla Dinâmica|4|Pág. 32|fix">Dupla Dinâmica</option>
-                <option value="Filiação|4|Pág. 32|fix">Filiação</option>
-            </optgroup>
             <option value="Customizado|0|Custom">-- OUTRO / CUSTOMIZADO --</option>
         </select>
         <button class="btn-add" onclick="addFromSelect()">+ ADICIONAR</button>
@@ -242,6 +223,45 @@
         <button class="btn-add" onclick="addEquipFromSelect()">+ ADICIONAR</button>
     </div>
     <div id="equip-container"></div>
+
+    <h2>CONHECIMENTOS (4 PAX cada)</h2>
+    <div class="add-bar">
+        <select id="knowledgeSelect" style="flex: 3;">
+            <option value="">-- SELECIONE UM CONHECIMENTO --</option>
+            <option value="Acadêmico|4|Pág. 29|fix">Acadêmico - Conhecimento profundo em história, geografia, literatura e ciências.</option>
+            <option value="Acrobacia|4|Pág. 30|fix">Acrobacia - Equilíbrio, saltos, quedas e manobras acrobáticas.</option>
+            <option value="Medicina|4|Pág. 30|fix">Medicina - Primeiros socorros, diagnóstico e tratamento de ferimentos.</option>
+            <option value="Subterfúgio|4|Pág. 30|fix">Subterfúgio - Mentira, disfarces, contra-espionagem e enganação.</option>
+            <option value="Tech|4|Pág. 30|fix">Tech - Tecnologia, hacking, reparos e operação de máquinas.</option>
+            <option value="Investigação|4|Pág. 30|fix">Investigação - Perícia em encontrar pistas e resolver mistérios.</option>
+            <option value="Sobrevivência|4|Pág. 30|fix">Sobrevivência - Rastreamento, caça, e adaptação a ambientes hostis.</option>
+            <option value="Liderança|4|Pág. 30|fix">Liderança - Inspirar e comandar equipes, táticas de grupo.</option>
+        </select>
+        <button class="btn-add" onclick="addKnowledgeFromSelect()">+ ADICIONAR</button>
+    </div>
+    <div id="knowledge-container"></div>
+
+    <h2>TRAÇOS (4 PAX cada)</h2>
+    <div class="add-bar">
+        <select id="traitSelect" style="flex: 3;">
+            <option value="">-- SELECIONE UM TRAÇO --</option>
+            <option value="Beleza Rara|4|Pág. 31|fix">Beleza Rara - Vantagem em testes de interação social baseados em aparência.</option>
+            <option value="Poliglota|4|Pág. 31|fix">Poliglota - Fluente em diversos idiomas, entende qualquer língua básica.</option>
+            <option value="Contato Confiável|4|Pág. 31|fix">Contato Confiável - Possui um aliado influente em alguma organização.</option>
+            <option value="Casca Grossa|4|Pág. 31|fix">Casca Grossa - Vantagem em resistir a intimidação e provocações.</option>
+            <option value="Frase de Efeito|4|Pág. 31|fix">Frase de Efeito - Sua fala impactante pode inspirar aliados uma vez por cena.</option>
+            <option value="Gadgets de Bolso|4|Pág. 31|fix">Gadgets de Bolso - Sempre tem uma pequena ferramenta útil escondida.</option>
+            <option value="Voz da Multidão|4|Pág. 32|fix">Voz da Multidão - Influencia massas e manipula opinião pública.</option>
+            <option value="Influencer|4|Pág. 32|fix">Influencer - Rede de contatos nas redes sociais e mídia.</option>
+            <option value="Identidade Secreta|4|Pág. 32|fix">Identidade Secreta - Mantém sua vida civil separada da heroica.</option>
+            <option value="Dupla Dinâmica|4|Pág. 32|fix">Dupla Dinâmica - Bônus em trabalho conjunto com um parceiro específico.</option>
+            <option value="Filiação|4|Pág. 32|fix">Filiação - Pertence a uma organização que pode oferecer suporte.</option>
+            <option value="Sorte do Principiante|4|Pág. 32|fix">Sorte do Principiante - Uma vez por sessão, sucesso automático em uma ação simples.</option>
+            <option value="Intuição Aguçada|4|Pág. 32|fix">Intuição Aguçada - Percebe intenções ocultas e mentiras.</option>
+        </select>
+        <button class="btn-add" onclick="addTraitFromSelect()">+ ADICIONAR</button>
+    </div>
+    <div id="traits-container"></div>
 
     <h2>STATUS DE COMBATE</h2>
     <div class="grid-2">
@@ -349,12 +369,12 @@
                 break;
             case 'Gênio':
                 if(!existingPowers.includes('Conhecimento Tecnológico')) {
-                    addPowerByName('Conhecimento Tecnológico', 4, 'Pág. 30', 'fix', true);
+                    addKnowledgeByName('Tech', 4, 'Pág. 30', 'fix', true);
                 }
                 break;
             case 'Anti-Herói':
                 if(!existingPowers.includes('Subterfúgio')) {
-                    addPowerByName('Subterfúgio', 4, 'Pág. 30', 'fix', true);
+                    addKnowledgeByName('Subterfúgio', 4, 'Pág. 30', 'fix', true);
                 }
                 break;
         }
@@ -390,7 +410,7 @@
                     if(confirm('Humanos recebem um poder Grátis: Mestre Marcial ou Tech? Clique OK para Mestre Marcial ou Cancelar para Tech.')) {
                         addPowerByName('Mestre Marcial', 6, 'Pág. 25', 'grad', true);
                     } else {
-                        addPowerByName('Tech', 4, 'Pág. 30', 'fix', true);
+                        addKnowledgeByName('Tech', 4, 'Pág. 30', 'fix', true);
                     }
                 }
                 break;
@@ -466,6 +486,14 @@
         createPowerCard(name, cost, page, type, 'powers-container', '', cost, false, isFree);
     }
     
+    function addKnowledgeByName(name, cost, page, type, isFree = false) {
+        createPowerCard(name, cost, page, type, 'knowledge-container', '', cost, false, isFree);
+    }
+    
+    function addTraitByName(name, cost, page, type, isFree = false) {
+        createPowerCard(name, cost, page, type, 'traits-container', '', cost, false, isFree);
+    }
+    
     function addFromSelect() {
         const select = document.getElementById('powerSelect');
         processAdd(select, 'powers-container');
@@ -474,6 +502,16 @@
     function addEquipFromSelect() {
         const select = document.getElementById('equipSelect');
         processAdd(select, 'equip-container', true);
+    }
+    
+    function addKnowledgeFromSelect() {
+        const select = document.getElementById('knowledgeSelect');
+        processAdd(select, 'knowledge-container');
+    }
+    
+    function addTraitFromSelect() {
+        const select = document.getElementById('traitSelect');
+        processAdd(select, 'traits-container');
     }
 
     function processAdd(select, containerId, isEquip = false) {
@@ -518,7 +556,7 @@
                     </label>
                 </div>
             </div>
-            <div class="editable-box p-desc" contenteditable="true" placeholder="Descrição detalhada do poder...">${savedDesc}</div>
+            <div class="editable-box p-desc" contenteditable="true" placeholder="Descrição detalhada...">${savedDesc}</div>
             <div class="limit-text">⚠️ ERRO: LIMITE DE GRAU (${TIERS[currentTier].powerLimit}) EXCEDIDO!</div>
             <div class="limit-text-warn">⚠️ AVISO: Apenas 1 poder permitido neste Grau.</div>
         `;
@@ -596,7 +634,7 @@
     }
 
     function saveSheet() {
-        const data = { inputs: {}, content: {}, powers: [], equips: [], conditions: [], tier: '' };
+        const data = { inputs: {}, content: {}, powers: [], equips: [], knowledges: [], traits: [], conditions: [], tier: '' };
         document.querySelectorAll('input:not(.p-grade):not(.p-cost):not(.attr-base):not(.attr-bonus):not(.free-check):not(#fileInput)').forEach(el => { if(el.id) data.inputs[el.id] = el.value; });
         const attrs = {};
         document.querySelectorAll('.attr-base').forEach(el => attrs[el.id] = el.value);
@@ -610,6 +648,8 @@
         
         document.querySelectorAll('#powers-container .power-card').forEach(card => extractCardData(card, data.powers));
         document.querySelectorAll('#equip-container .power-card').forEach(card => extractCardData(card, data.equips));
+        document.querySelectorAll('#knowledge-container .power-card').forEach(card => extractCardData(card, data.knowledges));
+        document.querySelectorAll('#traits-container .power-card').forEach(card => extractCardData(card, data.traits));
 
         const name = document.getElementById('heroName').value || 'heroi';
         const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
@@ -659,10 +699,18 @@
                 
                 document.getElementById('equip-container').innerHTML = '';
                 if(data.equips) data.equips.forEach(p => createPowerCard(p.name, parseInt(p.base), p.page, p.type, 'equip-container', p.desc, p.cost, true, p.free));
+                
+                document.getElementById('knowledge-container').innerHTML = '';
+                if(data.knowledges) data.knowledges.forEach(p => createPowerCard(p.name, parseInt(p.base), p.page, p.type, 'knowledge-container', p.desc, p.cost, false, p.free));
+                
+                document.getElementById('traits-container').innerHTML = '';
+                if(data.traits) data.traits.forEach(p => createPowerCard(p.name, parseInt(p.base), p.page, p.type, 'traits-container', p.desc, p.cost, false, p.free));
 
                 setTimeout(() => {
                    if(data.powers) data.powers.forEach((p, i) => document.querySelectorAll('#powers-container .free-check')[i].checked = p.free);
                    if(data.equips) data.equips.forEach((p, i) => document.querySelectorAll('#equip-container .free-check')[i].checked = p.free);
+                   if(data.knowledges) data.knowledges.forEach((p, i) => document.querySelectorAll('#knowledge-container .free-check')[i].checked = p.free);
+                   if(data.traits) data.traits.forEach((p, i) => document.querySelectorAll('#traits-container .free-check')[i].checked = p.free);
                    calcPax();
                 }, 100);
             } catch (err) { console.error(err); alert('Erro ao ler arquivo: ' + err.message); }
