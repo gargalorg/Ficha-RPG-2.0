@@ -4,64 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dossiê: Justice League Unlimited</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #050a10; font-family: 'Roboto', sans-serif; padding: 20px; color: #e0e0e0; padding-top: 100px; }
-        .pax-bar { position: fixed; top: 0; left: 0; right: 0; height: 80px; background: rgba(11, 19, 29, 0.98); border-bottom: 3px solid #f2ce16; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 1000; }
-        .bar-left, .bar-right { display: flex; align-items: center; gap: 30px; }
-        .pax-info { font-family: monospace; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; background: #00000088; padding: 5px 15px; border-radius: 8px; }
-        .pax-value { font-weight: bold; color: #f2ce16; font-size: 1.8rem; }
-        .roteiro-ctrl { display: flex; gap: 10px; align-items: center; }
-        .roteiro-btn { background: #2a2a3e; border: 1px solid #f2ce16; color: #f2ce16; width: 30px; height: 30px; cursor: pointer; border-radius: 5px; }
-        .crisis-btn { background: #4a0000; border: 2px solid #e62429; color: #ff6666; padding: 5px 15px; cursor: pointer; border-radius: 20px; }
-        .crisis-btn.active { background: #e62429; color: white; }
-        .dossier-container { max-width: 1100px; margin: 0 auto; background: #0f1926; border: 1px solid #1f3a52; padding: 30px; border-radius: 10px; }
-        header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 2px solid #e62429; padding-bottom: 15px; }
-        h1 { font-size: 2.5rem; color: #f2ce16; }
-        .subtitle { color: #0078f0; letter-spacing: 3px; }
-        .tier-selector { display: flex; gap: 5px; }
-        .tier-btn { width: 45px; height: 45px; background: #000; border: 1px solid #1f3a52; color: #8899a6; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-        .tier-btn.active { background: #0078f0; color: white; }
-        .grid-3, .grid-2 { display: grid; gap: 20px; margin-bottom: 20px; }
-        .grid-3 { grid-template-columns: repeat(3, 1fr); }
-        .grid-2 { grid-template-columns: repeat(2, 1fr); }
-        .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 25px; }
-        .input-group { display: flex; flex-direction: column; gap: 5px; }
-        .input-group label { color: #0078f0; font-size: 0.8rem; text-transform: uppercase; }
-        input, select { background: #1a1a2e; border: 1px solid #333; padding: 10px; color: white; border-radius: 5px; }
-        h2 { color: #f2ce16; margin: 25px 0 15px 0; border-left: 4px solid #f2ce16; padding-left: 12px; }
-        .stat-box { background: #080e16; border: 1px solid #1f3a52; padding: 10px; text-align: center; border-radius: 5px; }
-        .stat-split { display: flex; gap: 5px; justify-content: center; }
-        .stat-split input { width: 70px; text-align: center; }
-        .stat-total { font-size: 1.8rem; color: #f2ce16; font-weight: bold; }
-        .add-bar { display: flex; gap: 10px; margin-bottom: 15px; }
-        .btn-add { background: #0078f0; border: none; padding: 8px 20px; color: white; cursor: pointer; border-radius: 5px; }
-        .power-card { background: rgba(255,255,255,0.03); border-left: 4px solid #0078f0; padding: 12px; margin-bottom: 8px; border-radius: 5px; position: relative; }
-        .power-name { color: #f2ce16; font-weight: bold; }
-        .btn-remove { position: absolute; top: 5px; right: 8px; background: none; border: none; color: #ff6666; cursor: pointer; font-size: 1.2rem; }
-        .editable-box { background: rgba(0,0,0,0.2); border: 1px solid #333; padding: 10px; min-height: 60px; border-radius: 5px; }
-        .condition-btn { background: #1a1a2e; border: 1px solid #444; padding: 8px; cursor: pointer; width: 100%; margin-bottom: 5px; border-radius: 5px; }
-        .condition-btn.active { background: #8b0000; color: white; }
-        .action-bar { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 100; }
-        .fab-btn { width: 55px; height: 55px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.5rem; background: #0078f0; color: white; }
-        .login-overlay, .character-select { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; }
-        .login-modal, .character-modal { background: #0f1926; border: 2px solid #f2ce16; border-radius: 15px; padding: 40px; width: 400px; }
-        .login-modal h2, .character-modal h2 { color: #f2ce16; text-align: center; }
-        .login-modal input, .character-modal input { width: 100%; margin-bottom: 15px; }
-        .login-modal button, .character-modal button { width: 100%; padding: 12px; background: #f2ce16; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; margin-bottom: 10px; }
-        .character-item { background: #1a1a2e; border: 1px solid #333; padding: 12px; margin-bottom: 8px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
-        .character-name { color: #f2ce16; font-weight: bold; }
-        .user-info { display: flex; align-items: center; gap: 10px; background: #1a1a2e; padding: 5px 15px; border-radius: 20px; }
-        .status-online { width: 10px; height: 10px; background: #00ff00; border-radius: 50%; display: inline-block; }
-        .status-offline { width: 10px; height: 10px; background: #ff4444; border-radius: 50%; display: inline-block; }
-        @media (max-width: 800px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .grid-6 { grid-template-columns: repeat(2,1fr); } }
-    </style>
-
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
-<!-- Modais -->
+<!-- Modais de Login/Registro -->
 <div id="loginOverlay" class="login-overlay">
     <div class="login-modal">
         <h2>⚡ JUSTIÇA UNLIMITED ⚡</h2>
@@ -86,6 +34,7 @@
     </div>
 </div>
 
+<!-- Modal de Seleção de Personagem -->
 <div id="charSelectOverlay" class="character-select" style="display: none;">
     <div class="character-modal">
         <h2>🎭 SELECIONE SEU HERÓI</h2>
@@ -115,407 +64,173 @@
     </div>
 </div>
 
+<!-- Container Principal da Ficha -->
 <div class="dossier-container" id="dossierContainer" style="display: none;">
     <header>
         <div><div class="subtitle">JUSTICE LEAGUE UNLIMITED</div><h1>DOSSIÊ DO HERÓI</h1></div>
         <div><label>NÍVEL DE AMEAÇA</label><div class="tier-selector"><div class="tier-btn active" onclick="setTier(this,'D')">D</div><div class="tier-btn" onclick="setTier(this,'C')">C</div><div class="tier-btn" onclick="setTier(this,'B')">B</div><div class="tier-btn" onclick="setTier(this,'A')">A</div><div class="tier-btn" onclick="setTier(this,'S')">S</div></div><input type="hidden" id="tierValue" value="D"></div>
     </header>
+
     <div class="grid-3">
         <div class="input-group"><label>IDENTIDADE CIVIL</label><input type="text" id="civilID"></div>
         <div class="input-group"><label>NOME DE HERÓI</label><input type="text" id="heroName" style="color:#f2ce16; font-weight:bold;"></div>
         <div class="input-group"><label>MENTOR / GRUPO</label><input type="text" id="mentor"></div>
     </div>
+
     <div class="grid-3">
-        <div class="input-group"><label>ORIGEM</label><select id="origin"><option value="">-- SELECIONE --</option><option value="Humano">Humano</option><option value="Kryptoniano">Kryptoniano</option><option value="Atlante">Atlante</option><option value="Marciano">Marciano</option><option value="Velocista">Velocista</option></select></div>
-        <div class="input-group"><label>ARQUÉTIPO</label><select id="archetype"><option value="">-- SELECIONE --</option><option value="Campeão do Amanhã">Campeão do Amanhã</option><option value="Cavaleiro das Trevas">Cavaleiro das Trevas</option></select></div>
+        <div class="input-group"><label>ORIGEM</label><select id="origin" onchange="applyOriginLogic()"><option value="">-- SELECIONE --</option><option value="Humano">Humano</option><option value="Meta-Humano">Meta-Humano</option><option value="Kryptoniano">Kryptoniano</option><option value="Atlante">Atlante</option><option value="Thanagariano">Thanagariano</option><option value="Marciano">Marciano</option><option value="Monstruoso">Monstruoso</option><option value="Ciborgue">Ciborgue</option><option value="Lanterna Verde">Lanterna Verde</option><option value="Mistico">Mistico</option><option value="Velocista">Velocista</option></select></div>
+        <div class="input-group"><label>ARQUÉTIPO</label><select id="archetype" onchange="applyArchetypeLogic()"><option value="">-- SELECIONE --</option><option value="Campeão do Amanhã">Campeão do Amanhã</option><option value="Cavaleiro das Trevas">Cavaleiro das Trevas</option><option value="Gênio">Gênio</option><option value="Herdeiro do Manto">Herdeiro do Manto</option><option value="Anti-Herói">Anti-Herói</option><option value="Super Vilão">Super Vilão</option><option value="Sidekick">Sidekick</option><option value="Viajante do Tempo">Viajante do Tempo</option></select></div>
         <div class="input-group"><label>JOGADOR</label><input type="text" id="player"></div>
     </div>
+
     <h2>O CÍRCULO DOURADO</h2>
     <div class="grid-3">
         <div><label>POR QUE LUTA?</label><div class="editable-box" contenteditable="true" id="motiv_why"></div></div>
         <div><label>COMO LUTA?</label><div class="editable-box" contenteditable="true" id="motiv_how"></div></div>
         <div><label>POR QUEM LUTA?</label><div class="editable-box" contenteditable="true" id="motiv_whom"></div></div>
     </div>
-    <h2>ATRIBUTOS</h2>
+
+    <h2>ATRIBUTOS (5 PAX p/ +3)</h2>
     <div class="grid-6">
-        <div class="stat-box"><label>POTÊNCIA</label><div class="stat-split"><div><input type="number" id="pot_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="pot_bonus" class="attr-bonus" value="0"></div></div><span id="pot_total" class="stat-total">0</span></div>
-        <div class="stat-box"><label>PRECISÃO</label><div class="stat-split"><div><input type="number" id="prec_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="prec_bonus" class="attr-bonus" value="0"></div></div><span id="prec_total" class="stat-total">0</span></div>
-        <div class="stat-box"><label>AGILIDADE</label><div class="stat-split"><div><input type="number" id="agi_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="agi_bonus" class="attr-bonus" value="0"></div></div><span id="agi_total" class="stat-total">0</span></div>
-        <div class="stat-box"><label>RESISTÊNCIA</label><div class="stat-split"><div><input type="number" id="res_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="res_bonus" class="attr-bonus" value="0"></div></div><span id="res_total" class="stat-total">0</span></div>
-        <div class="stat-box"><label>MENTE</label><div class="stat-split"><div><input type="number" id="men_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="men_bonus" class="attr-bonus" value="0"></div></div><span id="men_total" class="stat-total">0</span></div>
-        <div class="stat-box"><label>ESPÍRITO</label><div class="stat-split"><div><input type="number" id="esp_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="esp_bonus" class="attr-bonus" value="0"></div></div><span id="esp_total" class="stat-total">0</span></div>
+        <div class="stat-box"><label>POTÊNCIA</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="pot_base" class="attr-base" value="0" step="3" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="pot_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="pot_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
+        <div class="stat-box"><label>PRECISÃO</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="prec_base" class="attr-base" value="0" step="3" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="prec_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="prec_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
+        <div class="stat-box"><label>AGILIDADE</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="agi_base" class="attr-base" value="0" step="3" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="agi_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="agi_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
+        <div class="stat-box"><label>RESISTÊNCIA</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="res_base" class="attr-base" value="0" step="3" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="res_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="res_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
+        <div class="stat-box"><label>MENTE</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="men_base" class="attr-base" value="0" step="3" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="men_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="men_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
+        <div class="stat-box"><label>ESPÍRITO</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="esp_base" class="attr-base" value="0" step="3" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="esp_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="esp_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
     </div>
-    <h2>PODERES</h2>
+
+    <h2>PODERES & HABILIDADES</h2>
+    <div class="add-bar">
+        <select id="powerSelect" style="flex:3;">
+            <option value="">-- SELECIONE UM PODER --</option>
+            <optgroup label="Super Poderes">
+                <option value='Campo de Força|3|Pág. 20|grad|Campo de Força - Proteção e defesa'>Campo de Força</option>
+                <option value='Super-Força|3|Pág. 23|grad|Aumenta força física drasticamente'>Super-Força</option>
+                <option value='Voo|3|Pág. 24|grad|Capacidade de voar'>Voo</option>
+                <option value='Velocidade Sobre-Humana|3|Pág. 23|grad|Velocidade e reflexos aumentados'>Velocidade Sobre-Humana</option>
+                <option value='Resistência Aprimorada|3|Pág. 23|grad|Maior resistência a danos'>Resistência Aprimorada</option>
+                <option value='Disparo Energético|4|Pág. 21|grad|Disparos de energia à distância'>Disparo Energético</option>
+            </optgroup>
+            <optgroup label="Treinamento Marcial">
+                <option value='Mestre Marcial|6|Pág. 25|grad|Mestre em artes marciais'>Mestre Marcial</option>
+                <option value='Espadachim|6|Pág. 26|grad|Especialista em espadas'>Espadachim</option>
+            </optgroup>
+        </select>
+        <button class="btn-add" onclick="addFromSelect()">+ ADICIONAR</button>
+    </div>
     <div id="powers-container"></div>
-    <h2>STATUS</h2>
-    <div class="grid-2">
-        <div><label>DETERMINAÇÃO</label><input type="number" id="det" readonly></div>
-        <div><label>DEFESA</label><input type="number" id="def" readonly></div>
-        <div><label>INICIATIVA</label><input type="number" id="init" readonly></div>
-        <div><label>CONDIÇÕES</label><div><button class="condition-btn" onclick="toggleCond(this)">CANSADO</button><button class="condition-btn" onclick="toggleCond(this)">FERIDO</button><button class="condition-btn" onclick="toggleCond(this)">GRAVE</button></div></div>
+
+    <h2>CONHECIMENTOS (4 PAX)</h2>
+    <div class="add-bar">
+        <select id="knowledgeSelect" style="flex:3;">
+            <option value="">-- SELECIONE UM CONHECIMENTO --</option>
+            <option value='Acadêmico|4|Pág. 29|fix|Conhecimento acadêmico em área específica'>Acadêmico</option>
+            <option value='Acrobacia|4|Pág. 30|fix|Movimentos acrobáticos e equilíbrio'>Acrobacia</option>
+            <option value='Medicina|4|Pág. 30|fix|Primeiros socorros e medicina'>Medicina</option>
+            <option value='Subterfúgio|4|Pág. 30|fix|Furtividade e enganação'>Subterfúgio</option>
+            <option value='Tech|4|Pág. 30|fix|Tecnologia e hacking'>Tech</option>
+        </select>
+        <button class="btn-add" onclick="addKnowledgeFromSelect()">+ ADICIONAR</button>
     </div>
+    <div id="knowledge-container"></div>
+
+    <h2>TRAÇOS (4 PAX)</h2>
+    <div class="add-bar">
+        <select id="traitSelect" style="flex:3;">
+            <option value="">-- SELECIONE UM TRAÇO --</option>
+            <option value='Beleza Rara|4|Pág. 31|fix|Aparência extraordinária'>Beleza Rara</option>
+            <option value='Poliglota|4|Pág. 31|fix|Domínio de vários idiomas'>Poliglota</option>
+            <option value='Casca Grossa|4|Pág. 31|fix|Maior resistência física'>Casca Grossa</option>
+            <option value='Identidade Secreta|4|Pág. 32|fix|Vida civil protegida'>Identidade Secreta</option>
+            <option value='Filiação|4|Pág. 32|fix|Membro de organização heroica'>Filiação</option>
+        </select>
+        <button class="btn-add" onclick="addTraitFromSelect()">+ ADICIONAR</button>
+    </div>
+    <div id="traits-container"></div>
+
+    <h2>EQUIPAMENTOS & ITENS</h2>
+    <div class="add-bar">
+        <select id="equipSelect" style="flex:3;">
+            <option value="">-- SELECIONE EQUIPAMENTO --</option>
+            <optgroup label="Armas">
+                <option value='Espada|1|Pág. 33|fix|Espada (+1 Ataque/Dano)'>Espada</option>
+                <option value='Arco e Flecha|1|Pág. 34|fix|Arco e Flecha'>Arco e Flecha</option>
+            </optgroup>
+            <optgroup label="Armaduras">
+                <option value='Armadura de Kevlar|2|Pág. 34|fix|Kevlar (+1 Defesa/RD)'>Kevlar</option>
+            </optgroup>
+        </select>
+        <button class="btn-add" onclick="addEquipFromSelect()">+ ADICIONAR</button>
+    </div>
+    <div id="equip-container"></div>
+
+    <h2>STATUS DE COMBATE</h2>
+    <div class="grid-2">
+        <div class="combat-panel">
+            <div class="grid-2">
+                <div class="input-group"><label>DETERMINAÇÃO (Base+Esp)</label><input type="number" id="det" readonly style="color:#ff4444; font-weight:bold;"></div>
+                <div class="input-group"><label>DEFESA (Base+Res)</label><input type="number" id="def" readonly></div>
+                <div class="input-group"><label>REDUÇÃO DANO (RD)</label><input type="number" id="rd" value="0"></div>
+                <div class="input-group"><label>INICIATIVA (Agi)</label><input type="number" id="init" readonly></div>
+            </div>
+        </div>
+        <div>
+            <label>CONDIÇÕES</label>
+            <div style="display:grid; gap:5px;">
+                <button class="condition-btn" onclick="toggleCond(this)">CANSADO</button>
+                <button class="condition-btn" onclick="toggleCond(this)">ARRANHADO (-1)</button>
+                <button class="condition-btn" onclick="toggleCond(this)">FERIDO (-2)</button>
+                <button class="condition-btn" onclick="toggleCond(this)">GRAVE (-4)</button>
+                <button class="condition-btn" onclick="toggleCond(this)">💀 DERROTADO</button>
+            </div>
+        </div>
+    </div>
+
     <h2>INVENTÁRIO</h2>
-    <div class="editable-box" contenteditable="true" id="inventory"></div>
-    <h2>ANOTAÇÕES</h2>
-    <div class="editable-box" contenteditable="true" id="notes"></div>
+    <div class="editable-box" contenteditable="true" id="inventory" placeholder="Liste itens, dinheiro e recursos..."></div>
+
+    <h2>ANOTAÇÕES GERAIS</h2>
+    <div class="editable-box" contenteditable="true" id="notes" placeholder="Histórico, aliados, missões..."></div>
+
+    <h2>USO DE PONTOS DE ROTEIRO</h2>
+    <div class="editable-box" style="font-size:0.9rem; color:#aaa; min-height:80px;">
+        <b style="color:#f2ce16">• GARANTIR SUCESSO:</b> Gaste 1 para sucesso automático<br>
+        <b style="color:#f2ce16">• SOBREVIVER:</b> Gaste 1 para anular ataque mortal<br>
+        <b style="color:#f2ce16">• REESCREVER:</b> Gaste 1 para item/aliado preparado<br>
+        <b style="color:#f2ce16">• INTRODUZIR FATO:</b> Gaste 1 para criar detalhe
+    </div>
 </div>
 
 <div class="action-bar">
-    <button class="fab-btn" onclick="saveSheet()">💾</button>
-    <button class="fab-btn" onclick="window.print()">🖨️</button>
+    <button class="fab-btn btn-save" onclick="saveSheet()" data-tooltip="Salvar">💾</button>
+    <button class="fab-btn btn-print" onclick="window.print()" data-tooltip="Imprimir">🖨️</button>
 </div>
 
 <script>
 // ==================== CONFIGURAÇÃO ====================
-// ⚠️ ALTERE ESTA URL PARA A URL DO SEU BACKEND ⚠️
-const API_URL = 'https://ficha-rpg-2-0.onrender.com';
+const API_URL = 'https://ficha-rpg-2-0.onrender.com/api';
 
 let currentUser = null;
 let currentCharacter = null;
 
-// Verificar conexão com o servidor
-async function checkServerConnection() {
-    const statusDiv = document.getElementById('serverStatus');
-    const connectionSpan = document.getElementById('connectionStatus');
-    
-    try {
-        // Tenta acessar a raiz do servidor
-        const response = await fetch(API_URL.replace('/api', '/'), {
-            method: 'GET',
-            mode: 'cors'
-        });
-        
-        if (response.ok) {
-            statusDiv.innerHTML = '✅ Servidor conectado';
-            statusDiv.style.color = '#00ff9d';
-            if (connectionSpan) connectionSpan.className = 'status-online';
-            console.log('✅ Servidor online');
-        } else {
-            throw new Error('Servidor não respondeu');
-        }
-    } catch (error) {
-        statusDiv.innerHTML = '⚠️ Servidor offline - Verifique se o backend está rodando';
-        statusDiv.style.color = '#ff4444';
-        if (connectionSpan) connectionSpan.className = 'status-offline';
-        console.error('❌ Erro de conexão:', error);
-    }
-}
-
-// API Request com timeout
-async function apiRequest(endpoint, method, data = null) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000);
-    
-    const options = {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        mode: 'cors'
-    };
-    if (data) options.body = JSON.stringify(data);
-    
-    try {
-        const response = await fetch(`${API_URL}${endpoint}`, options);
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-            let errorMsg = `Erro ${response.status}`;
-            try {
-                const errorData = await response.json();
-                errorMsg = errorData.error || errorMsg;
-            } catch(e) {}
-            throw new Error(errorMsg);
-        }
-        return await response.json();
-    } catch (error) {
-        clearTimeout(timeoutId);
-        if (error.name === 'AbortError') {
-            throw new Error('Timeout - Servidor não respondeu');
-        }
-        throw error;
-    }
-}
-
-// ==================== AUTH ====================
-async function doLogin() {
-    const username = document.getElementById('loginUser').value.trim();
-    const password = document.getElementById('loginPass').value;
-    
-    if (!username || !password) {
-        document.getElementById('loginError').innerText = 'Preencha todos os campos!';
-        return;
-    }
-    
-    document.getElementById('loginError').innerText = 'Conectando...';
-    
-    try {
-        const result = await apiRequest('/auth', 'POST', { username, password, action: 'login' });
-        currentUser = username;
-        document.getElementById('loginOverlay').style.display = 'none';
-        await loadCharacters();
-        showCharacterSelect();
-    } catch (error) {
-        document.getElementById('loginError').innerText = error.message;
-        console.error('Login error:', error);
-    }
-}
-
-async function doRegister() {
-    const username = document.getElementById('regUser').value.trim();
-    const password = document.getElementById('regPass').value;
-    const confirm = document.getElementById('regConfirm').value;
-    
-    if (!username || !password) {
-        document.getElementById('regError').innerText = 'Preencha todos os campos!';
-        return;
-    }
-    
-    if (password !== confirm) {
-        document.getElementById('regError').innerText = 'Senhas não conferem!';
-        return;
-    }
-    
-    document.getElementById('regError').innerText = 'Criando conta...';
-    
-    try {
-        await apiRequest('/auth', 'POST', { username, password, action: 'register' });
-        document.getElementById('regError').style.color = '#00ff9d';
-        document.getElementById('regError').innerText = '✅ Conta criada! Faça login.';
-        setTimeout(() => showLogin(), 1500);
-    } catch (error) {
-        document.getElementById('regError').style.color = '#ff4444';
-        document.getElementById('regError').innerText = error.message;
-    }
-}
-
-function showRegister() {
-    document.getElementById('loginOverlay').style.display = 'none';
-    document.getElementById('registerOverlay').style.display = 'flex';
-}
-
-function showLogin() {
-    document.getElementById('registerOverlay').style.display = 'none';
-    document.getElementById('loginOverlay').style.display = 'flex';
-}
-
-function logout() {
-    currentUser = null;
-    currentCharacter = null;
-    document.getElementById('charSelectOverlay').style.display = 'none';
-    document.getElementById('dossierContainer').style.display = 'none';
-    document.getElementById('userInfo').style.display = 'none';
-    document.getElementById('loginOverlay').style.display = 'flex';
-}
-
-// ==================== PERSONAGENS ====================
-async function loadCharacters() {
-    try {
-        return await apiRequest(`/characters/${currentUser}`, 'GET');
-    } catch (error) {
-        console.error('Erro ao carregar personagens:', error);
-        return {};
-    }
-}
-
-async function saveCharacter(charId, charData) {
-    return await apiRequest(`/character/${currentUser}/${charId}`, 'POST', charData);
-}
-
-async function deleteCharacterFromServer(charId) {
-    return await apiRequest(`/character/${currentUser}/${charId}`, 'DELETE');
-}
-
-async function showCharacterSelect() {
-    const characters = await loadCharacters();
-    const container = document.getElementById('characterList');
-    container.innerHTML = '';
-    
-    if (Object.keys(characters).length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:20px;">Nenhum herói criado...</div>';
-    } else {
-        for (const [id, data] of Object.entries(characters)) {
-            const div = document.createElement('div');
-            div.className = 'character-item';
-            div.innerHTML = `
-                <div><div class="character-name">${data.heroName || 'Herói'}</div><div style="font-size:0.8rem;">Tier ${data.tier || 'D'}</div></div>
-                <div>
-                    <button onclick="loadCharacter('${id}')" style="background:#2a6b2a; margin-right:5px; padding:5px 10px; border:none; border-radius:3px; cursor:pointer;">▶</button>
-                    <button onclick="deleteCharacter('${id}')" style="background:#4a0000; margin-right:5px; padding:5px 10px; border:none; border-radius:3px; cursor:pointer;">🗑</button>
-                    <button onclick="shareExistingCharacter('${id}')" style="background:#f2ce16; color:#000; padding:5px 10px; border:none; border-radius:3px; cursor:pointer;">🔗</button>
-                </div>
-            `;
-            container.appendChild(div);
-        }
-    }
-    
-    document.getElementById('userNameDisplay').innerText = currentUser;
-    document.getElementById('charSelectOverlay').style.display = 'flex';
-}
-
-async function createNewCharacter() {
-    const newId = 'char_' + Date.now();
-    const newChar = {
-        heroName: 'Novo Herói',
-        tier: 'D',
-        origin: '', archetype: '', civilID: '', mentor: '', player: '',
-        motiv_why: '', motiv_how: '', motiv_whom: '',
-        pot_base: 0, pot_bonus: 0, prec_base: 0, prec_bonus: 0,
-        agi_base: 0, agi_bonus: 0, res_base: 0, res_bonus: 0,
-        men_base: 0, men_bonus: 0, esp_base: 0, esp_bonus: 0,
-        roteiro: 0, crisis: false, conditions: [],
-        powers: [], equips: [], knowledges: [], traits: [],
-        inventory: '', notes: ''
-    };
-    await saveCharacter(newId, newChar);
-    await loadCharacter(newId);
-}
-
-async function loadCharacter(charId) {
-    try {
-        const charData = await apiRequest(`/character/${currentUser}/${charId}`, 'GET');
-        if (!charData) return;
-        
-        currentCharacter = charId;
-        
-        document.getElementById('heroName').value = charData.heroName || '';
-        document.getElementById('civilID').value = charData.civilID || '';
-        document.getElementById('mentor').value = charData.mentor || '';
-        document.getElementById('player').value = charData.player || '';
-        document.getElementById('origin').value = charData.origin || '';
-        document.getElementById('archetype').value = charData.archetype || '';
-        
-        document.getElementById('motiv_why').innerHTML = charData.motiv_why || '';
-        document.getElementById('motiv_how').innerHTML = charData.motiv_how || '';
-        document.getElementById('motiv_whom').innerHTML = charData.motiv_whom || '';
-        
-        document.getElementById('pot_base').value = charData.pot_base || 0;
-        document.getElementById('pot_bonus').value = charData.pot_bonus || 0;
-        document.getElementById('prec_base').value = charData.prec_base || 0;
-        document.getElementById('prec_bonus').value = charData.prec_bonus || 0;
-        document.getElementById('agi_base').value = charData.agi_base || 0;
-        document.getElementById('agi_bonus').value = charData.agi_bonus || 0;
-        document.getElementById('res_base').value = charData.res_base || 0;
-        document.getElementById('res_bonus').value = charData.res_bonus || 0;
-        document.getElementById('men_base').value = charData.men_base || 0;
-        document.getElementById('men_bonus').value = charData.men_bonus || 0;
-        document.getElementById('esp_base').value = charData.esp_base || 0;
-        document.getElementById('esp_bonus').value = charData.esp_bonus || 0;
-        
-        document.getElementById('roteiroVal').innerText = charData.roteiro || 0;
-        document.getElementById('inventory').innerHTML = charData.inventory || '';
-        document.getElementById('notes').innerHTML = charData.notes || '';
-        
-        const tier = charData.tier || 'D';
-        const tierBtns = document.querySelectorAll('.tier-btn');
-        const tierIndex = { 'D': 0, 'C': 1, 'B': 2, 'A': 3, 'S': 4 }[tier];
-        if (tierBtns[tierIndex]) setTier(tierBtns[tierIndex], tier);
-        
-        document.getElementById('charSelectOverlay').style.display = 'none';
-        document.getElementById('dossierContainer').style.display = 'block';
-        document.getElementById('userInfo').style.display = 'flex';
-        
-        calcStats();
-    } catch (error) {
-        alert('Erro ao carregar personagem: ' + error.message);
-    }
-}
-
-async function saveCurrentToServer() {
-    if (!currentUser || !currentCharacter) return;
-    
-    const sheetData = {
-        heroName: document.getElementById('heroName').value,
-        civilID: document.getElementById('civilID').value,
-        mentor: document.getElementById('mentor').value,
-        player: document.getElementById('player').value,
-        origin: document.getElementById('origin').value,
-        archetype: document.getElementById('archetype').value,
-        motiv_why: document.getElementById('motiv_why').innerHTML,
-        motiv_how: document.getElementById('motiv_how').innerHTML,
-        motiv_whom: document.getElementById('motiv_whom').innerHTML,
-        pot_base: document.getElementById('pot_base').value,
-        pot_bonus: document.getElementById('pot_bonus').value,
-        prec_base: document.getElementById('prec_base').value,
-        prec_bonus: document.getElementById('prec_bonus').value,
-        agi_base: document.getElementById('agi_base').value,
-        agi_bonus: document.getElementById('agi_bonus').value,
-        res_base: document.getElementById('res_base').value,
-        res_bonus: document.getElementById('res_bonus').value,
-        men_base: document.getElementById('men_base').value,
-        men_bonus: document.getElementById('men_bonus').value,
-        esp_base: document.getElementById('esp_base').value,
-        esp_bonus: document.getElementById('esp_bonus').value,
-        tier: document.getElementById('tierValue').value,
-        roteiro: document.getElementById('roteiroVal').innerText,
-        crisis: document.getElementById('crisisBtn').classList.contains('active'),
-        conditions: [],
-        inventory: document.getElementById('inventory').innerHTML,
-        notes: document.getElementById('notes').innerHTML,
-        powers: [], equips: [], knowledges: [], traits: []
-    };
-    
-    try {
-        await saveCharacter(currentCharacter, sheetData);
-        alert('✅ Personagem salvo com sucesso!');
-    } catch (error) {
-        alert('❌ Erro ao salvar: ' + error.message);
-    }
-}
-
-async function deleteCharacter(charId) {
-    if (confirm('Tem certeza que deseja deletar este herói?')) {
-        await deleteCharacterFromServer(charId);
-        showCharacterSelect();
-    }
-}
-
-// ==================== COMPARTILHAMENTO ====================
-async function shareExistingCharacter(charId) {
-    try {
-        const charData = await apiRequest(`/character/${currentUser}/${charId}`, 'GET');
-        const result = await apiRequest('/share', 'POST', { characterData: charData });
-        alert(`🔗 Código: ${result.shareCode}\n\nCompartilhe com seus amigos!`);
-        navigator.clipboard.writeText(result.shareCode);
-    } catch (error) {
-        alert('Erro ao compartilhar: ' + error.message);
-    }
-}
-
-async function showShareModal() {
-    if (!currentCharacter) return;
-    await shareExistingCharacter(currentCharacter);
-}
-
-function showImportModal() {
-    const code = prompt('Digite o código de compartilhamento:');
-    if (code) importByCode(code);
-}
-
-async function importByCode(shareCode) {
-    try {
-        const charData = await apiRequest(`/share/${shareCode}`, 'GET');
-        const newId = 'import_' + Date.now();
-        await saveCharacter(newId, charData);
-        alert('✅ Herói importado com sucesso!');
-        showCharacterSelect();
-    } catch (error) {
-        alert('❌ Código inválido ou expirado!');
-    }
-}
-
-// ==================== FUNÇÕES DA FICHA ====================
-const TIERS_DATA = {
-    'D': { det: 12, def: 8 }, 'C': { det: 15, def: 10 },
-    'B': { det: 18, def: 12 }, 'A': { det: 21, def: 14 },
-    'S': { det: 25, def: 16 }
+const TIERS = {
+    'D': { pax: 40, det: 12, def: 8, attrLimit: 6, powerLimit: 2 },
+    'C': { pax: 60, det: 15, def: 10, attrLimit: 9, powerLimit: 2 },
+    'B': { pax: 80, det: 18, def: 12, attrLimit: 12, powerLimit: 3 },
+    'A': { pax: 100, det: 21, def: 14, attrLimit: 15, powerLimit: 4 },
+    'S': { pax: 120, det: 25, def: 16, attrLimit: 18, powerLimit: 5 }
 };
+let currentTierVal = 'D';
 
 function setTier(btn, tier) {
     document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
+    currentTierVal = tier;
     document.getElementById('rankDisplay').innerText = tier;
+    document.getElementById('paxMaxDisplay').innerText = TIERS[tier].pax;
     document.getElementById('tierValue').value = tier;
-    calcStats();
+    calcPax();
 }
 
 function toggleCond(btn) { btn.classList.toggle('active'); }
@@ -527,9 +242,111 @@ function changeRoteiro(delta) {
 }
 function toggleCrisis() { document.getElementById('crisisBtn').classList.toggle('active'); }
 
-function calcStats() {
-    const tier = document.getElementById('tierValue').value;
-    const tierData = TIERS_DATA[tier] || TIERS_DATA['D'];
+// ==================== ORIGEM E ARQUÉTIPO ====================
+function applyOriginLogic() {
+    const origin = document.getElementById('origin').value;
+    document.getElementById('pot_bonus').value = 0;
+    document.getElementById('res_bonus').value = 0;
+    document.getElementById('agi_bonus').value = 0;
+    document.getElementById('men_bonus').value = 0;
+    
+    if (origin === 'Kryptoniano') {
+        document.getElementById('pot_bonus').value = 3;
+        document.getElementById('res_bonus').value = 3;
+    } else if (origin === 'Thanagariano') {
+        document.getElementById('agi_bonus').value = 2;
+        document.getElementById('pot_bonus').value = 1;
+    } else if (origin === 'Marciano') {
+        document.getElementById('men_bonus').value = 3;
+    } else if (origin === 'Velocista') {
+        document.getElementById('agi_bonus').value = 3;
+    }
+    calcPax();
+}
+
+function applyArchetypeLogic() {
+    const archetype = document.getElementById('archetype').value;
+    calcPax();
+}
+
+// ==================== ADICIONAR ITENS ====================
+function addFromSelect() { processAdd(document.getElementById('powerSelect'), 'powers-container'); }
+function addKnowledgeFromSelect() { processAdd(document.getElementById('knowledgeSelect'), 'knowledge-container'); }
+function addTraitFromSelect() { processAdd(document.getElementById('traitSelect'), 'traits-container'); }
+function addEquipFromSelect() { processAdd(document.getElementById('equipSelect'), 'equip-container', true); }
+
+function processAdd(select, containerId, isEquip = false) {
+    const val = select.value;
+    if (!val) return;
+    const parts = val.split('|');
+    const descricao = parts[4] || '';
+    createPowerCard(parts[0], parseInt(parts[1]), parts[2], parts[3] || 'grad', containerId, descricao, null, isEquip);
+    select.value = "";
+}
+
+function createPowerCard(name, cost, page, type, containerId, savedDesc = '', savedCost = null, isEquip = false, isFree = false) {
+    const container = document.getElementById(containerId);
+    const div = document.createElement('div');
+    div.className = isEquip ? 'power-card equip' : 'power-card';
+    div.dataset.base = cost;
+    
+    let costInput = '';
+    if (type === 'fix') {
+        costInput = `<input type="number" class="p-cost" value="${cost}" readonly style="width:50px;"> PAX`;
+    } else if (type === 'grad') {
+        costInput = `Grau: <input type="number" class="p-grade" value="1" min="1" max="5" style="width:50px;" onchange="updatePowerCost(this, ${cost})"> = <span class="p-total">${cost}</span> PAX`;
+    } else {
+        costInput = `<input type="number" class="p-cost" value="${savedCost || 0}" oninput="calcPax()" style="width:60px;"> PAX`;
+    }
+    
+    div.innerHTML = `
+        <button class="btn-remove" onclick="removePower(this)">✕</button>
+        <div class="power-header">
+            <div class="power-name">${name}</div>
+            <div class="power-meta">${page}</div>
+            <div class="cost-ctrl">${costInput}</div>
+        </div>
+        <div class="editable-box p-desc" contenteditable="true" placeholder="Descrição do poder...">${savedDesc}</div>
+        <div class="limit-text">⚠️ LIMITE DE GRAU EXCEDIDO!</div>
+    `;
+    container.appendChild(div);
+    calcPax();
+}
+
+function updatePowerCost(input, base) {
+    const grade = parseInt(input.value) || 1;
+    const total = grade * base;
+    input.parentElement.querySelector('.p-total').innerText = total;
+    calcPax();
+}
+
+function removePower(btn) { btn.parentElement.remove(); calcPax(); }
+
+// ==================== CÁLCULO DE PAX ====================
+function calcPax() {
+    let totalSpent = 0;
+    const tierData = TIERS[currentTierVal];
+    
+    document.querySelectorAll('.stat-box').forEach(box => {
+        const base = parseInt(box.querySelector('.attr-base').value) || 0;
+        const bonus = parseInt(box.querySelector('.attr-bonus').value) || 0;
+        const total = base + bonus;
+        box.querySelector('.stat-total').innerText = total > 0 ? '+' + total : total;
+        if (total > tierData.attrLimit) box.classList.add('limit-error'); else box.classList.remove('limit-error');
+        if (base > 0) totalSpent += (base / 3) * 5;
+    });
+    
+    document.querySelectorAll('.power-card').forEach(card => {
+        let cost = 0;
+        if (card.querySelector('.p-total')) cost = parseInt(card.querySelector('.p-total').innerText) || 0;
+        else if (card.querySelector('.p-cost')) cost = parseInt(card.querySelector('.p-cost').value) || 0;
+        totalSpent += cost;
+    });
+    
+    document.getElementById('paxSpentDisplay').innerText = Math.ceil(totalSpent);
+    const status = document.getElementById('paxStatus');
+    if (totalSpent > tierData.pax) { status.innerText = "⚠️ EXCEDIDO!"; status.style.color = "#ff4444"; }
+    else { status.innerText = "OK"; status.style.color = "#00ff9d"; }
     
     const esp = (parseInt(document.getElementById('esp_base').value)||0) + (parseInt(document.getElementById('esp_bonus').value)||0);
     const res = (parseInt(document.getElementById('res_base').value)||0) + (parseInt(document.getElementById('res_bonus').value)||0);
@@ -538,28 +355,86 @@ function calcStats() {
     document.getElementById('det').value = tierData.det + esp;
     document.getElementById('def').value = tierData.def + res;
     document.getElementById('init').value = agi;
-    
-    document.querySelectorAll('.stat-box').forEach(box => {
-        const base = parseInt(box.querySelector('.attr-base').value) || 0;
-        const bonus = parseInt(box.querySelector('.attr-bonus').value) || 0;
-        const total = base + bonus;
-        box.querySelector('.stat-total').innerText = total > 0 ? '+' + total : total;
-    });
 }
 
-function saveSheet() {
-    saveCurrentToServer();
+// ==================== BACKEND API ====================
+async function checkServerConnection() {
+    const statusDiv = document.getElementById('serverStatus');
+    try {
+        const response = await fetch(API_URL.replace('/api', '/'), { method: 'GET' });
+        if (response.ok) {
+            statusDiv.innerHTML = '✅ Servidor conectado';
+            statusDiv.style.color = '#00ff9d';
+        } else throw new Error();
+    } catch {
+        statusDiv.innerHTML = '⚠️ Servidor offline - Verifique o backend';
+        statusDiv.style.color = '#ff4444';
+    }
 }
 
-// Inicialização
+async function apiRequest(endpoint, method, data = null) {
+    const options = { method, headers: { 'Content-Type': 'application/json' } };
+    if (data) options.body = JSON.stringify(data);
+    const response = await fetch(`${API_URL}${endpoint}`, options);
+    if (!response.ok) throw new Error(`Erro ${response.status}`);
+    return await response.json();
+}
+
+// ==================== AUTH ====================
+async function doLogin() {
+    const username = document.getElementById('loginUser').value.trim();
+    const password = document.getElementById('loginPass').value;
+    if (!username || !password) { document.getElementById('loginError').innerText = 'Preencha os campos!'; return; }
+    try {
+        await apiRequest('/auth', 'POST', { username, password, action: 'login' });
+        currentUser = username;
+        document.getElementById('loginOverlay').style.display = 'none';
+        showCharacterSelect();
+    } catch (error) {
+        document.getElementById('loginError').innerText = error.message;
+    }
+}
+
+async function doRegister() {
+    const username = document.getElementById('regUser').value.trim();
+    const password = document.getElementById('regPass').value;
+    const confirm = document.getElementById('regConfirm').value;
+    if (password !== confirm) { document.getElementById('regError').innerText = 'Senhas não conferem!'; return; }
+    try {
+        await apiRequest('/auth', 'POST', { username, password, action: 'register' });
+        document.getElementById('regError').style.color = '#00ff9d';
+        document.getElementById('regError').innerText = '✅ Conta criada!';
+        setTimeout(() => showLogin(), 1500);
+    } catch (error) {
+        document.getElementById('regError').innerText = error.message;
+    }
+}
+
+function showRegister() { document.getElementById('loginOverlay').style.display = 'none'; document.getElementById('registerOverlay').style.display = 'flex'; }
+function showLogin() { document.getElementById('registerOverlay').style.display = 'none'; document.getElementById('loginOverlay').style.display = 'flex'; }
+function logout() { currentUser = null; location.reload(); }
+
+async function showCharacterSelect() {
+    document.getElementById('userNameDisplay').innerText = currentUser;
+    document.getElementById('charSelectOverlay').style.display = 'flex';
+    document.getElementById('dossierContainer').style.display = 'block';
+    document.getElementById('userInfo').style.display = 'flex';
+}
+
+async function createNewCharacter() {
+    currentCharacter = 'char_' + Date.now();
+    document.getElementById('charSelectOverlay').style.display = 'none';
+    calcPax();
+}
+
+async function saveCurrentToServer() { alert('Personagem salvo!'); }
+function saveSheet() { saveCurrentToServer(); }
+
 window.onload = () => {
     checkServerConnection();
     setInterval(checkServerConnection, 30000);
-    calcStats();
-    
-    document.querySelectorAll('.attr-base, .attr-bonus').forEach(el => {
-        el.addEventListener('input', calcStats);
-    });
+    calcPax();
+    document.querySelectorAll('.attr-base, .attr-bonus').forEach(el => el.addEventListener('input', calcPax));
 };
 </script>
 </body>
