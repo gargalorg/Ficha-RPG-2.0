@@ -5,755 +5,510 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dossiê: Justice League Unlimited</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #050a10; font-family: 'Roboto', sans-serif; padding: 20px; color: #e0e0e0; padding-top: 100px; }
+        .pax-bar { position: fixed; top: 0; left: 0; right: 0; height: 80px; background: rgba(11, 19, 29, 0.98); border-bottom: 3px solid #f2ce16; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 1000; }
+        .bar-left, .bar-right { display: flex; align-items: center; gap: 30px; }
+        .pax-info { font-family: 'Courier New', monospace; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; background: #00000088; padding: 5px 15px; border-radius: 8px; }
+        .pax-value { font-weight: bold; color: #f2ce16; font-size: 1.8rem; }
+        .roteiro-ctrl { display: flex; gap: 10px; align-items: center; }
+        .roteiro-btn { background: #2a2a3e; border: 1px solid #f2ce16; color: #f2ce16; width: 30px; height: 30px; cursor: pointer; border-radius: 5px; }
+        .crisis-btn { background: #4a0000; border: 2px solid #e62429; color: #ff6666; padding: 5px 15px; cursor: pointer; border-radius: 20px; }
+        .crisis-btn.active { background: #e62429; color: white; }
+        .dossier-container { max-width: 1100px; margin: 0 auto; background: #0f1926; border: 1px solid #1f3a52; padding: 30px; border-radius: 10px; }
+        header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 30px; border-bottom: 2px solid #e62429; padding-bottom: 15px; }
+        h1 { font-size: 2.5rem; color: #f2ce16; }
+        .subtitle { color: #0078f0; letter-spacing: 3px; }
+        .tier-selector { display: flex; gap: 5px; }
+        .tier-btn { width: 45px; height: 45px; background: #000; border: 1px solid #1f3a52; color: #8899a6; font-size: 1.5rem; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+        .tier-btn.active { background: #0078f0; color: white; }
+        .grid-3, .grid-2 { display: grid; gap: 20px; margin-bottom: 20px; }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-bottom: 25px; }
+        .input-group { display: flex; flex-direction: column; gap: 5px; }
+        .input-group label { color: #0078f0; font-size: 0.8rem; text-transform: uppercase; }
+        input, select { background: #1a1a2e; border: 1px solid #333; padding: 10px; color: white; border-radius: 5px; }
+        h2 { color: #f2ce16; margin: 25px 0 15px 0; border-left: 4px solid #f2ce16; padding-left: 12px; }
+        .stat-box { background: #080e16; border: 1px solid #1f3a52; padding: 10px; text-align: center; border-radius: 5px; }
+        .stat-split { display: flex; gap: 5px; justify-content: center; }
+        .stat-split input { width: 70px; text-align: center; }
+        .stat-total { font-size: 1.8rem; color: #f2ce16; font-weight: bold; }
+        .add-bar { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn-add { background: #0078f0; border: none; padding: 8px 20px; color: white; cursor: pointer; border-radius: 5px; }
+        .power-card { background: rgba(255,255,255,0.03); border-left: 4px solid #0078f0; padding: 12px; margin-bottom: 8px; border-radius: 5px; position: relative; }
+        .power-name { color: #f2ce16; font-weight: bold; }
+        .btn-remove { position: absolute; top: 5px; right: 8px; background: none; border: none; color: #ff6666; cursor: pointer; font-size: 1.2rem; }
+        .editable-box { background: rgba(0,0,0,0.2); border: 1px solid #333; padding: 10px; min-height: 60px; border-radius: 5px; }
+        .condition-btn { background: #1a1a2e; border: 1px solid #444; padding: 8px; cursor: pointer; width: 100%; margin-bottom: 5px; border-radius: 5px; }
+        .condition-btn.active { background: #8b0000; color: white; }
+        .action-bar { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; z-index: 100; }
+        .fab-btn { width: 55px; height: 55px; border-radius: 50%; border: none; cursor: pointer; font-size: 1.5rem; background: #0078f0; color: white; }
+        .login-overlay, .character-select { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+        .login-modal, .character-modal { background: #0f1926; border: 2px solid #f2ce16; border-radius: 15px; padding: 40px; width: 400px; }
+        .login-modal h2, .character-modal h2 { color: #f2ce16; text-align: center; }
+        .login-modal input, .character-modal input { width: 100%; margin-bottom: 15px; }
+        .login-modal button, .character-modal button { width: 100%; padding: 12px; background: #f2ce16; border: none; font-weight: bold; cursor: pointer; border-radius: 5px; margin-bottom: 10px; }
+        .character-item { background: #1a1a2e; border: 1px solid #333; padding: 12px; margin-bottom: 8px; border-radius: 5px; display: flex; justify-content: space-between; align-items: center; }
+        .character-name { color: #f2ce16; font-weight: bold; }
+        .user-info { display: flex; align-items: center; gap: 10px; background: #1a1a2e; padding: 5px 15px; border-radius: 20px; }
+        .status-online { width: 10px; height: 10px; background: #00ff00; border-radius: 50%; display: inline-block; }
+        .status-offline { width: 10px; height: 10px; background: #ff4444; border-radius: 50%; display: inline-block; }
+        .share-code { background: #1a1a2e; padding: 15px; text-align: center; font-size: 1.3rem; letter-spacing: 2px; margin: 15px 0; border-radius: 8px; }
+        @media (max-width: 800px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .grid-6 { grid-template-columns: repeat(2,1fr); } }
+    </style>
 </head>
 <body>
 
-<div class="pax-bar">
-    <div class="bar-left">
-        <div class="pax-info">
-            <span class="pax-label">RANK</span> 
-            <span id="rankDisplay" class="pax-value">D</span>
-        </div>
-        <div class="pax-info">
-            <span class="pax-label">PAX</span> 
-            <span id="paxSpentDisplay" class="pax-value">0</span> 
-            <span style="color:#666; font-size: 1.5rem;">/</span> 
-            <span id="paxMaxDisplay" class="pax-value" style="color: #888;">40</span>
-            <span id="paxStatus" class="pax-status"></span>
-        </div>
-    </div>
-    
-    <div class="bar-right">
-        <div class="pax-info">
-            <span class="pax-label">ROTEIRO</span>
-            <div class="roteiro-ctrl">
-                <button class="roteiro-btn" onclick="changeRoteiro(-1)">-</button>
-                <span id="roteiroVal" class="roteiro-val">0</span>
-                <button class="roteiro-btn" onclick="changeRoteiro(1)">+</button>
-            </div>
-        </div>
-        <button id="crisisBtn" class="crisis-btn" onclick="toggleCrisis()">⚠️ CRISE</button>
+<!-- Modais -->
+<div id="loginOverlay" class="login-overlay">
+    <div class="login-modal">
+        <h2>⚡ JUSTIÇA UNLIMITED ⚡</h2>
+        <input type="text" id="loginUser" placeholder="NOME DO HERÓI (USUÁRIO)">
+        <input type="password" id="loginPass" placeholder="SENHA">
+        <button onclick="doLogin()">ENTRAR</button>
+        <button onclick="showRegister()">CRIAR CONTA</button>
+        <div id="loginError" style="color:#ff4444; text-align:center; margin-top:10px;"></div>
+        <div id="serverStatus" style="text-align:center; margin-top:10px; font-size:0.8rem;"></div>
     </div>
 </div>
 
-<div class="dossier-container">
-    <header>
-        <div>
-            <div class="subtitle">JUSTICE LEAGUE UNLIMITED</div>
-            <h1>DOSSIÊ DO HERÓI</h1>
-        </div>
-        
-        <div>
-            <label style="text-align: right; margin-bottom: 5px;">NÍVEL DE AMEAÇA</label>
-            <div class="tier-selector">
-                <div class="tier-btn active" onclick="setTier(this, 'D')">D</div>
-                <div class="tier-btn" onclick="setTier(this, 'C')">C</div>
-                <div class="tier-btn" onclick="setTier(this, 'B')">B</div>
-                <div class="tier-btn" onclick="setTier(this, 'A')">A</div>
-                <div class="tier-btn" onclick="setTier(this, 'S')">S</div>
-            </div>
-            <input type="hidden" id="tierValue" value="D">
-        </div>
-    </header>
+<div id="registerOverlay" class="login-overlay" style="display: none;">
+    <div class="login-modal">
+        <h2>📝 CRIAR CONTA</h2>
+        <input type="text" id="regUser" placeholder="NOME DO HERÓI (USUÁRIO)">
+        <input type="password" id="regPass" placeholder="SENHA">
+        <input type="password" id="regConfirm" placeholder="CONFIRMAR SENHA">
+        <button onclick="doRegister()">REGISTRAR</button>
+        <button onclick="showLogin()">VOLTAR</button>
+        <div id="regError" style="color:#ff4444; text-align:center; margin-top:10px;"></div>
+    </div>
+</div>
 
+<div id="charSelectOverlay" class="character-select" style="display: none;">
+    <div class="character-modal">
+        <h2>🎭 SELECIONE SEU HERÓI</h2>
+        <div id="characterList" style="max-height:300px; overflow-y:auto; margin-bottom:20px;"></div>
+        <button onclick="createNewCharacter()">+ NOVO HERÓI</button>
+        <button onclick="showImportModal()" style="background:#2a6b2a;">📥 IMPORTAR CÓDIGO</button>
+        <button onclick="logout()" style="background:#4a0000; margin-top:10px;">🚪 SAIR</button>
+    </div>
+</div>
+
+<!-- Barra PAX -->
+<div class="pax-bar">
+    <div class="bar-left">
+        <div class="pax-info"><span class="pax-label">RANK</span> <span id="rankDisplay" class="pax-value">D</span></div>
+        <div class="pax-info"><span class="pax-label">PAX</span> <span id="paxSpentDisplay" class="pax-value">0</span> <span style="color:#666;">/</span> <span id="paxMaxDisplay" class="pax-value">40</span><span id="paxStatus" class="pax-status"></span></div>
+    </div>
+    <div class="bar-right">
+        <div class="pax-info"><span class="pax-label">ROTEIRO</span><div class="roteiro-ctrl"><button class="roteiro-btn" onclick="changeRoteiro(-1)">-</button><span id="roteiroVal" class="roteiro-val">0</span><button class="roteiro-btn" onclick="changeRoteiro(1)">+</button></div></div>
+        <button id="crisisBtn" class="crisis-btn" onclick="toggleCrisis()">⚠️ CRISE</button>
+        <div id="userInfo" class="user-info" style="display:none;">
+            <span id="userNameDisplay"></span>
+            <span id="connectionStatus" class="status-online"></span>
+            <button onclick="showCharacterSelect()" style="background:none; color:#f2ce16;">📁</button>
+            <button onclick="saveCurrentToServer()" style="background:none; color:#00ff00;">💾</button>
+            <button onclick="showShareModal()" style="background:none; color:#f2ce16;">🔗</button>
+        </div>
+    </div>
+</div>
+
+<div class="dossier-container" id="dossierContainer" style="display: none;">
+    <header>
+        <div><div class="subtitle">JUSTICE LEAGUE UNLIMITED</div><h1>DOSSIÊ DO HERÓI</h1></div>
+        <div><label>NÍVEL DE AMEAÇA</label><div class="tier-selector"><div class="tier-btn active" onclick="setTier(this,'D')">D</div><div class="tier-btn" onclick="setTier(this,'C')">C</div><div class="tier-btn" onclick="setTier(this,'B')">B</div><div class="tier-btn" onclick="setTier(this,'A')">A</div><div class="tier-btn" onclick="setTier(this,'S')">S</div></div><input type="hidden" id="tierValue" value="D"></div>
+    </header>
     <div class="grid-3">
         <div class="input-group"><label>IDENTIDADE CIVIL</label><input type="text" id="civilID"></div>
-        <div class="input-group"><label>NOME DE HERÓI</label><input type="text" id="heroName" style="color: var(--dc-gold, #d4af37); font-weight: bold; font-size: 1.3rem;"></div>
+        <div class="input-group"><label>NOME DE HERÓI</label><input type="text" id="heroName" style="color:#f2ce16; font-weight:bold;"></div>
         <div class="input-group"><label>MENTOR / GRUPO</label><input type="text" id="mentor"></div>
     </div>
     <div class="grid-3">
-        <div class="input-group">
-            <label>ORIGEM</label>
-            <select id="origin" onchange="applyOriginLogic()">
-                <option value="">-- SELECIONE --</option>
-                <option value="Humano">Humano</option>
-                <option value="Meta-Humano">Meta-Humano</option>
-                <option value="Kryptoniano">Kryptoniano</option>
-                <option value="Amazona">Amazona</option>
-                <option value="Atlante">Atlante</option>
-                <option value="Alienígena">Alienígena</option>
-                <option value="Thanagariano">Thanagariano</option>
-                <option value="Novo Deus">Novo Deus</option>
-                <option value="Marciano">Marciano</option>
-                <option value="Monstruoso">Monstruoso</option>
-                <option value="Ciborgue">Ciborgue</option>
-                <option value="Lanterna Verde">Lanterna Verde</option>               
-                <option value="Mistico">Mistico</option>
-                <option value="Consciencia Coletiva">Consciencia Coletiva</option>
-                <option value="Velocista">Velocista</option>
-                <option value="Tamareano">Tamareano</option>
-            </select>
-        </div>
-        <div class="input-group">
-            <label>ARQUÉTIPO</label>
-            <select id="archetype" onchange="applyArchetypeLogic()">
-                <option value="">-- SELECIONE --</option>
-                <option value="Campeão do Amanhã">Campeão do Amanhã</option>
-                <option value="Cavaleiro das Trevas">Cavaleiro das Trevas</option>
-                <option value="Gênio">Gênio</option>
-                <option value="Herdeiro do Manto">Herdeiro do Manto</option>
-                <option value="Forasteiro">Forasteiro</option>
-                <option value="Guerreiro">Guerreiro</option>
-                <option value="Super Vilão">Super Vilão</option>
-                <option value="Anti-Herói">Anti-Herói</option>
-                <option value="Sidekick">Sidekick</option>
-                <option value="Viajante do Tempo">Viajante do Tempo</option>
-            </select>
-        </div>
+        <div class="input-group"><label>ORIGEM</label><select id="origin"><option value="">-- SELECIONE --</option><option value="Humano">Humano</option><option value="Kryptoniano">Kryptoniano</option><option value="Atlante">Atlante</option><option value="Marciano">Marciano</option><option value="Velocista">Velocista</option></select></div>
+        <div class="input-group"><label>ARQUÉTIPO</label><select id="archetype"><option value="">-- SELECIONE --</option><option value="Campeão do Amanhã">Campeão do Amanhã</option><option value="Cavaleiro das Trevas">Cavaleiro das Trevas</option></select></div>
         <div class="input-group"><label>JOGADOR</label><input type="text" id="player"></div>
     </div>
-
     <h2>O CÍRCULO DOURADO</h2>
     <div class="grid-3">
         <div><label>POR QUE LUTA?</label><div class="editable-box" contenteditable="true" id="motiv_why"></div></div>
         <div><label>COMO LUTA?</label><div class="editable-box" contenteditable="true" id="motiv_how"></div></div>
         <div><label>POR QUEM LUTA?</label><div class="editable-box" contenteditable="true" id="motiv_whom"></div></div>
     </div>
-
-    <h2>ATRIBUTOS (5 PAX p/ +3)</h2>
-    <p style="color:#666; font-size:0.8rem; margin-top:-10px; margin-bottom:20px;">* Base aumenta de 3 em 3. Use Bônus para valores de Origem/Itens.</p>
+    <h2>ATRIBUTOS</h2>
     <div class="grid-6">
-        <div class="stat-box"><label>POTÊNCIA</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="pot_base" class="attr-base" value="0" step="3" min="0" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="pot_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="pot_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
-        <div class="stat-box"><label>PRECISÃO</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="prec_base" class="attr-base" value="0" step="3" min="0" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="prec_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="prec_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
-        <div class="stat-box"><label>AGILIDADE</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="agi_base" class="attr-base" value="0" step="3" min="0" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="agi_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="agi_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
-        <div class="stat-box"><label>RESISTÊNCIA</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="res_base" class="attr-base" value="0" step="3" min="0" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="res_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="res_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
-        <div class="stat-box"><label>MENTE</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="men_base" class="attr-base" value="0" step="3" min="0" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="men_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="men_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
-        <div class="stat-box"><label>ESPÍRITO</label><div class="stat-split"><div><span class="stat-label-small">Base</span><input type="number" id="esp_base" class="attr-base" value="0" step="3" min="0" oninput="calcPax()"></div><div><span class="stat-label-small">Bônus</span><input type="number" id="esp_bonus" class="attr-bonus" value="0" oninput="calcPax()"></div></div><span id="esp_total" class="stat-total">0</span><span class="limit-text">LIMITE!</span></div>
+        <div class="stat-box"><label>POTÊNCIA</label><div class="stat-split"><div><input type="number" id="pot_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="pot_bonus" class="attr-bonus" value="0"></div></div><span id="pot_total" class="stat-total">0</span></div>
+        <div class="stat-box"><label>PRECISÃO</label><div class="stat-split"><div><input type="number" id="prec_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="prec_bonus" class="attr-bonus" value="0"></div></div><span id="prec_total" class="stat-total">0</span></div>
+        <div class="stat-box"><label>AGILIDADE</label><div class="stat-split"><div><input type="number" id="agi_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="agi_bonus" class="attr-bonus" value="0"></div></div><span id="agi_total" class="stat-total">0</span></div>
+        <div class="stat-box"><label>RESISTÊNCIA</label><div class="stat-split"><div><input type="number" id="res_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="res_bonus" class="attr-bonus" value="0"></div></div><span id="res_total" class="stat-total">0</span></div>
+        <div class="stat-box"><label>MENTE</label><div class="stat-split"><div><input type="number" id="men_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="men_bonus" class="attr-bonus" value="0"></div></div><span id="men_total" class="stat-total">0</span></div>
+        <div class="stat-box"><label>ESPÍRITO</label><div class="stat-split"><div><input type="number" id="esp_base" class="attr-base" value="0" step="3"></div><div><input type="number" id="esp_bonus" class="attr-bonus" value="0"></div></div><span id="esp_total" class="stat-total">0</span></div>
     </div>
-
-    <h2>PODERES & HABILIDADES</h2>
-    <div class="add-bar">
-        <select id="powerSelect" style="flex: 3;">
-            <option value="">-- SELECIONE UMA HABILIDADE --</option>
-            <optgroup label="Super Poderes">
-                <option value='Campo de Força|3|Pág. 20|Campo de Força%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ GERAÇÃO DE CAMPO (Passiva/Ativa): Você pode manifestar um campo de energia. Se usado como uma Ação, concede +2 de Defesa e RD 1 até o seu próximo turno.%0A✅ "EU NÃO VOU AGUENTAR POR MUITO TEMPO" (Reação): Quando você ou um aliado adjacente for atingido, você pode gastar sua Reação e 1 de Determinação para reduzir o dano sofrido em um valor igual ao seu Tier + Grau de Poder.%0A✅ CAMPO SALVADOR (Manobra): (1 Ação / 1 Det.) Você projeta um campo em uma zona próxima para amortecer a queda de alguém ou impedir que um objeto pesado esmague um civil. Concede Vantagem em testes de Salvamento.%0A%0A【GRAU 2】%0A✅ BOLHA DE PROTEÇÃO (Manobra): (1 Ação / 2 Det.) O campo agora pode envolver você e até dois aliados próximos. O bônus de Defesa sobe para +4 e a RD para 3.%0A✅ CAMPO DE CONTENÇÃO (Ataque): (1 Ação / 2 Det.) Você tenta prender um inimigo em uma esfera. O alvo deve realizar um teste de Resistência (Tensão 10 + Mente). Se falhar, recebe a condição Imobilizado.%0A✅ PLATAFORMA DE ENERGIA (Utilidade): Você pode criar superfícies sólidas de energia para caminhar sobre os vãos.%0A%0A【GRAU 3】%0A✅ DOMO DA LIGA (Manobra): (1 Ação / 4 Det.) Você cria um domo que cobre uma Zona inteira. A RD é 5 e a Defesa +6.%0A✅ PULSO DE REPULSÃO (Reação): Se um inimigo entrar em combate corpo-a-corpo com você, pode gastar 2 de Determinação para liberar uma onda de choque.%0A%0A【GRAU 4】%0A✅ CAMPO REATIVO (Passiva): Sempre que o campo sofrer um ataque e a RD absorver todo o dano, você recupera 1 de Determinação.%0A✅ PRISÃO MOLECULAR (Ataque): (1 Ação / 5 Det.) O alvo fica Atordoado e Imobilizado.%0A✅ ESCUDO ESPELHADO (Reação): Ao bloquear um disparo energético, pode refletir o disparo de volta.%0A%0A【GRAU 5】%0A✅ ISOLAMENTO ABSOLUTO (Manobra): (1 Ação / 8 Det.) Defesa +10, RD 15.%0A✅ MOLDAR REALIDADE CINÉTICA (Utilidade): Cria construtos complexos que agem independentemente.%0A✅ SOBRECARGA DE CAMPO (Ataque de Área): (1 Ação / 10 Det.) Dano = Mente + Tier em área.'>Campo de Força</option>
-                <option value='Garras/Presas|3|Pág. 20|Garras/Presas%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ ARMAS NATURAIS (Passiva): Seus ataques desarmados causam dano de perfuração ou corte (Dano = Tier + Grau) e você recebe +2 em testes de Atletismo para escalar.%0A✅ LACERAÇÃO (Manobra): (1 Ação / 1 Det.) Além do dano normal, o alvo recebe a condição Ferido.%0A✅ MORDIDA DE CONTENÇÃO (Manobra): (1 Ação / 1 Det.) O alvo fica Agarrado.%0A%0A【GRAU 2】%0A✅ RETALHAR (Manobra): (1 Ação / 2 Det.) Dois ataques contra o mesmo alvo.%0A✅ INSTINTO ASSASSINO (Passiva): Vantagem contra inimigos Ferido, Caído ou Sangrando.%0A✅ GARRAS DE ESCALADA (Utilidade): Velocidade de Escalada igual à velocidade terrestre.%0A%0A【GRAU 3】%0A✅ GARRAS PENETRANTES (Passiva): Ignora RD igual a Potência + Grau.%0A✅ BOTE SELVAGEM (Manobra): (1 Ação / 3 Det.) Salta e ataca, deixando o alvo Caído.%0A%0A【GRAU 4】%0A✅ FERIMENTOS EXPOSTOS (Passiva): Dano de sangramento = Tier.%0A✅ FRENESI SANGUINÁRIO (Reação): Ataque adicional imediato.%0A%0A【GRAU 5】%0A✅ ESTRAÇALHAR (Manobra): (1 Ação / 6 Det.) Dano dobrado.%0A✅ GARRAS ATÔMICAS (Passiva): Afeta seres Intangíveis.%0A✅ CARNICEIRO CÓSMICO (Passiva): Recupera 5 de Determinação ao derrotar inimigo de Tier igual ou superior.'>Garras/Presas</option>
-                <option value='Disparo Energético|4|Pág. 21|Disparo Energético%0A%0A【Custo: 4 PAX por Grau】%0A%0A【GRAU 1】%0A✅ RAJADA CONCENTRADA (Manobra): (1 Ação / 1 Det.) Bônus de acerto e dano = 1 + Grau.%0A✅ DISPARO DE AVISO (Utilidade): Concede Vantagem em Intimidação.%0A✅ SOBRECARGA DE IMPACTO (Manobra): Empurra e deixa Caído.%0A%0A【GRAU 2】%0A✅ FOGO DE SUPRESSÃO (Ataque de Área): Dano = Tier + Grau, causa Lento.%0A✅ DISPARO DUPLO (Manobra): Dois disparos.%0A✅ PONTO DE IGNIÇÃO (Passiva): Críticos causam condições.%0A%0A【GRAU 3】%0A✅ CANHÃO DE ENERGIA (Manobra): Dano +1d6 por ponto de Mente.%0A✅ DISPARO REATIVO (Reação): Disparo para interceptar.%0A%0A【GRAU 4】%0A✅ DESINTEGRAÇÃO PARCIAL (Passiva): Ignora RD igual ao dobro do Grau.%0A✅ CHUVA DE PLASMA (Ataque de Área): Até três Zonas.%0A%0A【GRAU 5】%0A✅ ANNIHILAÇÃO TOTAL (Manobra): Dano triplicado.%0A✅ NEXO ENERGÉTICO (Passiva): RD 5, recupera 2 Det por rodada.%0A✅ DISPARO INTERPLANETÁRIO (Utilidade): Alcance orbital.'>Disparo Energético</option>
-                <option value='Força de Aceleração|6|Pág. 21|Força de Aceleração%0A%0A【Custo: 6 PAX por Grau】%0A%0A【GRAU 1】%0A✅ CONEXÃO CINÉTICA (Passiva): +2 Iniciativa, corre sobre superfícies verticais.%0A✅ VIBRAÇÃO MOLECULAR (Manobra): Atravessa objetos sólidos.%0A✅ SÍCOMO DE CORRENTE (Reação): Pega projéteis no ar.%0A%0A【GRAU 2】%0A✅ TORNADO ESCARLATE (Manobra): Arremessa inimigos e deixa Caídos.%0A✅ MÃO VIBRATÓRIA (Ataque): Ignora RD física.%0A✅ METABOLISMO ACELERADO (Passiva): Recupera Determinação.%0A%0A【GRAU 3】%0A✅ SOBRECARGA TEMPORAL (Manobra): Duas Ações extras, fica Cansado.%0A✅ VÁCUO DE VELOCIDADE (Utilidade): Anula efeitos de área.%0A%0A【GRAU 4】%0A✅ PUNCH DE MASSA INFINITA (Ataque): Usa Agilidade para dano.%0A✅ RUTURA DA BARREIRA DO TEMPO (Utilidade): Volta uma rodada no tempo.%0A%0A【GRAU 5】%0A✅ UNITARIEDADE COM A FORÇA (Passiva): Imune a Lento, Imobilizado, Paralisado.%0A✅ ROUBO DE ENERGIA CINÉTICA (Ataque): Alvo Paralisado, você ganha Ação Extra.%0A✅ VIAJANTE MULTIDIMENSIONAL (Utilidade): Transporta para outras dimensões.'>Força de Aceleração</option>
-                <option value='Manipulação Elemental|3|Pág. 22|Manipulação Elemental%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1 - Escolha um elemento】%0A✅ RAIO ELEMENTAL (Manobra): (1 Ação / 1 Det.) Dano = Tier + Grau.%0A✅ ESCUDO ELEMENTAL (Reação): +2 de Defesa.%0A✅ INTERAÇÃO AMBIENTAL (Utilidade): Manipula pequenas quantidades do elemento.%0A%0A【GRAU 2】%0A✅ MANIPULAÇÃO DE ÁREA (Ataque de Área): Expande elemento pela Zona.%0A✅ FORMA ELEMENTAL PARCIAL (Passiva): RD 3 contra seu elemento.%0A✅ CONSTRUTOS ELEMENTAIS SIMPLES (Utilidade): Cria ferramentas ou barreiras.%0A%0A【GRAU 3】%0A✅ DOMÍNIO DA NATUREZA (Manobra): Controla o elemento em escala massiva.%0A✅ TRANSMUTAÇÃO ELEMENTAL (Passiva): Alterna entre sub-tipos.%0A%0A【GRAU 4】%0A✅ AVATAR ELEMENTAL (Manobra): Corpo vira o elemento, Intangível.%0A✅ NÚCLEO REATIVO (Reação): Absorve dano, próximo ataque causa dobro.%0A%0A【GRAU 5】%0A✅ CATACLISMO TOTAL (Manobra): Dano massivo em três Zonas.%0A✅ CONTROLE MOLECULAR (Utilidade): Cria estruturas permanentes.%0A✅ IMUNIDADE ABSOLUTA (Passiva): Imune ao seu elemento, recupera Det.'>Manipulação Elemental</option>
-                <option value='Sentidos Especiais|3|Pág. 22|Sentidos Especiais%0A%0A【Custo: 3 PAX por Grau】%0A%0A✅ Você possui os sentidos bem acima do comum. Escolha um entre a visão, audição ou olfato.%0A✅ Cada Grau fornece +2 em Testes de Mente quando usar seus sentidos para rastrear ou perceber.%0A✅ A cada grau, aumente a escala em que ele opera.%0A✅ Em Grau 5, você pode ouvir ou enxergar o mundo inteiro.'>Sentidos Especiais</option>
-                <option value='Super-Força|3|Pág. 23|Super-Força%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ FORÇA BRUTA (Passiva): +2 Potência, ergue carros.%0A✅ IMPACTO DEVASTADOR (Manobra): Ignora RD igual a Grau + Tier.%0A✅ ARREMESSO DE PRECISÃO (Manobra): Usa Potência para acerto à distância.%0A%0A【GRAU 2】%0A✅ ONDA DE CHOQUE (Ataque de Área): Empurra e derruba inimigos.%0A✅ GRIP DE TITÃ (Manobra): Imobiliza e causa dano automático.%0A✅ RESISTÊNCIA AO CANSAÇO (Passiva): Vantagem vs Lento/Exausto.%0A%0A【GRAU 3】%0A✅ ESMAGAR ÁTOMOS (Passiva): Dano dobrado contra objetos.%0A✅ SALTO HULKIANO (Utilidade): Salta até duas Zonas.%0A%0A【GRAU 4】%0A✅ PULSO DE PRESSÃO (Manobra): Cone de vácuo, causa Atordoado.%0A✅ REAÇÃO DE CONTRA-GOLPE (Reação): Anula dano e arremessa inimigo.%0A%0A【GRAU 5】%0A✅ FORÇA DE ESCALA PLANETÁRIA (Passiva): Move montanhas.%0A✅ GOLPE DO FIM DO MUNDO (Manobra): Dano triplicado.%0A✅ INABALÁVEL (Passiva): Imune a ser empurrado/derrubado.'>Super-Força</option>
-                <option value='Resistência Aprimorada|3|Pág. 23|Resistência Aprimorada%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ CORPO ROBUSTO (Passiva): +2 Resistência, RD 1.%0A✅ DETERMINAÇÃO FERRENHA (Passiva): +5 Determinação máxima.%0A✅ PONTO DE APOIO (Manobra): Não pode ser movido/derrubado.%0A%0A【GRAU 2】%0A✅ VIGOR SOBRE-HUMANO (Passiva): Imune a doenças, Vantagem vs venenos.%0A✅ PELE IMPENETRÁVEL (Passiva): RD 3.%0A✅ RECUPERAÇÃO DE FÔLEGO (Manobra): Recupera Determinação = Tier + Grau.%0A%0A【GRAU 3】%0A✅ INQUEBRÁVEL (Passiva): RD 6.%0A✅ ESCUDO HUMANO (Reação): Toma dano no lugar de aliado.%0A%0A【GRAU 4】%0A✅ ESTADO ESTACIONÁRIO (Passiva): RD 12, ignora penalidades de Ferido.%0A✅ PANCADA DE RETORNO (Reação): Contra-golpe usando Resistência.%0A%0A【GRAU 5】%0A✅ IMORTALIDADE CINÉTICA (Passiva): RD 20, desperta com 1 Det após 1d4 rodadas.%0A✅ NÚCLEO INVIOLÁVEL (Passiva): Imune a desintegração.%0A✅ SOBREVIVÊNCIA ABSOLUTA (Utilidade): Sobrevive a explosão planetária.'>Resistência Aprimorada</option>
-                <option value='Velocidade Sobre-Humana|3|Pág. 23|Velocidade Sobre-Humana%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ CORREDOR NATO (Passiva): +3 Agilidade, +1 Zona de movimento.%0A✅ REFLEXOS DE ESQUIVA (Passiva): +2 Defesa vs ataques à distância.%0A✅ MOVIMENTO ACROBÁTICO (Utilidade): Corre por paredes.%0A%0A【GRAU 2】%0A✅ REFLEXOS DE COMBATE (Reação): Bloqueio/Esquiva como Reação.%0A✅ GOLPES EM SÉRIE (Manobra): Ataca todos inimigos na Zona.%0A✅ RUTURA CINÉTICA (Manobra): Empurra e deixa Caído.%0A%0A【GRAU 3】%0A✅ ESPECIALISTA EM FLANQUEAMENTO (Passiva): Vantagem vs inimigos atacados por aliados.%0A✅ GINÁSTICA DE COMBATE (Passiva): Ignora ataques de oportunidade.%0A✅ INSTANTE DE LUCIDEZ (Manobra): Vantagem em Agilidade, Precisão e Defesa.%0A%0A【GRAU 4】%0A✅ CONTRA-ATAQUE INEVITÁVEL (Reação): Ataque de retaliação com dano dobrado.%0A✅ BORRÃO DE ESQUIVA (Passiva): Inimigos têm Desvantagem.%0A✅ PRECISÃO DE ALTA VELOCIDADE (Passiva): Crítico com 18-20.%0A%0A【GRAU 5】%0A✅ DANÇA DA MORTE (Manobra): Ataca todos em até duas Zonas.%0A✅ MÁXIMA EFICIÊNCIA CINÉTICA (Passiva): +10 Agilidade total.%0A✅ FLUXO DE COMBATE PERFEITO (Passiva): Pode re-rolar Defesa gastando 1 Det.'>Velocidade Sobre-Humana</option>
-                <option value='Voo|3|Pág. 24|Voo%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ LEVITAR (Passiva): Ignora terreno difícil, Vantagem em Percepção aérea.%0A✅ MERGULHO EM VELOCIDADE (Manobra): Adiciona Grau ao dano, deixa Caído.%0A✅ RESGATE AÉREO (Utilidade): Carrega aliados voando.%0A%0A【GRAU 2】%0A✅ MANOBRABILIDADE AÉREA (Passiva): +2 Defesa no ar.%0A✅ ACROBACIA SUPREMA (Reação): Vantagem na Defesa contra ataque à distância.%0A✅ VÔO SUPERSÔNICO (Utilidade): Atravessa cidades em minutos.%0A%0A【GRAU 3】%0A✅ ÁS DOS CÉUS (Passiva): Vantagem em Agilidade/Precisão voando.%0A✅ TURBILHÃO DE VENTO (Manobra): Arremessa inimigos, causa Abaulado.%0A%0A【GRAU 4】%0A✅ INÉRCIA ZERO (Passiva): Ação de Movimento como Ação Livre.%0A✅ ATAQUE DE INTERCEPTAÇÃO (Reação): Intercepta e Imobiliza.%0A%0A【GRAU 5】%0A✅ VÔO TRANSESTELAR (Passiva): Voa no vácuo, imune a Caído.%0A✅ BOMBARDEIO CINÉTICO (Manobra): Dano = Potência/Mente + 15.%0A✅ ESTABILIDADE ABSOLUTA (Passiva): Ignora penalidades de alcance.'>Voo</option>
-            </optgroup>
-            <optgroup label="Treinamento Marcial">
-                <option value='Mestre Marcial|6|Pág. 25|Mestre Marcial%0A%0A【Custo: 6 PAX por Grau (3 PAX para Arquétipo Cavaleiro)】%0A%0A【GRAU 1】%0A✅ MESTRE DO DOJÔ (Passiva): Dano = Tier + Grau, +2 acerto desarmado.%0A✅ GOLPE DE ATORDOAMENTO (Manobra): Causa Abaulado.%0A✅ PARAR IMPACTO (Reação): +2 Defesa, se errar derruba inimigo.%0A%0A【GRAU 2】%0A✅ MANOBRA DE AGARRAR (Manobra): Imobiliza.%0A✅ CONTROLE CORPORAL (Passiva): Vantagem vs derrubar/empurrar.%0A✅ COMBATE FLUIDO (Manobra): Próximo ataque tem Vantagem.%0A%0A【GRAU 3】%0A✅ CONTRA-ATAQUE DE MESTRE (Reação): Ataque imediato com Vantagem.%0A✅ GOLPE DUPLO (Manobra): Dois ataques desarmados.%0A✅ MOVIMENTAÇÃO TÁTICA (Passiva): Ignora ataques de oportunidade.%0A%0A【GRAU 4】%0A✅ PRESSÃO MOLECULAR (Manobra): Ignora RD física, causa Paralisado.%0A✅ FOCO INTERIOR (Passiva): Remove condições gastando 2 Det.%0A✅ SENTIDO DE LUTA (Passiva): Nunca pego de surpresa.%0A%0A【GRAU 5】%0A✅ GOLPE DOS CINCO PONTOS (Manobra): Determinação do alvo cai para 0.%0A✅ ESTADO DE ZEN (Passiva): +5 Defesa, ignora cegueira.%0A✅ MESTRE SUPREMO (Passiva): Crítico 18-20, Vantagem em todos ataques.'>Mestre Marcial</option>
-                <option value='Espadachim|6|Pág. 26|Mestre Espadachim%0A%0A【Custo: 6 PAX por Grau】%0A%0A【GRAU 1】%0A✅ MESTRE DAS LÂMINAS (Passiva): +2 acerto, Dano = Tier + Grau + 2.%0A✅ APARAR (Reação): +3 Defesa.%0A✅ ESTOCADA RÁPIDA (Manobra): Causa Sangrando.%0A%0A【GRAU 2】%0A✅ DESARMAR (Manobra): Alvo perde a arma.%0A✅ VARREDURA DE LÂMINA (Ataque de Área): Atinge todos adjacentes.%0A✅ POSTURA DE DUELO (Passiva): Vantagem na Defesa vs um inimigo.%0A%0A【GRAU 3】%0A✅ LÂMINA DEFENSIVA (Passiva): RD 3.%0A✅ CORTAR O VENTO (Manobra): Alcance Afastado.%0A✅ FLUXO DE LÂMINAS (Passiva): Movimento extra ao nocautear.%0A%0A【GRAU 4】%0A✅ QUEBRA-AÇO (Passiva): Ignora RD de armaduras.%0A✅ REPRESÁLIA (Reação): Causa Ferimento Crítico.%0A✅ VONTADE DA LÂMINA (Passiva): Não pode ser desarmado, crítico 18-20.%0A%0A【GRAU 5】%0A✅ CORTE DIMENSIONAL (Manobra): Ignora qualquer RD.%0A✅ DANÇA DAS ESPADAS (Passiva): Ação de Ataque extra por turno.%0A✅ SENTIDO DO DUELISTA (Passiva): +5 Defesa, Vantagem em Iniciativa.'>Espadachim</option>
-                <option value='Atirador|6|Pág. 26|Mestre Atirador%0A%0A【Custo: 6 PAX por Grau】%0A%0A【GRAU 1】%0A✅ OLHO DE ÁGUIA (Passiva): +2 acerto à distância.%0A✅ TIRO DE INTERCEPTAÇÃO (Reação): Anula projétil inimigo.%0A✅ DISPARO DE PRECISÃO (Manobra): Ignora cobertura leve.%0A%0A【GRAU 2】%0A✅ TIRO EM MOVIMENTO (Passiva): Ataca sem penalidade após mover.%0A✅ DISPARO TRICK-SHOT (Manobra): Atinge alvos em cobertura total.%0A✅ MUNIÇÃO ESPECIAL (Utilidade): Causa Abaulado ou Lento.%0A%0A【GRAU 3】%0A✅ CHUVA DE PROJÉTEIS (Ataque de Área): Causa Suprimido.%0A✅ CADÊNCIA ACELERADA (Passiva): Dois ataques por Ação.%0A✅ ESTOCADA DE LONGE (Passiva): Ignora penalidades de combate corpo-a-corpo.%0A%0A【GRAU 4】%0A✅ TIRO NO PONTO VITAL (Passiva): Crítico 18-20, causa Incapacitado.%0A✅ NUNCA ERRA (Reação): Transforma erro em acerto automático.%0A✅ SENTINELA DE LONGE (Reação): Ataque imediato ao inimigo entrar/sair da Zona.%0A%0A【GRAU 5】%0A✅ DISPARO IMPOSSÍVEL (Manobra): Atravessa barreiras, dano triplicado.%0A✅ DOMÍNIO BALÍSTICO (Passiva): Sem penalidades de distância/cobertura.%0A✅ ARSENAL INFINITO (Passiva): Munição infinita, pode ignorar RD total.'>Atirador</option>
-            </optgroup>
-            <optgroup label="Outros Poderes">
-                <option value='Metamorfo|5|Pág. 22|Metamorfo%0A%0A【Custo: 5 PAX por Grau (Limite: Grau 1)】%0A%0A✅ MIMETISMO SOCIAL (Utilidade): (1 Ação) Assume aparência de qualquer pessoa.%0A✅ ADAPTAÇÃO BIOLÓGICA (Passiva): Brânquias, garras, camuflagem.%0A✅ MALEABILIDADE FÍSICA (Reação): (1 Det.) RD 5 contra impacto.%0A✅ EXPANSÃO DE MEMBROS (Manobra): (1 Ação / 1 Det.) Alcance corpo-a-corpo vira Afastado.'>Metamorfo</option>
-                <option value='Intangibilidade|4|Pág. 22|Intangibilidade%0A%0A【Custo: 4 PAX por Grau】%0A%0A【GRAU 1】%0A✅ FORMA FANTASMÁGORICA (Manobra): Atravessa matéria sólida.%0A✅ ESQUIVA VIBRACIONAL (Reação): +3 Defesa.%0A✅ PASSO LEVE (Passiva): Não ativa armadilhas de pressão.%0A%0A【GRAU 2】%0A✅ DESSINCRONIZAÇÃO MOLECULAR (Passiva): Ignora RD física.%0A✅ TOQUE DISRUPTOR (Manobra): Causa Pane em eletrônicos.%0A✅ MANUTENÇÃO DE FORMA (Passiva): Intangível por rodadas = Resistência.%0A%0A【GRAU 3】%0A✅ MORTALHA FANTASMA (Utilidade): Torna aliados intangíveis.%0A✅ FLUTUAÇÃO MOLECULAR (Passiva): Voo enquanto intangível.%0A✅ ATAQUE INTERNO (Manobra): Ignora toda RD, causa Ferido.%0A%0A【GRAU 4】%0A✅ VIBRAÇÃO DE ÁREA (Manobra): Faz chão ficar intangível.%0A✅ INVISIBILIDADE VIBRACIONAL (Passiva): Invisível enquanto intangível.%0A✅ REFLEXO DE FASE (Passiva): +4 Defesa.%0A%0A【GRAU 5】%0A✅ ESTADO DE FASE PERMANENTE (Passiva): Intangível sem custo.%0A✅ DESINTEGRAÇÃO POR FASE (Manobra): Alvo vira poeira se falhar Resistência 20.%0A✅ VIAGEM ATRAVÉS DE BARREIRAS MÍSTICAS (Passiva): Atravessa campos de força Grau 5.'>Intangibilidade</option>
-                <option value='Telepatia|4|Pág. 22|Telepatia%0A%0A【Custo: 4 PAX por Grau】%0A%0A【GRAU 1】%0A✅ ELO MENTAL (Passiva): Comunicação mental.%0A✅ LEITURA SUPERFICIAL (Manobra): Vantagem em Percepção/Intimidação.%0A✅ PROJEÇÃO DE RUÍDO (Manobra): Causa Abaulado.%0A%0A【GRAU 2】%0A✅ SUGESTÃO HIPNÓTICA (Manobra): Planta ideia simples.%0A✅ MASCARAMENTO MENTAL (Passiva): Inimigos têm Desvantagem para detectar.%0A✅ VARREDURA SENSORIAL (Utilidade): Detecta mentes em 1km.%0A%0A【GRAU 3】%0A✅ PARALISIA PSÍQUICA (Manobra): Causa Paralisado.%0A✅ ESCUDO COGNITIVO (Utilidade): Vantagem vs ataques mentais.%0A✅ INVASÃO DE MEMÓRIA (Utilidade): Extrai informações do passado.%0A%0A【GRAU 4】%0A✅ CONTROLE MENTAL (Manobra): Assume controle do corpo do alvo.%0A✅ ILUSÃO TELEPÁTICA (Manobra): Alvo vê algo que não existe.%0A✅ DOR SINÁPTICA (Passiva): Dano direto na Determinação.%0A%0A【GRAU 5】%0A✅ APAGÃO MENTAL (Manobra): "Desliga" mente de todos inimigos na Zona.%0A✅ ONIPRESENÇA PSÍQUICA (Passiva): Elo Mental sem limite de distância, +5 Mente.%0A✅ REESCRITA DE PERSONALIDADE (Utilidade): Altera memória ou lealdade permanentemente.'>Telepatia</option>
-                <option value='Comunicação Animal|3|Pág. 22|Comunicação Animal%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ LINGUAGEM DA MATILHA (Passiva): Entende e é entendido por animais.%0A✅ EMPATIA BESTIAL (Utilidade): Acalma animais selvagens.%0A✅ SENTIDOS COMPARTILHADOS (Passiva): +2 Percepção.%0A%0A【GRAU 2】%0A✅ CONVOCAÇÃO DE ALIADOS (Manobra): Animais dão Desvantagem aos inimigos.%0A✅ OLHOS DA NATUREZA (Utilidade): Vê através de animal em 1km.%0A✅ FEROCIDADE INCENTIVADA (Passiva): Animais têm Vantagem e +2 Dano.%0A%0A【GRAU 3】%0A✅ COMANDO DA ALFA (Manobra): Ataque coordenado, causa Caído ou Sangrando.%0A✅ MIMETISMO SENSORIAL (Passiva): Visão noturna, sonar.%0A✅ VIGOR DA SELVA (Reação): RD 5, recupera 1d6 Det.%0A%0A【GRAU 4】%0A✅ DOMINAÇÃO DE FERAS (Manobra): Controla criaturas bestiais.%0A✅ ENXAME DEVASTADOR (Ataque de Área): Cobre duas Zonas, causa Cego.%0A✅ LÍDER DA CAÇA (Passiva): Aliados ganham +2 Agilidade e Defesa.%0A%0A【GRAU 5】%0A✅ AVATAR DA NATUREZA (Manobra): Espírito de fera lendária, dano triplicado.%0A✅ RESSURREIÇÃO DO ESPÍRITO (Utilidade): Traz animais de volta à vida.%0A✅ UNIDADE BIOLÓGICA (Passiva): Imune a venenos, usa atributo de qualquer animal.'>Comunicação Animal</option>
-                <option value='Construtos de Luz|5|Pág. 24|Construtos de Luz (Lanternas)%0A%0A【Custo: 5 PAX por Grau】%0A%0A【GRAU 1】%0A✅ ARMAMENTO DE LUZ (Passiva): Usa Espírito para acerto e dano.%0A✅ ESCUDO DE VONTADE (Reação): +3 Defesa.%0A✅ FERRAMENTA VERSÁTIL (Utilidade): Cria objetos simples.%0A%0A【GRAU 2】%0A✅ PROTEÇÃO INTEGRAL (Manobra): Armadura de luz, RD 4.%0A✅ CONSTRUTO DE CONTENÇÃO (Manobra): Algemas de luz, causa Agarrado.%0A✅ ARTILHARIA PESADA (Ataque de Área): Construtos grandes causam dano em área.%0A%0A【GRAU 3】%0A✅ MULTI-TAREFA DE LUZ (Passiva): Mantém três construtos ativos.%0A✅ MURALHA INTRANSITÁVEL (Manobra): Barreira RD 10 entre Zonas.%0A✅ EXÉRCITO DE UM HOMEM SÓ (Manobra): Três ataques por rodada.%0A%0A【GRAU 4】%0A✅ REFORÇO DE VONTADE (Reação): Reconstrói construto destruído.%0A✅ FOTOMETRIA AVANÇADA (Passiva): Sensores, radares.%0A%0A【GRAU 5】%0A✅ CONSTRUTO PLANETÁRIO (Utilidade): Cria algo de escala colossal.%0A✅ VONTADE INABALÁVEL (Passiva): Construtos indestrutíveis por Tiers inferiores.%0A✅ SOBRECARGA DE LUZ SÓLIDA (Manobra): Dano triplicado, causa Cego e Atordoado.'>Construtos de Luz</option>
-                <option value='Magia|4|Pág. 21|Magia%0A%0A【Custo: 4 PAX por Grau】%0A%0A✅ Capacidade de canalizar energia arcana para lançar feitiços.%0A✅ Pode criar ilusões, proteções, teletransporte e efeitos sobrenaturais.%0A✅ Cada Grau permite acesso a feitiços mais poderosos e complexos.%0A✅ Requer testes de Mente ou Espírito dependendo do tipo de magia.%0A✅ Em Grau 5, pode realizar feitos de escala cósmica e manipular realidade.'>Magia</option>
-            </optgroup>
-            <optgroup label="Arquétipos">
-                <option value="Presença Inspiradora (Campeão)|3|Pág. 17|Action">Presença Inspiradora</option>
-                <option value="Ninguém Fica Para Trás (Campeão)|0|Pág. 17|Action">Ninguém Fica Para Trás</option>
-                <option value="Heroísmo Clássico (Campeão)|0|Pág. 17|Action">Heroísmo Clássico</option>
-                <option value="Verdade e Justiça (Campeão)|4|Pág. 17|Action">Verdade e Justiça</option>
-                <option value="Eu Sou a Noite (Cavaleiro)|0|Pág. 17|Action">Eu Sou a Noite</option>
-                <option value="Cinto de Utilidades (Cavaleiro)|3|Pág. 17|Action">Cinto de Utilidades</option>
-                <option value="Preparo (Cavaleiro)|0|Pág. 17|Action">Preparo</option>
-                <option value="Xeque-Mate (Gênio)|0|Pág. 18|Action">Xeque-Mate</option>
-                <option value="É Trivial! (Gênio)|0|Pág. 18|Action">É Trivial!</option>
-                <option value="Blablálogia (Gênio)|0|Pág. 18|Action">Blablálogia</option>
-                <option value="Estilo Novo! (Herdeiro)|0|Pág. 18|Action">Estilo Novo!</option>
-                <option value="Honrar o Manto (Herdeiro)|0|Pág. 18|Action">Honrar o Manto</option>
-                <option value="Passos Ancestrais (Herdeiro)|0|Pág. 18|Action">Passos Ancestrais</option>
-                <option value="Peso do Símbolo (Herdeiro)|3|Pág. 18|Action">Peso do Símbolo</option>
-                <option value="Monólogo Imponente (Super Vilão)|3|Pág. 18|Action">Monólogo Imponente</option>
-                <option value="Plano Magistral (Super Vilão)|0|Pág. 18|Action">Plano Magistral</option>
-                <option value="Golpe Baixo (Super Vilão)|0|Pág. 18|Action">Golpe Baixo</option>
-                <option value="Recursos Ilimitados (Super Vilão)|0|Pág. 18|Action">Recursos Ilimitados</option>
-                <option value="Justiça Brutal (Anti-Herói)|3|Pág. 18|Action">Justiça Brutal</option>
-                <option value="Resiliência do Cinismo (Anti-Herói)|0|Pág. 18|Action">Resiliência do Cinismo</option>
-                <option value="Métodos Questionáveis (Anti-Herói)|0|Pág. 18|Action">Métodos Questionáveis</option>
-                <option value="Trabalho em Equipe (Sidekick)|0|Pág. 18|Action">Trabalho em Equipe</option>
-                <option value="Eu Aprendi com o Melhor (Sidekick)|2|Pág. 18|Action">Eu Aprendi com o Melhor</option>
-                <option value="Proteção do Aprendiz (Sidekick)|0|Pág. 18|Action">Proteção do Aprendiz</option>
-                <option value="Presciência de Combate (Viajante)|0|Pág. 18|Action">Presciência de Combate</option>
-                <option value="Intervenção do Eu Futuro (Viajante)|2|Pág. 18|Action">Intervenção do Eu Futuro</option>
-            </optgroup>
-        </select>
-        <button class="btn-add" onclick="addFromSelect()">+ ADICIONAR</button>
-    </div>
+    <h2>PODERES</h2>
     <div id="powers-container"></div>
-
-    <h2>CONHECIMENTOS (4 PAX cada)</h2>
-    <div class="add-bar">
-        <select id="knowledgeSelect" style="flex: 3;">
-            <option value="">-- SELECIONE UM CONHECIMENTO --</option>
-            <option value='Acadêmico|4|Pág. 29|fix|Acadêmico%0A%0AComo um acadêmico, você teve acesso a tomos antigos, artigos científicos ou até mesmo um mentor particular. Escolha uma área (história, jornalismo, linguagens etc.) na qual você se tornou especialista.%0A%0A✅ CONHECIMENTO ACADÊMICO: Quando usar seu conhecimento acadêmico, receba +3 em seu Teste.%0A✅ CONTATO NA ÁREA: Você possui contato com algum especialista famoso (para o bem ou para o mal) em sua área de expertise. Uma vez por sessão, pode solicitar a ajuda dessa pessoa.%0A✅ RESPEITO DOS PARES: Quando lida com gente da mesma área, eles são mais propensos a ajudá-lo. Reduza a Tensão em 5 quando cercado por pares de sua área.'>Acadêmico</option>
-            <option value='Acrobacia|4|Pág. 30|fix|Acrobacia%0A%0A✅ ESCALADA: Quando escalar qualquer superfície, saltar sobre prédios ou se movimentar acrobaticamente, receba +3 em seu Teste.%0A✅ SALTO ACROBÁTICO: Uma vez por Edição, você consegue um sucesso automático ao realizar uma façanha inacreditável de salto ou movimento aéreo.%0A✅ CORRIDA LIVRE: Quando precisar atravessar uma área com obstáculos (telhados, muros, vãos), reduza a Tensão em 5 para chegar ao destino rapidamente.'>Acrobacia</option>
-            <option value='Medicina|4|Pág. 30|fix|Medicina%0A%0A✅ PRIMEIROS SOCORROS: Você pode gastar 3 Ações para remover uma Condição ou Status de um alvo. Você pode fazer isso em um número de alvos igual ao seu valor de Mente por Cena.%0A✅ MÉDICO DE CAMPO: Em Cenas de Salvamento, você recebe +3 em rolagens que envolvam curar feridos e aplicar primeiros socorros.%0A✅ EU SOU O CIRURGIÃO: Uma vez por Edição, com os recursos certos, você pode fazer um procedimento médico complicado. O alvo recupera todos os pontos de Determinação, recupera as Condições e remove Status negativos.'>Medicina</option>
-            <option value='Subterfúgio|4|Pág. 30|fix|Subterfúgio%0A%0A✅ PASSAR BATIDO: Quando fizer testes de Agilidade para se esgueirar, receba +3 em seu Teste.%0A✅ ESCAPISTA: Nenhuma amarra te prende. Uma vez por sessão, caso esteja encarcerado ou algemado, você pode escapar automaticamente.%0A✅ GOLPE DESPREVENIDO: Uma vez por Cena, quando acertar um alvo que não esteja ciente de sua presença, receba 1 Dado igual ao seu dado de Dano do Tier adicional no Dano do ataque.'>Subterfúgio</option>
-            <option value='Tech|4|Pág. 30|fix|Tech%0A%0A✅ HACKER: Se tiver ferramentas adequadas, pode invadir sistemas sofisticados. Receba 1 Dado extra igual ao seu dado de Dano do Tier sempre que tentar hackear algo relevante na Cena.%0A✅ RATO DE TECH: Quando fizer uma rolagem envolvendo tecnologia, considere seu Grau de Mente como 1 acima do atual.%0A✅ APETRECHO TECNOLÓGICO: Você carrega um gadget especial. No começo da Edição, escolha um apetrecho da lista, você recebe 1 uso dele.'>Tech</option>
-        </select>
-        <button class="btn-add" onclick="addKnowledgeFromSelect()">+ ADICIONAR</button>
-    </div>
-    <div id="knowledge-container"></div>
-
-    <h2>TRAÇOS (4 PAX cada)</h2>
-    <div class="add-bar">
-        <select id="traitSelect" style="flex: 3;">
-            <option value="">-- SELECIONE UM TRAÇO --</option>
-            <option value='Beleza Rara|4|Pág. 31|fix|Beleza Rara%0A%0A✅ Sua aparência é extraordinária, quase hipnótica.%0A✅ Uma vez por Cena, quando fizer um teste social baseado em persuasão ou sedução pode gastar 2 pontos de Determinação e ser bem sucedido.'>Beleza Rara</option>
-            <option value='Poliglota|4|Pág. 31|fix|Poliglota%0A%0A✅ Você lê, escreve e fala todos os idiomas humanos comuns.%0A✅ Pode aprender idiomas novos os observando por pelo menos uma Cena (fora de Combate).'>Poliglota</option>
-            <option value='Contato Confiável|4|Pág. 31|fix|Contato Confiável%0A%0A✅ Uma fonte garantida de informação (repórter, cientista, hacker).%0A✅ Uma vez por Edição pergunte ao Editor e receba uma pista útil.'>Contato Confiável</option>
-            <option value='Casca Grossa|4|Pág. 31|fix|Casca Grossa%0A%0A✅ Você recebe RD 2.%0A✅ Quando você marcar a Condição Derrotado, ainda pode agir mais uma vez antes de cair.'>Casca Grossa</option>
-            <option value='Frase de Efeito|4|Pág. 31|fix|Frase de Efeito%0A%0A✅ Defina uma Frase de Efeito junto com o Editor.%0A✅ Uma vez por Cena, quando bradá-la, escolha: Reduz o custo em Determinação de uma habilidade em Tier+1, OU recebe Vantagem na próxima rolagem.'>Frase de Efeito</option>
-            <option value='Gadgets de Bolso|4|Pág. 31|fix|Gadgets de Bolso%0A%0A✅ Você tem sempre o item pronto para cada situação.%0A✅ Gastando 1 ponto de Determinação e uma ação, escolha um dos itens da lista de Apetrechos e receba 1 uso.'>Gadgets de Bolso</option>
-            <option value='Voz da Multidão|4|Pág. 32|fix|Voz da Multidão%0A%0A✅ Em tempos de crise, sua voz se sobressai.%0A✅ Você recebe +3 em testes que envolvem dar instruções, controlar e acalmar multidões em Cenas de Salvamento.'>Voz da Multidão</option>
-            <option value='Influencer|4|Pág. 32|fix|Influencer%0A%0A✅ Você possui bastante seguidores nas redes sociais.%0A✅ Você possui +2 em testes sociais que envolvam sua fama.%0A✅ Receber Mimo: Uma vez por sessão, você pode receber um item pequeno como um celular de última geração, uma pequena arma ou um item de vestuário.'>Influencer</option>
-            <option value='Identidade Secreta|4|Pág. 32|fix|Identidade Secreta%0A%0A✅ Você mantém uma vida civil bem protegida.%0A✅ Quando age em forma civil, quaisquer ataques feitos contra você recebem -3.%0A✅ Sempre que sua vida civil se chocar com sua vida heroica, você recebe 1 Ponto de Roteiro que não entra na contagem total da Edição.'>Identidade Secreta</option>
-            <option value='Dupla Dinâmica|4|Pág. 32|fix|Dupla Dinâmica%0A%0A✅ Você forjou uma amizade linda e verdadeira com um outro Herói (ambos devem ter este traço).%0A✅ Sempre que estiverem na mesma Cena, ambos recebem +1 em Determinação, Precisão e Defesa.%0A✅ Sempre que o Herói da dupla receber qualquer quantidade de Dano, você recebe 1 ponto de Dano.'>Dupla Dinâmica</option>
-            <option value='Filiação|4|Pág. 32|fix|Filiação%0A%0A✅ Você é membro de uma conhecida organização (Liga da Justiça, Tropa dos Lanternas, ARGUS, Bat-família).%0A✅ Gastando 3 de Determinação, uma vez por Cena, obtenha sucessos em testes sociais para impressionar ou acalmar pessoas que conhecem sua organização.%0A✅ Receba um acesso direto via comunicador da sua organização.'>Filiação</option>
-        </select>
-        <button class="btn-add" onclick="addTraitFromSelect()">+ ADICIONAR</button>
-    </div>
-    <div id="traits-container"></div>
-
-    <h2>EQUIPAMENTOS & ITENS (1 PAX cada)</h2>
-    <div class="add-bar">
-        <select id="equipSelect" style="flex: 3;">
-            <option value="">-- SELECIONE EQUIPAMENTO --</option>
-            <optgroup label="Armas Marciais (1 PAX)">
-                <option value='Espada|1|Pág. 33|fix|Espada%0A%0A✅ Arma corpo-a-corpo. Fornece +1 em Ataque e Dano.%0A✅ A espada é a arma clássica. Das antigas lâminas medievais, passando pela katana japonesa até as lendárias como a Espada da Noite.'>Espada (+1 Atq/Dano)</option>
-                <option value='Bastão|1|Pág. 33|fix|Bastão%0A%0A✅ Arma corpo-a-corpo. Fornece +1 em Ataque e Dano.%0A✅ Um bastão é o tipo mais simples de arma, e ainda assim se mantém como um dos mais efetivos. Perfeito para desequilibrar oponentes.'>Bastão (+1 Atq/Dano)</option>
-                <option value='Faca|1|Pág. 33|fix|Faca%0A%0A✅ Arma corpo-a-corpo. Fornece +1 em Ataque e Dano.%0A✅ Adagas, facões e até mesmo facas de cozinha são armamento perigoso nas mãos certas. Podem ser escondidas e arremessadas.'>Faca (+1 Atq/Dano)</option>
-                <option value='Tridente|1|Pág. 33|fix|Tridente%0A%0A✅ Arma corpo-a-corpo. Fornece +1 em Ataque e Dano.%0A✅ Favorita dos atlantes pela praticidade na água. Consiste em uma lança de três pontas, visada pelo seu alcance e capacidade de desarme.'>Tridente (+1 Atq/Dano)</option>
-                <option value='Clava|1|Pág. 33|fix|Clava%0A%0A✅ Arma corpo-a-corpo. Fornece +1 em Ataque e Dano.%0A✅ Clavas têm imenso potencial destrutivo; esmagam não só inimigos, mas também objetos e barreiras.'>Clava (+1 Atq/Dano)</option>
-            </optgroup>
-            <optgroup label="Armas à Distância (1 PAX)">
-                <option value='Arco e Flecha|1|Pág. 34|fix|Arco e Flecha%0A%0A✅ Alcances: Adjacente*, Próximo, Afastado, Distante*.%0A✅ Uma das armas mais antigas da humanidade.%0A✅ Permite gastar 1 de Determinação ao acertar um alvo Adjacente a outro, causando Dano igual ao Grau de Atirador no segundo alvo.'>Arco e Flecha</option>
-                <option value='Pistola|1|Pág. 34|fix|Pistola%0A%0A✅ Alcance: Adjacente, Próximo, Afastado*.%0A✅ Arma de fogo simples capaz de disparar somente um projétil por vez.%0A✅ Ataques contra alvos Próximos recebem um bônus igual ao seu Grau em Atirador.'>Pistola</option>
-                <option value='Rifle de Precisão|1|Pág. 34|fix|Rifle de Precisão%0A%0A✅ Alcance: Adjacente*, Próximo, Afastado, Distante.%0A✅ Arma de longo alcance e altíssima precisão, ideal para alvos isolados.%0A✅ Ataques contra alvos Distantes recebem um bônus igual ao Grau de Atirador.'>Rifle de Precisão</option>
-                <option value='Metralhadora|1|Pág. 34|fix|Metralhadora%0A%0A✅ Alcance: Adjacente, Próximo, Afastado*.%0A✅ Arma automática ideal para supressão e controle de distâncias curtas e médias.%0A✅ Ataques contra alvos Adjacentes ou Próximos que estejam Adjacentes entre si recebem bônus igual ao Grau de Atirador.'>Metralhadora</option>
-            </optgroup>
-            <optgroup label="Armaduras">
-                <option value='Armadura de Promethium|3|Pág. 34|fix|Armadura de Promethium%0A%0A✅ Custo: 3 PAX%0A✅ Uma armadura do metal mais poderoso da Terra, praticamente indestrutível.%0A✅ Você recebe +2 em Defesa e RD.'>Promethium (+2 Def/RD) - 3 PAX</option>
-                <option value='Armadura de Amazonium|4|Pág. 34|fix|Armadura de Amazonium%0A%0A✅ Custo: 4 PAX%0A✅ Metal único das amazonas, vigora entre os mais poderosos e versáteis do planeta.%0A✅ Você recebe +1 em Defesa, Agilidade e RD.'>Amazonium (+1 Def/Agi/RD) - 4 PAX</option>
-                <option value='Armadura de Metal Enésimo|6|Pág. 34|fix|Armadura de Metal Enésimo%0A%0A✅ Custo: 6 PAX%0A✅ Armaduras feitas desse metal possuem uma série de benefícios.%0A✅ Você recebe Voo e Regeneração em Grau 1, +1 em Defesa e RD.'>Metal Enésimo (+1 Def/RD, Voo) - 6 PAX</option>
-                <option value='Traje de Kevlar Reforçado|2|Pág. 34|fix|Traje de Kevlar Reforçado%0A%0A✅ Custo: 2 PAX%0A✅ Traje composto por múltiplas camadas de Kevlar e placas de cerâmica sobre pontos vitais.%0A✅ Fornece +1 em Defesa e RD. +2 RD contra Dano físico de projéteis (balas e flechas).'>Kevlar (+1 Def/RD, +2 RD vs projéteis) - 2 PAX</option>
-                <option value='Armadura de Apokolips|5|Pág. 34|fix|Armadura de Apokolips%0A%0A✅ Custo: 5 PAX%0A✅ Forjada nas fossas de Apokolips, feita para os Parademônios de elite de Darkseid.%0A✅ Você recebe +3 em Defesa e RD. Penalidade de -2 em todos os testes de Agilidade.'>Apokolips (+3 Def/RD, -2 Agi) - 5 PAX</option>
-            </optgroup>
-            <optgroup label="Apetrechos (1 PAX - 3 usos)">
-                <option value='Bomba de Fumaça|1|Pág. 35|fix|Bomba de Fumaça%0A%0A✅ Gaste 1 uso.%0A✅ Durante 1 Rodada, todos os alvos em uma zona Próxima de onde você arremessou sofrem -3 em jogadas que requeiram o uso da visão.'>Bomba de Fumaça</option>
-                <option value='Arma de Gancho|1|Pág. 35|fix|Arma de Gancho%0A%0A✅ Gaste 1 uso para se mover 1 Distância em qualquer direção.%0A✅ Puxa e Bate: Gaste 1 uso para Ataque à distância. Se acertar, move o alvo 1 Distância na sua direção. Se ficar Adjacente, causa dano igual ao seu Tier+1.'>Arma de Gancho</option>
-                <option value='Spray Curativo|1|Pág. 35|fix|Spray Curativo%0A%0A✅ Quando usado, pode remover as Condições Arranhado, Cansado ou Ferido de um alvo.'>Spray Curativo</option>
-                <option value='Rastreador|1|Pág. 35|fix|Rastreador%0A%0A✅ Gaste 1 uso para colocar o Rastreador em uma pessoa ou objeto.%0A✅ Ele emite um sinal de GPS que indica com precisão a localização do alvo.'>Rastreador</option>
-                <option value='Respirador|1|Pág. 35|fix|Respirador%0A%0A✅ Gaste 1 uso; até o final da cena, você pode respirar em ambientes com fumaça, água ou ar rarefeito.'>Respirador</option>
-                <option value='Máscara Alteradora|1|Pág. 35|fix|Máscara Alteradora%0A%0A✅ Gaste 1 uso para assumir a aparência de outra pessoa por 1 hora.%0A✅ Concede Vantagem em testes de Disfarce.'>Máscara Alteradora</option>
-                <option value='P.E.M.|1|Pág. 35|fix|P.E.M.%0A%0A✅ Gaste 1 uso para desativar dispositivos eletrônicos em uma Zona por 1d4 rodadas.'>P.E.M. (Pulso Eletromagnético)</option>
-                <option value='Comunicador|1|Pág. 35|fix|Comunicador%0A%0A✅ Permite comunicação instantânea com aliados em qualquer lugar do planeta.%0A✅ Possui alcance planetário e criptografia de ponta.'>Comunicador</option>
-            </optgroup>
-            <optgroup label="Material Especial (5 PAX)">
-                <option value='Arma de Enésimo Metal|5|Pág. 34|fix|Arma de Enésimo Metal%0A%0A✅ Custo: 5 PAX%0A✅ Esse metal nativo do planeta Thanagar possui propriedades capazes de negar a gravidade.%0A✅ Concede Voo Grau 1 a quem a possuir.'>Enésimo Metal (Voo Grau 1)</option>
-                <option value='Arma de Promethium|5|Pág. 34|fix|Arma de Promethium%0A%0A✅ Custo: 5 PAX%0A✅ Liga metálica mais forte do planeta Terra.%0A✅ Ignora toda a RD de um alvo e causa +1 em Dano.'>Promethium (Ignora RD, +1 Dano)</option>
-                <option value='Arma de Kryptonita|5|Pág. 34|fix|Arma de Kryptonita%0A%0A✅ Custo: 5 PAX%0A✅ Sua arma possui pedaços do mineral que é a maior fraqueza dos Kryptonianos.%0A✅ Aplica Vulnerável a Kryptonianos.'>Kryptonita (Vulnerável a Kryptonianos)</option>
-            </optgroup>
-        </select>
-        <button class="btn-add" onclick="addEquipFromSelect()">+ ADICIONAR</button>
-    </div>
-    <div id="equip-container"></div>
-
-    <h2>STATUS DE COMBATE</h2>
+    <h2>STATUS</h2>
     <div class="grid-2">
-        <div class="combat-panel">
-            <div class="grid-2">
-                <div class="input-group"><label>DETERMINAÇÃO (Base+Esp)</label><input type="number" id="det" readonly style="color:var(--dc-red, #ff4444); font-weight:bold;"></div>
-                <div class="input-group"><label>DEFESA (Base+Res)</label><input type="number" id="def" readonly></div>
-                <div class="input-group"><label>REDUÇÃO DANO (RD)</label><input type="number" id="rd"></div>
-                <div class="input-group"><label>INICIATIVA (Agi)</label><input type="number" id="init" readonly></div>
-            </div>
-        </div>
-        <div>
-            <label>CONDIÇÕES</label>
-            <div style="display:grid; gap:5px;">
-                <button class="condition-btn" onclick="toggleCond(this)">CANSADO</button>
-                <button class="condition-btn" onclick="toggleCond(this)">ARRANHADO (-1)</button>
-                <button class="condition-btn" onclick="toggleCond(this)">FERIDO (-2)</button>
-                <button class="condition-btn" onclick="toggleCond(this)">GRAVE (-4)</button>
-                <button class="condition-btn" onclick="toggleCond(this)">💀 DERROTADO</button>
-            </div>
-        </div>
+        <div><label>DETERMINAÇÃO</label><input type="number" id="det" readonly></div>
+        <div><label>DEFESA</label><input type="number" id="def" readonly></div>
+        <div><label>INICIATIVA</label><input type="number" id="init" readonly></div>
+        <div><label>CONDIÇÕES</label><div><button class="condition-btn" onclick="toggleCond(this)">CANSADO</button><button class="condition-btn" onclick="toggleCond(this)">FERIDO</button><button class="condition-btn" onclick="toggleCond(this)">GRAVE</button></div></div>
     </div>
-
     <h2>INVENTÁRIO</h2>
-    <div class="editable-box" contenteditable="true" id="inventory" style="min-height: 150px;" placeholder="Liste aqui itens extras, dinheiro e detalhes de carga..."></div>
-
-    <h2>ANOTAÇÕES GERAIS</h2>
-    <div class="editable-box" contenteditable="true" id="notes" style="min-height: 150px;" placeholder="Histórico, aliados, missões atuais..."></div>
-
-    <h2>USO DE PONTOS DE ROTEIRO (PÁGS 6-9)</h2>
-    <div class="editable-box" style="font-size: 0.9rem; color: #aaa; min-height: 80px;">
-        <b style="color:var(--dc-gold, #d4af37)">• GARANTIR SUCESSO:</b> Gaste 1 para ter sucesso automático ou +7 na rolagem.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• SOBREVIVER (Armadura de Roteiro):</b> Gaste 1 para anular um ataque mortal.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• REESCREVER (Retcon):</b> Gaste 1 para revelar um item preparado, aliado ou fraqueza.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• PÁGINA DUPLA:</b> Gaste 1-3 para aumentar o Grau de um poder (Gera Condições depois).<br>
-        <b style="color:var(--dc-gold, #d4af37)">• INTRODUZIR FATO:</b> Gaste 1 para criar um detalhe conveniente no cenário.<br>
-        <i>* O uso gera Pontos de Edição para o GM e risca o Dado de Crise (1d6 vs Pontos Gastos).</i>
-    </div>
-
-    <h2>GUIA DE COMBATE (REFERÊNCIA)</h2>
-    <div class="editable-box" style="font-size: 0.9rem; color: #aaa; min-height: 80px;">
-        <b style="color:var(--dc-gold, #d4af37)">• ATAQUE (1 Ação):</b> Teste de Precisão vs Defesa. Dano na Determinação.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• BLOQUEIO (1 Ação):</b> +1 Defesa por Tier até próximo turno.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• ESQUIVA (1 Ação):</b> Teste de Agilidade vs Ataque para anular dano.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• AJUDAR/MOVER (1 Ação):</b> Auxilia aliado ou o move 1 Distância.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• DEFENDER (1 Ação):</b> +3 Defesa para aliado, -3 para você.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• COBERTURA (1 Ação):</b> Atrapalha inimigo. Próximo ataque dele contra aliado tem -5.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• DESARMAR (3 Ações):</b> Teste Oposto para tirar arma.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• LIBERTAR (1 Ação):</b> Teste para sair de amarras/agarrão.<br>
-        <b style="color:var(--dc-gold, #d4af37)">• SUPERAR LIMITES (2 Ações):</b> Marca Condição para recuperar Determinação Base.
-    </div>
+    <div class="editable-box" contenteditable="true" id="inventory"></div>
+    <h2>ANOTAÇÕES</h2>
+    <div class="editable-box" contenteditable="true" id="notes"></div>
 </div>
 
 <div class="action-bar">
-    <input type="file" id="fileInput" accept=".json" style="display:none" onchange="loadSheet(this)">
-    <button class="fab-btn btn-save" onclick="saveSheet()" data-tooltip="Salvar">💾</button>
-    <button class="fab-btn btn-load" onclick="document.getElementById('fileInput').click()" data-tooltip="Carregar">📂</button>
-    <button class="fab-btn btn-print" onclick="window.print()" data-tooltip="Gerar PDF">🖨️</button>
+    <button class="fab-btn" onclick="saveSheet()">💾</button>
+    <button class="fab-btn" onclick="window.print()">🖨️</button>
 </div>
 
 <script>
-    const TIERS = {
-        'D': { pax: 40, det: 12, def: 8, attrLimit: 6, powerLimit: 2 },
-        'C': { pax: 60, det: 15, def: 10, attrLimit: 9, powerLimit: 2 },
-        'B': { pax: 80, det: 18, def: 12, attrLimit: 12, powerLimit: 3 },
-        'A': { pax: 100, det: 21, def: 14, attrLimit: 15, powerLimit: 4 },
-        'S': { pax: 120, det: 25, def: 16, attrLimit: 18, powerLimit: 5 }
+// ==================== CONFIGURAÇÃO ====================
+// USE A URL DO SEU SERVIDOR AQUI!
+const API_URL = 'https://shiny-winner-7qqqrrg6pjwhr7g6-3000.app.github.dev/api';
+
+let currentUser = null;
+let currentCharacter = null;
+let isOnline = true;
+
+// Verificar conexão
+async function checkServerConnection() {
+    try {
+        const response = await fetch(`${API_URL.replace('/api', '')}/`);
+        isOnline = response.ok;
+        document.getElementById('serverStatus').innerHTML = isOnline ? '✅ Servidor conectado' : '⚠️ Servidor offline';
+        const statusSpan = document.getElementById('connectionStatus');
+        if (statusSpan) statusSpan.className = isOnline ? 'status-online' : 'status-offline';
+    } catch {
+        isOnline = false;
+        document.getElementById('serverStatus').innerHTML = '⚠️ Servidor offline';
+        const statusSpan = document.getElementById('connectionStatus');
+        if (statusSpan) statusSpan.className = 'status-offline';
+    }
+}
+
+// API Request
+async function apiRequest(endpoint, method, data = null) {
+    const options = { method, headers: { 'Content-Type': 'application/json' } };
+    if (data) options.body = JSON.stringify(data);
+    
+    const response = await fetch(`${API_URL}${endpoint}`, options);
+    if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Erro na requisição');
+    }
+    return await response.json();
+}
+
+// ==================== AUTH ====================
+async function doLogin() {
+    const username = document.getElementById('loginUser').value.trim();
+    const password = document.getElementById('loginPass').value;
+    
+    try {
+        const result = await apiRequest('/auth', 'POST', { username, password, action: 'login' });
+        currentUser = username;
+        document.getElementById('loginOverlay').style.display = 'none';
+        await loadCharacters();
+        showCharacterSelect();
+    } catch (error) {
+        document.getElementById('loginError').innerText = error.message;
+    }
+}
+
+async function doRegister() {
+    const username = document.getElementById('regUser').value.trim();
+    const password = document.getElementById('regPass').value;
+    const confirm = document.getElementById('regConfirm').value;
+    
+    if (password !== confirm) {
+        document.getElementById('regError').innerText = 'Senhas não conferem!';
+        return;
+    }
+    
+    try {
+        await apiRequest('/auth', 'POST', { username, password, action: 'register' });
+        document.getElementById('regError').style.color = '#00ff9d';
+        document.getElementById('regError').innerText = 'Conta criada! Faça login.';
+        setTimeout(() => showLogin(), 1500);
+    } catch (error) {
+        document.getElementById('regError').innerText = error.message;
+    }
+}
+
+function showRegister() {
+    document.getElementById('loginOverlay').style.display = 'none';
+    document.getElementById('registerOverlay').style.display = 'flex';
+}
+
+function showLogin() {
+    document.getElementById('registerOverlay').style.display = 'none';
+    document.getElementById('loginOverlay').style.display = 'flex';
+}
+
+function logout() {
+    currentUser = null;
+    currentCharacter = null;
+    document.getElementById('charSelectOverlay').style.display = 'none';
+    document.getElementById('dossierContainer').style.display = 'none';
+    document.getElementById('userInfo').style.display = 'none';
+    document.getElementById('loginOverlay').style.display = 'flex';
+}
+
+// ==================== PERSONAGENS ====================
+async function loadCharacters() {
+    try {
+        return await apiRequest(`/characters/${currentUser}`, 'GET');
+    } catch {
+        return {};
+    }
+}
+
+async function saveCharacter(charId, charData) {
+    return await apiRequest(`/character/${currentUser}/${charId}`, 'POST', charData);
+}
+
+async function deleteCharacterFromServer(charId) {
+    return await apiRequest(`/character/${currentUser}/${charId}`, 'DELETE');
+}
+
+async function showCharacterSelect() {
+    const characters = await loadCharacters();
+    const container = document.getElementById('characterList');
+    container.innerHTML = '';
+    
+    if (Object.keys(characters).length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:20px;">Nenhum herói criado...</div>';
+    } else {
+        for (const [id, data] of Object.entries(characters)) {
+            const div = document.createElement('div');
+            div.className = 'character-item';
+            div.innerHTML = `
+                <div><div class="character-name">${data.heroName || 'Herói'}</div><div style="font-size:0.8rem;">Tier ${data.tier || 'D'}</div></div>
+                <div><button onclick="loadCharacter('${id}')" style="background:#2a6b2a; margin-right:5px;">▶</button>
+                <button onclick="deleteCharacter('${id}')" style="background:#4a0000;">🗑</button>
+                <button onclick="shareExistingCharacter('${id}')" style="background:#f2ce16; color:#000;">🔗</button></div>
+            `;
+            container.appendChild(div);
+        }
+    }
+    
+    document.getElementById('userNameDisplay').innerText = currentUser;
+    document.getElementById('charSelectOverlay').style.display = 'flex';
+}
+
+async function createNewCharacter() {
+    const newId = 'char_' + Date.now();
+    const newChar = {
+        heroName: 'Novo Herói',
+        tier: 'D',
+        origin: '', archetype: '', civilID: '', mentor: '', player: '',
+        motiv_why: '', motiv_how: '', motiv_whom: '',
+        pot_base: 0, pot_bonus: 0, prec_base: 0, prec_bonus: 0,
+        agi_base: 0, agi_bonus: 0, res_base: 0, res_bonus: 0,
+        men_base: 0, men_bonus: 0, esp_base: 0, esp_bonus: 0,
+        roteiro: 0, crisis: false, conditions: [],
+        powers: [], equips: [], knowledges: [], traits: [],
+        inventory: '', notes: ''
     };
-    let currentTier = 'D';
+    await saveCharacter(newId, newChar);
+    await loadCharacter(newId);
+}
 
-    // Mapa de descrições dos poderes para usar quando a origem adicionar automaticamente
-    const powerDescriptions = {
-        'Super-Força': 'Super-Força%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ FORÇA BRUTA (Passiva): +2 Potência, ergue carros.%0A✅ IMPACTO DEVASTADOR (Manobra): Ignora RD igual a Grau + Tier.%0A✅ ARREMESSO DE PRECISÃO (Manobra): Usa Potência para acerto à distância.%0A%0A【GRAU 2】%0A✅ ONDA DE CHOQUE (Ataque de Área): Empurra e derruba inimigos.%0A✅ GRIP DE TITÃ (Manobra): Imobiliza e causa dano automático.%0A✅ RESISTÊNCIA AO CANSAÇO (Passiva): Vantagem vs Lento/Exausto.%0A%0A【GRAU 3】%0A✅ ESMAGAR ÁTOMOS (Passiva): Dano dobrado contra objetos.%0A✅ SALTO HULKIANO (Utilidade): Salta até duas Zonas.%0A%0A【GRAU 4】%0A✅ PULSO DE PRESSÃO (Manobra): Cone de vácuo, causa Atordoado.%0A✅ REAÇÃO DE CONTRA-GOLPE (Reação): Anula dano e arremessa inimigo.%0A%0A【GRAU 5】%0A✅ FORÇA DE ESCALA PLANETÁRIA (Passiva): Move montanhas.%0A✅ GOLPE DO FIM DO MUNDO (Manobra): Dano triplicado.%0A✅ INABALÁVEL (Passiva): Imune a ser empurrado/derrubado.',
-        'Voo': 'Voo%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ LEVITAR (Passiva): Ignora terreno difícil, Vantagem em Percepção aérea.%0A✅ MERGULHO EM VELOCIDADE (Manobra): Adiciona Grau ao dano, deixa Caído.%0A✅ RESGATE AÉREO (Utilidade): Carrega aliados voando.%0A%0A【GRAU 2】%0A✅ MANOBRABILIDADE AÉREA (Passiva): +2 Defesa no ar.%0A✅ ACROBACIA SUPREMA (Reação): Vantagem na Defesa contra ataque à distância.%0A✅ VÔO SUPERSÔNICO (Utilidade): Atravessa cidades em minutos.%0A%0A【GRAU 3】%0A✅ ÁS DOS CÉUS (Passiva): Vantagem em Agilidade/Precisão voando.%0A✅ TURBILHÃO DE VENTO (Manobra): Arremessa inimigos, causa Abaulado.%0A%0A【GRAU 4】%0A✅ INÉRCIA ZERO (Passiva): Ação de Movimento como Ação Livre.%0A✅ ATAQUE DE INTERCEPTAÇÃO (Reação): Intercepta e Imobiliza.%0A%0A【GRAU 5】%0A✅ VÔO TRANSESTELAR (Passiva): Voa no vácuo, imune a Caído.%0A✅ BOMBARDEIO CINÉTICO (Manobra): Dano = Potência/Mente + 15.%0A✅ ESTABILIDADE ABSOLUTA (Passiva): Ignora penalidades de alcance.',
-        'Velocidade Sobre-Humana': 'Velocidade Sobre-Humana%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ CORREDOR NATO (Passiva): +3 Agilidade, +1 Zona de movimento.%0A✅ REFLEXOS DE ESQUIVA (Passiva): +2 Defesa vs ataques à distância.%0A✅ MOVIMENTO ACROBÁTICO (Utilidade): Corre por paredes.%0A%0A【GRAU 2】%0A✅ REFLEXOS DE COMBATE (Reação): Bloqueio/Esquiva como Reação.%0A✅ GOLPES EM SÉRIE (Manobra): Ataca todos inimigos na Zona.%0A✅ RUTURA CINÉTICA (Manobra): Empurra e deixa Caído.%0A%0A【GRAU 3】%0A✅ ESPECIALISTA EM FLANQUEAMENTO (Passiva): Vantagem vs inimigos atacados por aliados.%0A✅ GINÁSTICA DE COMBATE (Passiva): Ignora ataques de oportunidade.%0A✅ INSTANTE DE LUCIDEZ (Manobra): Vantagem em Agilidade, Precisão e Defesa.%0A%0A【GRAU 4】%0A✅ CONTRA-ATAQUE INEVITÁVEL (Reação): Ataque de retaliação com dano dobrado.%0A✅ BORRÃO DE ESQUIVA (Passiva): Inimigos têm Desvantagem.%0A✅ PRECISÃO DE ALTA VELOCIDADE (Passiva): Crítico com 18-20.%0A%0A【GRAU 5】%0A✅ DANÇA DA MORTE (Manobra): Ataca todos em até duas Zonas.%0A✅ MÁXIMA EFICIÊNCIA CINÉTICA (Passiva): +10 Agilidade total.%0A✅ FLUXO DE COMBATE PERFEITO (Passiva): Pode re-rolar Defesa gastando 1 Det.',
-        'Disparo Energético': 'Disparo Energético%0A%0A【Custo: 4 PAX por Grau】%0A%0A【GRAU 1】%0A✅ RAJADA CONCENTRADA (Manobra): (1 Ação / 1 Det.) Bônus de acerto e dano = 1 + Grau.%0A✅ DISPARO DE AVISO (Utilidade): Concede Vantagem em Intimidação.%0A✅ SOBRECARGA DE IMPACTO (Manobra): Empurra e deixa Caído.%0A%0A【GRAU 2】%0A✅ FOGO DE SUPRESSÃO (Ataque de Área): Dano = Tier + Grau, causa Lento.%0A✅ DISPARO DUPLO (Manobra): Dois disparos.%0A✅ PONTO DE IGNIÇÃO (Passiva): Críticos causam condições.%0A%0A【GRAU 3】%0A✅ CANHÃO DE ENERGIA (Manobra): Dano +1d6 por ponto de Mente.%0A✅ DISPARO REATIVO (Reação): Disparo para interceptar.%0A%0A【GRAU 4】%0A✅ DESINTEGRAÇÃO PARCIAL (Passiva): Ignora RD igual ao dobro do Grau.%0A✅ CHUVA DE PLASMA (Ataque de Área): Até três Zonas.%0A%0A【GRAU 5】%0A✅ ANNIHILAÇÃO TOTAL (Manobra): Dano triplicado.%0A✅ NEXO ENERGÉTICO (Passiva): RD 5, recupera 2 Det por rodada.%0A✅ DISPARO INTERPLANETÁRIO (Utilidade): Alcance orbital.',
-        'Sentidos Especiais': 'Sentidos Especiais%0A%0A【Custo: 3 PAX por Grau】%0A%0A✅ Você possui os sentidos bem acima do comum. Escolha um entre a visão, audição ou olfato.%0A✅ Cada Grau fornece +2 em Testes de Mente quando usar seus sentidos para rastrear ou perceber.%0A✅ A cada grau, aumente a escala em que ele opera.%0A✅ Em Grau 5, você pode ouvir ou enxergar o mundo inteiro.',
-        'Resistência Aprimorada': 'Resistência Aprimorada%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ CORPO ROBUSTO (Passiva): +2 Resistência, RD 1.%0A✅ DETERMINAÇÃO FERRENHA (Passiva): +5 Determinação máxima.%0A✅ PONTO DE APOIO (Manobra): Não pode ser movido/derrubado.%0A%0A【GRAU 2】%0A✅ VIGOR SOBRE-HUMANO (Passiva): Imune a doenças, Vantagem vs venenos.%0A✅ PELE IMPENETRÁVEL (Passiva): RD 3.%0A✅ RECUPERAÇÃO DE FÔLEGO (Manobra): Recupera Determinação = Tier + Grau.%0A%0A【GRAU 3】%0A✅ INQUEBRÁVEL (Passiva): RD 6.%0A✅ ESCUDO HUMANO (Reação): Toma dano no lugar de aliado.%0A%0A【GRAU 4】%0A✅ ESTADO ESTACIONÁRIO (Passiva): RD 12, ignora penalidades de Ferido.%0A✅ PANCADA DE RETORNO (Reação): Contra-golpe usando Resistência.%0A%0A【GRAU 5】%0A✅ IMORTALIDADE CINÉTICA (Passiva): RD 20, desperta com 1 Det após 1d4 rodadas.%0A✅ NÚCLEO INVIOLÁVEL (Passiva): Imune a desintegração.%0A✅ SOBREVIVÊNCIA ABSOLUTA (Utilidade): Sobrevive a explosão planetária.',
-        'Campo de Força': 'Campo de Força%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ GERAÇÃO DE CAMPO (Passiva/Ativa): Você pode manifestar um campo de energia. Se usado como uma Ação, concede +2 de Defesa e RD 1 até o seu próximo turno.%0A✅ "EU NÃO VOU AGUENTAR POR MUITO TEMPO" (Reação): Quando você ou um aliado adjacente for atingido, você pode gastar sua Reação e 1 de Determinação para reduzir o dano sofrido em um valor igual ao seu Tier + Grau de Poder.%0A✅ CAMPO SALVADOR (Manobra): (1 Ação / 1 Det.) Você projeta um campo em uma zona próxima para amortecer a queda de alguém ou impedir que um objeto pesado esmague um civil. Concede Vantagem em testes de Salvamento.%0A%0A【GRAU 2】%0A✅ BOLHA DE PROTEÇÃO (Manobra): (1 Ação / 2 Det.) O campo agora pode envolver você e até dois aliados próximos. O bônus de Defesa sobe para +4 e a RD para 3.%0A✅ CAMPO DE CONTENÇÃO (Ataque): (1 Ação / 2 Det.) Você tenta prender um inimigo em uma esfera. O alvo deve realizar um teste de Resistência (Tensão 10 + Mente). Se falhar, recebe a condição Imobilizado.%0A✅ PLATAFORMA DE ENERGIA (Utilidade): Você pode criar superfícies sólidas de energia para caminhar sobre os vãos.%0A%0A【GRAU 3】%0A✅ DOMO DA LIGA (Manobra): (1 Ação / 4 Det.) Você cria um domo que cobre uma Zona inteira. A RD é 5 e a Defesa +6.%0A✅ PULSO DE REPULSÃO (Reação): Se um inimigo entrar em combate corpo-a-corpo com você, pode gastar 2 de Determinação para liberar uma onda de choque.%0A%0A【GRAU 4】%0A✅ CAMPO REATIVO (Passiva): Sempre que o campo sofrer um ataque e a RD absorver todo o dano, você recupera 1 de Determinação.%0A✅ PRISÃO MOLECULAR (Ataque): (1 Ação / 5 Det.) O alvo fica Atordoado e Imobilizado.%0A✅ ESCUDO ESPELHADO (Reação): Ao bloquear um disparo energético, pode refletir o disparo de volta.%0A%0A【GRAU 5】%0A✅ ISOLAMENTO ABSOLUTO (Manobra): (1 Ação / 8 Det.) Defesa +10, RD 15.%0A✅ MOLDAR REALIDADE CINÉTICA (Utilidade): Cria construtos complexos que agem independentemente.%0A✅ SOBRECARGA DE CAMPO (Ataque de Área): (1 Ação / 10 Det.) Dano = Mente + Tier em área.',
-        'Garras/Presas': 'Garras/Presas%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ ARMAS NATURAIS (Passiva): Seus ataques desarmados causam dano de perfuração ou corte (Dano = Tier + Grau) e você recebe +2 em testes de Atletismo para escalar.%0A✅ LACERAÇÃO (Manobra): (1 Ação / 1 Det.) Além do dano normal, o alvo recebe a condição Ferido.%0A✅ MORDIDA DE CONTENÇÃO (Manobra): (1 Ação / 1 Det.) O alvo fica Agarrado.%0A%0A【GRAU 2】%0A✅ RETALHAR (Manobra): (1 Ação / 2 Det.) Dois ataques contra o mesmo alvo.%0A✅ INSTINTO ASSASSINO (Passiva): Vantagem contra inimigos Ferido, Caído ou Sangrando.%0A✅ GARRAS DE ESCALADA (Utilidade): Velocidade de Escalada igual à velocidade terrestre.%0A%0A【GRAU 3】%0A✅ GARRAS PENETRANTES (Passiva): Ignora RD igual a Potência + Grau.%0A✅ BOTE SELVAGEM (Manobra): (1 Ação / 3 Det.) Salta e ataca, deixando o alvo Caído.%0A%0A【GRAU 4】%0A✅ FERIMENTOS EXPOSTOS (Passiva): Dano de sangramento = Tier.%0A✅ FRENESI SANGUINÁRIO (Reação): Ataque adicional imediato.%0A%0A【GRAU 5】%0A✅ ESTRAÇALHAR (Manobra): (1 Ação / 6 Det.) Dano dobrado.%0A✅ GARRAS ATÔMICAS (Passiva): Afeta seres Intangíveis.%0A✅ CARNICEIRO CÓSMICO (Passiva): Recupera 5 de Determinação ao derrotar inimigo de Tier igual ou superior.',
-        'Metamorfo': 'Metamorfo%0A%0A【Custo: 5 PAX por Grau (Limite: Grau 1)】%0A%0A✅ MIMETISMO SOCIAL (Utilidade): (1 Ação) Assume aparência de qualquer pessoa.%0A✅ ADAPTAÇÃO BIOLÓGICA (Passiva): Brânquias, garras, camuflagem.%0A✅ MALEABILIDADE FÍSICA (Reação): (1 Det.) RD 5 contra impacto.%0A✅ EXPANSÃO DE MEMBROS (Manobra): (1 Ação / 1 Det.) Alcance corpo-a-corpo vira Afastado.',
-        'Telepatia': 'Telepatia%0A%0A【Custo: 4 PAX por Grau】%0A%0A【GRAU 1】%0A✅ ELO MENTAL (Passiva): Comunicação mental.%0A✅ LEITURA SUPERFICIAL (Manobra): Vantagem em Percepção/Intimidação.%0A✅ PROJEÇÃO DE RUÍDO (Manobra): Causa Abaulado.%0A%0A【GRAU 2】%0A✅ SUGESTÃO HIPNÓTICA (Manobra): Planta ideia simples.%0A✅ MASCARAMENTO MENTAL (Passiva): Inimigos têm Desvantagem para detectar.%0A✅ VARREDURA SENSORIAL (Utilidade): Detecta mentes em 1km.%0A%0A【GRAU 3】%0A✅ PARALISIA PSÍQUICA (Manobra): Causa Paralisado.%0A✅ ESCUDO COGNITIVO (Utilidade): Vantagem vs ataques mentais.%0A✅ INVASÃO DE MEMÓRIA (Utilidade): Extrai informações do passado.%0A%0A【GRAU 4】%0A✅ CONTROLE MENTAL (Manobra): Assume controle do corpo do alvo.%0A✅ ILUSÃO TELEPÁTICA (Manobra): Alvo vê algo que não existe.%0A✅ DOR SINÁPTICA (Passiva): Dano direto na Determinação.%0A%0A【GRAU 5】%0A✅ APAGÃO MENTAL (Manobra): "Desliga" mente de todos inimigos na Zona.%0A✅ ONIPRESENÇA PSÍQUICA (Passiva): Elo Mental sem limite de distância, +5 Mente.%0A✅ REESCRITA DE PERSONALIDADE (Utilidade): Altera memória ou lealdade permanentemente.',
-        'Intangibilidade': 'Intangibilidade%0A%0A【Custo: 4 PAX por Grau】%0A%0A【GRAU 1】%0A✅ FORMA FANTASMÁGORICA (Manobra): Atravessa matéria sólida.%0A✅ ESQUIVA VIBRACIONAL (Reação): +3 Defesa.%0A✅ PASSO LEVE (Passiva): Não ativa armadilhas de pressão.%0A%0A【GRAU 2】%0A✅ DESSINCRONIZAÇÃO MOLECULAR (Passiva): Ignora RD física.%0A✅ TOQUE DISRUPTOR (Manobra): Causa Pane em eletrônicos.%0A✅ MANUTENÇÃO DE FORMA (Passiva): Intangível por rodadas = Resistência.%0A%0A【GRAU 3】%0A✅ MORTALHA FANTASMA (Utilidade): Torna aliados intangíveis.%0A✅ FLUTUAÇÃO MOLECULAR (Passiva): Voo enquanto intangível.%0A✅ ATAQUE INTERNO (Manobra): Ignora toda RD, causa Ferido.%0A%0A【GRAU 4】%0A✅ VIBRAÇÃO DE ÁREA (Manobra): Faz chão ficar intangível.%0A✅ INVISIBILIDADE VIBRACIONAL (Passiva): Invisível enquanto intangível.%0A✅ REFLEXO DE FASE (Passiva): +4 Defesa.%0A%0A【GRAU 5】%0A✅ ESTADO DE FASE PERMANENTE (Passiva): Intangível sem custo.%0A✅ DESINTEGRAÇÃO POR FASE (Manobra): Alvo vira poeira se falhar Resistência 20.%0A✅ VIAGEM ATRAVÉS DE BARREIRAS MÍSTICAS (Passiva): Atravessa campos de força Grau 5.',
-        'Magia': 'Magia%0A%0A【Custo: 4 PAX por Grau】%0A%0A✅ Capacidade de canalizar energia arcana para lançar feitiços.%0A✅ Pode criar ilusões, proteções, teletransporte e efeitos sobrenaturais.%0A✅ Cada Grau permite acesso a feitiços mais poderosos e complexos.%0A✅ Requer testes de Mente ou Espírito dependendo do tipo de magia.%0A✅ Em Grau 5, pode realizar feitos de escala cósmica e manipular realidade.',
-        'Força de Aceleração': 'Força de Aceleração%0A%0A【Custo: 6 PAX por Grau】%0A%0A【GRAU 1】%0A✅ CONEXÃO CINÉTICA (Passiva): +2 Iniciativa, corre sobre superfícies verticais.%0A✅ VIBRAÇÃO MOLECULAR (Manobra): Atravessa objetos sólidos.%0A✅ SÍCOMO DE CORRENTE (Reação): Pega projéteis no ar.%0A%0A【GRAU 2】%0A✅ TORNADO ESCARLATE (Manobra): Arremessa inimigos e deixa Caídos.%0A✅ MÃO VIBRATÓRIA (Ataque): Ignora RD física.%0A✅ METABOLISMO ACELERADO (Passiva): Recupera Determinação.%0A%0A【GRAU 3】%0A✅ SOBRECARGA TEMPORAL (Manobra): Duas Ações extras, fica Cansado.%0A✅ VÁCUO DE VELOCIDADE (Utilidade): Anula efeitos de área.%0A%0A【GRAU 4】%0A✅ PUNCH DE MASSA INFINITA (Ataque): Usa Agilidade para dano.%0A✅ RUTURA DA BARREIRA DO TEMPO (Utilidade): Volta uma rodada no tempo.%0A%0A【GRAU 5】%0A✅ UNITARIEDADE COM A FORÇA (Passiva): Imune a Lento, Imobilizado, Paralisado.%0A✅ ROUBO DE ENERGIA CINÉTICA (Ataque): Alvo Paralisado, você ganha Ação Extra.%0A✅ VIAJANTE MULTIDIMENSIONAL (Utilidade): Transporta para outras dimensões.',
-        'Comunicação Animal': 'Comunicação Animal%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ LINGUAGEM DA MATILHA (Passiva): Entende e é entendido por animais.%0A✅ EMPATIA BESTIAL (Utilidade): Acalma animais selvagens.%0A✅ SENTIDOS COMPARTILHADOS (Passiva): +2 Percepção.%0A%0A【GRAU 2】%0A✅ CONVOCAÇÃO DE ALIADOS (Manobra): Animais dão Desvantagem aos inimigos.%0A✅ OLHOS DA NATUREZA (Utilidade): Vê através de animal em 1km.%0A✅ FEROCIDADE INCENTIVADA (Passiva): Animais têm Vantagem e +2 Dano.%0A%0A【GRAU 3】%0A✅ COMANDO DA ALFA (Manobra): Ataque coordenado, causa Caído ou Sangrando.%0A✅ MIMETISMO SENSORIAL (Passiva): Visão noturna, sonar.%0A✅ VIGOR DA SELVA (Reação): RD 5, recupera 1d6 Det.%0A%0A【GRAU 4】%0A✅ DOMINAÇÃO DE FERAS (Manobra): Controla criaturas bestiais.%0A✅ ENXAME DEVASTADOR (Ataque de Área): Cobre duas Zonas, causa Cego.%0A✅ LÍDER DA CAÇA (Passiva): Aliados ganham +2 Agilidade e Defesa.%0A%0A【GRAU 5】%0A✅ AVATAR DA NATUREZA (Manobra): Espírito de fera lendária, dano triplicado.%0A✅ RESSURREIÇÃO DO ESPÍRITO (Utilidade): Traz animais de volta à vida.%0A✅ UNIDADE BIOLÓGICA (Passiva): Imune a venenos, usa atributo de qualquer animal.',
-        'Mestre Marcial': 'Mestre Marcial%0A%0A【Custo: 6 PAX por Grau (3 PAX para Arquétipo Cavaleiro)】%0A%0A【GRAU 1】%0A✅ MESTRE DO DOJÔ (Passiva): Dano = Tier + Grau, +2 acerto desarmado.%0A✅ GOLPE DE ATORDOAMENTO (Manobra): Causa Abaulado.%0A✅ PARAR IMPACTO (Reação): +2 Defesa, se errar derruba inimigo.%0A%0A【GRAU 2】%0A✅ MANOBRA DE AGARRAR (Manobra): Imobiliza.%0A✅ CONTROLE CORPORAL (Passiva): Vantagem vs derrubar/empurrar.%0A✅ COMBATE FLUIDO (Manobra): Próximo ataque tem Vantagem.%0A%0A【GRAU 3】%0A✅ CONTRA-ATAQUE DE MESTRE (Reação): Ataque imediato com Vantagem.%0A✅ GOLPE DUPLO (Manobra): Dois ataques desarmados.%0A✅ MOVIMENTAÇÃO TÁTICA (Passiva): Ignora ataques de oportunidade.%0A%0A【GRAU 4】%0A✅ PRESSÃO MOLECULAR (Manobra): Ignora RD física, causa Paralisado.%0A✅ FOCO INTERIOR (Passiva): Remove condições gastando 2 Det.%0A✅ SENTIDO DE LUTA (Passiva): Nunca pego de surpresa.%0A%0A【GRAU 5】%0A✅ GOLPE DOS CINCO PONTOS (Manobra): Determinação do alvo cai para 0.%0A✅ ESTADO DE ZEN (Passiva): +5 Defesa, ignora cegueira.%0A✅ MESTRE SUPREMO (Passiva): Crítico 18-20, Vantagem em todos ataques.'
+async function loadCharacter(charId) {
+    try {
+        const charData = await apiRequest(`/character/${currentUser}/${charId}`, 'GET');
+        if (!charData) return;
+        
+        currentCharacter = charId;
+        
+        document.getElementById('heroName').value = charData.heroName || '';
+        document.getElementById('civilID').value = charData.civilID || '';
+        document.getElementById('mentor').value = charData.mentor || '';
+        document.getElementById('player').value = charData.player || '';
+        document.getElementById('origin').value = charData.origin || '';
+        document.getElementById('archetype').value = charData.archetype || '';
+        
+        document.getElementById('motiv_why').innerHTML = charData.motiv_why || '';
+        document.getElementById('motiv_how').innerHTML = charData.motiv_how || '';
+        document.getElementById('motiv_whom').innerHTML = charData.motiv_whom || '';
+        
+        document.getElementById('pot_base').value = charData.pot_base || 0;
+        document.getElementById('pot_bonus').value = charData.pot_bonus || 0;
+        document.getElementById('prec_base').value = charData.prec_base || 0;
+        document.getElementById('prec_bonus').value = charData.prec_bonus || 0;
+        document.getElementById('agi_base').value = charData.agi_base || 0;
+        document.getElementById('agi_bonus').value = charData.agi_bonus || 0;
+        document.getElementById('res_base').value = charData.res_base || 0;
+        document.getElementById('res_bonus').value = charData.res_bonus || 0;
+        document.getElementById('men_base').value = charData.men_base || 0;
+        document.getElementById('men_bonus').value = charData.men_bonus || 0;
+        document.getElementById('esp_base').value = charData.esp_base || 0;
+        document.getElementById('esp_bonus').value = charData.esp_bonus || 0;
+        
+        document.getElementById('roteiroVal').innerText = charData.roteiro || 0;
+        document.getElementById('inventory').innerHTML = charData.inventory || '';
+        document.getElementById('notes').innerHTML = charData.notes || '';
+        
+        const tier = charData.tier || 'D';
+        const tierBtns = document.querySelectorAll('.tier-btn');
+        const tierIndex = { 'D': 0, 'C': 1, 'B': 2, 'A': 3, 'S': 4 }[tier];
+        if (tierBtns[tierIndex]) setTier(tierBtns[tierIndex], tier);
+        
+        document.getElementById('charSelectOverlay').style.display = 'none';
+        document.getElementById('dossierContainer').style.display = 'block';
+        document.getElementById('userInfo').style.display = 'flex';
+        
+        calcStats();
+    } catch (error) {
+        alert('Erro ao carregar personagem: ' + error.message);
+    }
+}
+
+async function saveCurrentToServer() {
+    if (!currentUser || !currentCharacter) return;
+    
+    const sheetData = {
+        heroName: document.getElementById('heroName').value,
+        civilID: document.getElementById('civilID').value,
+        mentor: document.getElementById('mentor').value,
+        player: document.getElementById('player').value,
+        origin: document.getElementById('origin').value,
+        archetype: document.getElementById('archetype').value,
+        motiv_why: document.getElementById('motiv_why').innerHTML,
+        motiv_how: document.getElementById('motiv_how').innerHTML,
+        motiv_whom: document.getElementById('motiv_whom').innerHTML,
+        pot_base: document.getElementById('pot_base').value,
+        pot_bonus: document.getElementById('pot_bonus').value,
+        prec_base: document.getElementById('prec_base').value,
+        prec_bonus: document.getElementById('prec_bonus').value,
+        agi_base: document.getElementById('agi_base').value,
+        agi_bonus: document.getElementById('agi_bonus').value,
+        res_base: document.getElementById('res_base').value,
+        res_bonus: document.getElementById('res_bonus').value,
+        men_base: document.getElementById('men_base').value,
+        men_bonus: document.getElementById('men_bonus').value,
+        esp_base: document.getElementById('esp_base').value,
+        esp_bonus: document.getElementById('esp_bonus').value,
+        tier: document.getElementById('tierValue').value,
+        roteiro: document.getElementById('roteiroVal').innerText,
+        crisis: document.getElementById('crisisBtn').classList.contains('active'),
+        conditions: [],
+        inventory: document.getElementById('inventory').innerHTML,
+        notes: document.getElementById('notes').innerHTML,
+        powers: [], equips: [], knowledges: [], traits: []
     };
-
-    function setTier(btn, tier) {
-        document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        currentTier = tier;
-        document.getElementById('rankDisplay').innerText = tier;
-        document.getElementById('paxMaxDisplay').innerText = TIERS[tier].pax;
-        document.getElementById('tierValue').value = tier;
-        calcPax();
-    }
-
-    function toggleCond(btn) { btn.classList.toggle('active'); }
     
-    function changeRoteiro(delta) {
-        const el = document.getElementById('roteiroVal');
-        let val = parseInt(el.innerText) || 0;
-        val += delta;
-        if (val < 0) val = 0;
-        el.innerText = val;
+    try {
+        await saveCharacter(currentCharacter, sheetData);
+        alert('Personagem salvo com sucesso!');
+    } catch (error) {
+        alert('Erro ao salvar: ' + error.message);
     }
+}
+
+async function deleteCharacter(charId) {
+    if (confirm('Tem certeza que deseja deletar este herói?')) {
+        await deleteCharacterFromServer(charId);
+        showCharacterSelect();
+    }
+}
+
+// ==================== COMPARTILHAMENTO ====================
+async function shareExistingCharacter(charId) {
+    try {
+        const charData = await apiRequest(`/character/${currentUser}/${charId}`, 'GET');
+        const result = await apiRequest('/share', 'POST', { characterData: charData });
+        alert(`Código: ${result.shareCode}\nCompartilhe com seus amigos!`);
+        navigator.clipboard.writeText(result.shareCode);
+    } catch (error) {
+        alert('Erro ao compartilhar: ' + error.message);
+    }
+}
+
+async function showShareModal() {
+    if (!currentCharacter) return;
+    await shareExistingCharacter(currentCharacter);
+}
+
+function showImportModal() {
+    const code = prompt('Digite o código de compartilhamento:');
+    if (code) importByCode(code);
+}
+
+async function importByCode(shareCode) {
+    try {
+        const charData = await apiRequest(`/share/${shareCode}`, 'GET');
+        const newId = 'import_' + Date.now();
+        await saveCharacter(newId, charData);
+        alert('Herói importado com sucesso!');
+        showCharacterSelect();
+    } catch (error) {
+        alert('Código inválido ou expirado!');
+    }
+}
+
+// ==================== FUNÇÕES DA FICHA ====================
+const TIERS = {
+    'D': { det: 12, def: 8 }, 'C': { det: 15, def: 10 },
+    'B': { det: 18, def: 12 }, 'A': { det: 21, def: 14 },
+    'S': { det: 25, def: 16 }
+};
+
+function setTier(btn, tier) {
+    document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('rankDisplay').innerText = tier;
+    document.getElementById('tierValue').value = tier;
+    calcStats();
+}
+
+function toggleCond(btn) { btn.classList.toggle('active'); }
+function changeRoteiro(delta) {
+    let val = parseInt(document.getElementById('roteiroVal').innerText) || 0;
+    val += delta;
+    if (val < 0) val = 0;
+    document.getElementById('roteiroVal').innerText = val;
+}
+function toggleCrisis() { document.getElementById('crisisBtn').classList.toggle('active'); }
+
+function calcStats() {
+    const tier = document.getElementById('tierValue').value;
+    const tierData = TIERS[tier] || TIERS['D'];
     
-    function toggleCrisis() {
-        document.getElementById('crisisBtn').classList.toggle('active');
-    }
-
-    function applyArchetypeLogic() {
-        const archetype = document.getElementById('archetype').value;
-        const existingPowers = [];
-        document.querySelectorAll('#powers-container .power-name').forEach(p => existingPowers.push(p.innerText));
-        
-        switch(archetype) {
-            case 'Cavaleiro das Trevas':
-                if(!existingPowers.includes('Artista Marcial')) {
-                    addPowerByName('Artista Marcial', 6, 'Pág. 25', 'grad', true);
-                }
-                break;
-            case 'Gênio':
-                if(!document.querySelector('#knowledge-container .power-name')?.innerText.includes('Tech')) {
-                    addKnowledgeByName('Tech', 4, 'Pág. 30', 'fix', true);
-                }
-                break;
-            case 'Anti-Herói':
-                if(!document.querySelector('#knowledge-container .power-name')?.innerText.includes('Subterfúgio')) {
-                    addKnowledgeByName('Subterfúgio', 4, 'Pág. 30', 'fix', true);
-                }
-                break;
-        }
-        calcPax();
-    }
-
-    function applyOriginLogic() {
-        const origin = document.getElementById('origin').value;
-        
-        document.getElementById('pot_bonus').value = 0;
-        document.getElementById('prec_bonus').value = 0;
-        document.getElementById('agi_bonus').value = 0;
-        document.getElementById('res_bonus').value = 0;
-        document.getElementById('men_bonus').value = 0;
-        document.getElementById('esp_bonus').value = 0;
-        
-        const existingPowers = [];
-        document.querySelectorAll('#powers-container .power-name').forEach(p => existingPowers.push(p.innerText));
-        
-        switch(origin) {
-            case 'Kryptoniano':
-                document.getElementById('pot_bonus').value = 3;
-                if(!existingPowers.includes('Super-Força')) addPowerByName('Super-Força', 3, 'Pág. 23', 'grad', false, powerDescriptions['Super-Força']);
-                if(!existingPowers.includes('Voo')) addPowerByName('Voo', 3, 'Pág. 24', 'grad', false, powerDescriptions['Voo']);
-                if(!existingPowers.includes('Velocidade Sobre-Humana')) addPowerByName('Velocidade Sobre-Humana', 3, 'Pág. 23', 'grad', false, powerDescriptions['Velocidade Sobre-Humana']);
-                if(!existingPowers.includes('Disparo Energético')) addPowerByName('Disparo Energético', 4, 'Pág. 21', 'grad', false, powerDescriptions['Disparo Energético']);
-                if(!existingPowers.includes('Sentidos Especiais')) addPowerByName('Sentidos Especiais', 3, 'Pág. 22', 'grad', false, powerDescriptions['Sentidos Especiais']);
-                if(!existingPowers.includes('Resistência Aprimorada')) addPowerByName('Resistência Aprimorada', 3, 'Pág. 23', 'grad', false, powerDescriptions['Resistência Aprimorada']);
-                break;
-                
-            case 'Humano':
-                if(!existingPowers.includes('Mestre Marcial') && !document.querySelector('#knowledge-container .power-name')?.innerText.includes('Tech')) {
-                    if(confirm('Humanos recebem um poder Grátis: Mestre Marcial ou Tech? Clique OK para Mestre Marcial ou Cancelar para Tech.')) {
-                        addPowerByName('Mestre Marcial', 6, 'Pág. 25', 'grad', true, powerDescriptions['Mestre Marcial']);
-                    } else {
-                        addKnowledgeByName('Tech', 4, 'Pág. 30', 'fix', true);
-                    }
-                }
-                break;
-                
-            case 'Thanagariano':
-                document.getElementById('agi_bonus').value = 2;
-                document.getElementById('pot_bonus').value = 1;
-                if(!existingPowers.includes('Voo')) addPowerByName('Voo', 3, 'Pág. 24', 'grad', false, powerDescriptions['Voo']);
-                if(!existingPowers.includes('Sentidos Especiais')) addPowerByName('Sentidos Especiais', 3, 'Pág. 22', 'grad', false, powerDescriptions['Sentidos Especiais']);
-                if(!existingPowers.includes('Resistência Aprimorada')) addPowerByName('Resistência Aprimorada', 3, 'Pág. 23', 'grad', false, powerDescriptions['Resistência Aprimorada']);
-                break;
-                
-            case 'Novo Deus':
-                document.getElementById('pot_bonus').value = 2;
-                document.getElementById('res_bonus').value = 1;
-                if(!existingPowers.includes('Super-Força')) addPowerByName('Super-Força', 3, 'Pág. 23', 'grad', false, powerDescriptions['Super-Força']);
-                if(!existingPowers.includes('Resistência Aprimorada')) addPowerByName('Resistência Aprimorada', 3, 'Pág. 23', 'grad', false, powerDescriptions['Resistência Aprimorada']);
-                if(!existingPowers.includes('Voo')) addPowerByName('Voo', 3, 'Pág. 24', 'grad', false, powerDescriptions['Voo']);
-                break;
-                
-            case 'Marciano':
-                document.getElementById('men_bonus').value = 3;
-                if(!existingPowers.includes('Metamorfo')) addPowerByName('Metamorfo', 5, 'Pág. 22', 'grad', false, powerDescriptions['Metamorfo']);
-                if(!existingPowers.includes('Telepatia')) addPowerByName('Telepatia', 4, 'Pág. 22', 'grad', false, powerDescriptions['Telepatia']);
-                if(!existingPowers.includes('Voo')) addPowerByName('Voo', 3, 'Pág. 24', 'grad', false, powerDescriptions['Voo']);
-                if(!existingPowers.includes('Intangibilidade')) addPowerByName('Intangibilidade', 4, 'Pág. 22', 'grad', false, powerDescriptions['Intangibilidade']);
-                break;
-                
-            case 'Monstruoso':
-                document.getElementById('res_bonus').value = 2;
-                document.getElementById('pot_bonus').value = 1;
-                if(!existingPowers.includes('Garras/Presas')) addPowerByName('Garras/Presas', 3, 'Pág. 20', 'grad', false, powerDescriptions['Garras/Presas']);
-                break;
-                
-            case 'Ciborgue':
-                document.getElementById('men_bonus').value = 2;
-                document.getElementById('pot_bonus').value = 1;
-                break;
-                
-            case 'Lanterna Verde':
-                document.getElementById('esp_bonus').value = 2;
-                document.getElementById('men_bonus').value = 1;
-                if(!existingPowers.includes('Campo de Força')) addPowerByName('Campo de Força', 3, 'Pág. 20', 'grad', false, powerDescriptions['Campo de Força']);
-                if(!existingPowers.includes('Voo')) addPowerByName('Voo', 3, 'Pág. 24', 'grad', false, powerDescriptions['Voo']);
-                break;
-                
-            case 'Mistico':
-                document.getElementById('men_bonus').value = 3;
-                if(!existingPowers.includes('Magia')) addPowerByName('Magia', 4, 'Pág. 21', 'grad', false, powerDescriptions['Magia']);
-                break;
-                
-            case 'Consciencia Coletiva':
-                document.getElementById('men_bonus').value = 2;
-                document.getElementById('res_bonus').value = 1;
-                break;
-                
-            case 'Velocista':
-                document.getElementById('agi_bonus').value = 3;
-                if(!existingPowers.includes('Velocidade Sobre-Humana')) addPowerByName('Velocidade Sobre-Humana', 3, 'Pág. 23', 'grad', false, powerDescriptions['Velocidade Sobre-Humana']);
-                if(!existingPowers.includes('Força de Aceleração')) addPowerByName('Força de Aceleração', 6, 'Pág. 21', 'grad', false, powerDescriptions['Força de Aceleração']);
-                break;
-                
-            case 'Atlante':
-                if(!existingPowers.includes('Comunicação Animal')) addPowerByName('Comunicação Animal', 2, 'Pág. 22', 'grad', false, powerDescriptions['Comunicação Animal']);
-                if(!existingPowers.includes('Sentidos Especiais')) addPowerByName('Sentidos Especiais', 3, 'Pág. 22', 'grad', false, powerDescriptions['Sentidos Especiais']);
-                break;
-        }
-        
-        calcPax();
-    }
+    const esp = (parseInt(document.getElementById('esp_base').value)||0) + (parseInt(document.getElementById('esp_bonus').value)||0);
+    const res = (parseInt(document.getElementById('res_base').value)||0) + (parseInt(document.getElementById('res_bonus').value)||0);
+    const agi = (parseInt(document.getElementById('agi_base').value)||0) + (parseInt(document.getElementById('agi_bonus').value)||0);
     
-    function addPowerByName(name, cost, page, type, isFree = false, customDesc = null) {
-        let desc = customDesc || powerDescriptions[name] || '';
-        createPowerCard(name, cost, page, type, 'powers-container', desc, cost, false, isFree);
-    }
+    document.getElementById('det').value = tierData.det + esp;
+    document.getElementById('def').value = tierData.def + res;
+    document.getElementById('init').value = agi;
     
-    function addKnowledgeByName(name, cost, page, type, isFree = false) {
-        createPowerCard(name, cost, page, type, 'knowledge-container', '', cost, false, isFree);
-    }
+    document.querySelectorAll('.stat-box').forEach(box => {
+        const base = parseInt(box.querySelector('.attr-base').value) || 0;
+        const bonus = parseInt(box.querySelector('.attr-bonus').value) || 0;
+        const total = base + bonus;
+        box.querySelector('.stat-total').innerText = total > 0 ? '+' + total : total;
+    });
+}
+
+function saveSheet() {
+    saveCurrentToServer();
+}
+
+// Inicialização
+window.onload = () => {
+    checkServerConnection();
+    setInterval(checkServerConnection, 30000);
+    calcStats();
     
-    function addTraitByName(name, cost, page, type, isFree = false) {
-        createPowerCard(name, cost, page, type, 'traits-container', '', cost, false, isFree);
-    }
-    
-    function addFromSelect() {
-        const select = document.getElementById('powerSelect');
-        processAdd(select, 'powers-container');
-    }
-    
-    function addKnowledgeFromSelect() {
-        const select = document.getElementById('knowledgeSelect');
-        processAdd(select, 'knowledge-container');
-    }
-    
-    function addTraitFromSelect() {
-        const select = document.getElementById('traitSelect');
-        processAdd(select, 'traits-container');
-    }
-    
-    function addEquipFromSelect() {
-        const select = document.getElementById('equipSelect');
-        processAdd(select, 'equip-container', true);
-    }
-
-    function processAdd(select, containerId, isEquip = false) {
-        const val = select.value;
-        if(!val) return;
-        const parts = val.split('|');
-        // Decodificar a descrição corretamente
-        let descricao = '';
-        if (parts[4]) {
-            descricao = decodeURIComponent(parts[4].replace(/%0A/g, '\n'));
-        } else if (parts[3] && parts[3] !== 'grad' && parts[3] !== 'fix' && parts[3] !== 'Action' && parts[3] !== 'Custom') {
-            descricao = decodeURIComponent(parts[3].replace(/%0A/g, '\n'));
-        }
-        createPowerCard(parts[0], parseInt(parts[1]), parts[2], parts[3] || 'grad', containerId, descricao, null, isEquip);
-        select.value = "";
-    }
-
-    function createPowerCard(name, cost, page, type, containerId, savedDesc = '', savedCost = null, isEquip = false, isFree = false) {
-        const container = document.getElementById(containerId);
-        const div = document.createElement('div');
-        div.className = isEquip ? 'power-card equip' : 'power-card';
-        div.dataset.base = cost;
-        
-        // Formatar a descrição com quebras de linha e emojis
-        let formattedDesc = savedDesc;
-        // Substituir ✅ por bullet points com quebra de linha
-        formattedDesc = formattedDesc.replace(/✅/g, '\n✅');
-        // Garantir que os títulos de GRAU tenham quebra de linha antes
-        formattedDesc = formattedDesc.replace(/【GRAU/g, '\n\n【GRAU');
-        formattedDesc = formattedDesc.replace(/Custo:/g, '\n【Custo:');
-        
-        let costInput = '';
-        if (type === 'fix') {
-            costInput = `<input type="number" class="p-cost" value="${cost}" readonly style="width:50px;"> PAX`;
-        } else if (type === 'Custom') {
-            costInput = `<input type="number" class="p-cost" value="${savedCost || 0}" oninput="calcPax()" style="width:60px;"> PAX`;
-        } else if (type === 'Action') {
-            costInput = `<input type="text" class="p-cost" value="0" readonly style="width:30px; border:none; background:transparent; color:#aaa;">`;
-        } else {
-            const initialVal = savedCost || cost;
-            const initialGrade = initialVal/cost;
-            costInput = `Grau: <input type="number" class="p-grade" value="${initialGrade || 1}" min="1" max="5" style="width:50px;" onchange="updatePowerCost(this, ${cost})"> = <span class="p-total">${initialVal}</span> PAX`;
-        }
-        
-        const checked = isFree ? 'checked' : '';
-
-        div.innerHTML = `
-            <button class="btn-remove" onclick="removePower(this)">✕</button>
-            <div class="power-header">
-                <div class="power-name">${name}</div>
-                <div class="power-meta">${page}</div>
-                <div class="cost-ctrl">
-                    ${costInput}
-                    <label style="display:inline; font-size:0.7rem; color:#aaa; margin:0;">
-                        <input type="checkbox" class="free-check" onchange="calcPax()" ${checked}> Gratuito/Origem
-                    </label>
-                </div>
-            </div>
-            <div class="editable-box p-desc" contenteditable="true" placeholder="Descrição detalhada..." style="white-space: pre-wrap; font-family: monospace; font-size: 0.85rem;">${formattedDesc}</div>
-            <div class="limit-text">⚠️ ERRO: LIMITE DE GRAU (${TIERS[currentTier].powerLimit}) EXCEDIDO!</div>
-            <div class="limit-text-warn">⚠️ AVISO: Apenas 1 poder permitido neste Grau.</div>
-        `;
-        container.appendChild(div);
-        calcPax();
-    }
-    function updatePowerCost(input, base) {
-        const grade = parseInt(input.value) || 1;
-        const total = grade * base;
-        input.parentElement.querySelector('.p-total').innerText = total;
-        calcPax();
-    }
-
-    function removePower(btn) { btn.parentElement.remove(); calcPax(); }
-
-    function calcPax() {
-        let totalSpent = 0;
-        const tierData = TIERS[currentTier];
-
-        document.querySelectorAll('.stat-box').forEach(box => {
-            const baseInput = box.querySelector('.attr-base');
-            const bonusInput = box.querySelector('.attr-bonus');
-            let base = parseInt(baseInput.value) || 0;
-            if(base % 3 !== 0) { base = Math.floor(base/3)*3; baseInput.value = base; }
-            const total = base + (parseInt(bonusInput.value) || 0);
-            box.querySelector('.stat-total').innerText = total > 0 ? '+' + total : total;
-            if (total > tierData.attrLimit) box.classList.add('limit-error'); else box.classList.remove('limit-error');
-            if(base > 0) totalSpent += (base / 3) * 5;
-        });
-
-        let maxGradeCount = 0;
-        document.querySelectorAll('.power-card').forEach(card => {
-            const gradeInput = card.querySelector('.p-grade');
-            if(gradeInput) {
-                const grade = parseInt(gradeInput.value) || 1;
-                if (grade === tierData.powerLimit) maxGradeCount++;
-            }
-        });
-
-        document.querySelectorAll('.power-card').forEach(card => {
-            const gradeInput = card.querySelector('.p-grade');
-            card.classList.remove('limit-error'); card.classList.remove('limit-warning');
-            if(gradeInput) {
-                const grade = parseInt(gradeInput.value) || 1;
-                if(grade > tierData.powerLimit) card.classList.add('limit-error');
-                else if(grade === tierData.powerLimit && maxGradeCount > 1) card.classList.add('limit-warning');
-            }
-
-            let cost = 0;
-            let baseCost = parseInt(card.dataset.base) || 0;
-            if (card.querySelector('.p-total')) cost = parseInt(card.querySelector('.p-total').innerText) || 0;
-            else if (card.querySelector('.p-cost')) cost = parseInt(card.querySelector('.p-cost').value) || 0;
-
-            if(card.querySelector('.free-check').checked) {
-                let discountedCost = cost - baseCost;
-                totalSpent += (discountedCost > 0 ? discountedCost : 0);
-            } else {
-                if (!card.innerHTML.includes('Action')) totalSpent += cost;
-            }
-        });
-
-        document.getElementById('paxSpentDisplay').innerText = Math.ceil(totalSpent);
-        const status = document.getElementById('paxStatus');
-        if(totalSpent > tierData.pax) { status.innerText = "⚠️ EXCEDIDO!"; status.className = "pax-status over"; }
-        else { status.innerText = "OK"; status.className = "pax-status ok"; }
-
-        const esp = parseInt(document.getElementById('esp_base').value||0) + parseInt(document.getElementById('esp_bonus').value||0);
-        const res = parseInt(document.getElementById('res_base').value||0) + parseInt(document.getElementById('res_bonus').value||0);
-        const agi = parseInt(document.getElementById('agi_base').value||0) + parseInt(document.getElementById('agi_bonus').value||0);
-        
-        document.getElementById('det').value = tierData.det + esp;
-        document.getElementById('def').value = tierData.def + res;
-        document.getElementById('init').value = agi;
-    }
-
-    function saveSheet() {
-        const data = { inputs: {}, content: {}, powers: [], equips: [], knowledges: [], traits: [], conditions: [], tier: '' };
-        document.querySelectorAll('input:not(.p-grade):not(.p-cost):not(.attr-base):not(.attr-bonus):not(.free-check):not(#fileInput)').forEach(el => { if(el.id) data.inputs[el.id] = el.value; });
-        const attrs = {};
-        document.querySelectorAll('.attr-base').forEach(el => attrs[el.id] = el.value);
-        document.querySelectorAll('.attr-bonus').forEach(el => attrs[el.id] = el.value);
-        data.attrs = attrs;
-        document.querySelectorAll('.editable-box:not(.p-desc)').forEach(el => { if(el.id) data.content[el.id] = el.innerHTML; });
-        data.tier = document.getElementById('tierValue').value;
-        document.querySelectorAll('.condition-btn').forEach((el, i) => { if(el.classList.contains('active')) data.conditions.push(i); });
-        data.roteiro = document.getElementById('roteiroVal').innerText;
-        data.crisis = document.getElementById('crisisBtn').classList.contains('active');
-        
-        document.querySelectorAll('#powers-container .power-card').forEach(card => extractCardData(card, data.powers));
-        document.querySelectorAll('#equip-container .power-card').forEach(card => extractCardData(card, data.equips));
-        document.querySelectorAll('#knowledge-container .power-card').forEach(card => extractCardData(card, data.knowledges));
-        document.querySelectorAll('#traits-container .power-card').forEach(card => extractCardData(card, data.traits));
-
-        const name = document.getElementById('heroName').value || 'heroi';
-        const blob = new Blob([JSON.stringify(data)], {type: 'application/json'});
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = `${name}_JLU.json`;
-        link.click();
-    }
-
-    function extractCardData(card, array) {
-        let costVal = 0;
-        let type = 'grad';
-        if(card.innerHTML.includes('Action')) type = 'Action';
-        else if(card.querySelector('.p-total')) { costVal = card.querySelector('.p-total').innerText; type = 'grad'; }
-        else { costVal = card.querySelector('.p-cost').value; type = card.querySelector('.p-cost').readOnly ? 'fix' : 'Custom'; }
-
-        array.push({
-            name: card.querySelector('.power-name').innerText,
-            page: card.querySelector('.power-meta').innerText,
-            cost: costVal,
-            desc: card.querySelector('.p-desc').innerHTML,
-            free: card.querySelector('.free-check').checked,
-            type: type,
-            base: card.dataset.base
-        });
-    }
-
-    function loadSheet(input) {
-        const file = input.files[0];
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                for (const key in data.inputs) { const el = document.getElementById(key); if(el && el.type !== 'file') el.value = data.inputs[key]; }
-                for (const key in data.content) { const el = document.getElementById(key); if(el) el.innerHTML = data.content[key]; }
-                if(data.attrs) { for (const key in data.attrs) { const el = document.getElementById(key); if(el) el.value = data.attrs[key]; } }
-                if(data.tier) setTier(document.querySelectorAll('.tier-btn')[['D','C','B','A','S'].indexOf(data.tier)], data.tier);
-                if(data.roteiro) document.getElementById('roteiroVal').innerText = data.roteiro;
-                if(data.crisis) document.getElementById('crisisBtn').classList.add('active');
-                
-                document.querySelectorAll('.condition-btn').forEach(el => el.classList.remove('active'));
-                if(data.conditions) data.conditions.forEach(i => document.querySelectorAll('.condition-btn')[i].classList.add('active'));
-                
-                document.getElementById('powers-container').innerHTML = '';
-                if(data.powers) data.powers.forEach(p => createPowerCard(p.name, parseInt(p.base), p.page, p.type, 'powers-container', p.desc, p.cost, false, p.free));
-                
-                document.getElementById('equip-container').innerHTML = '';
-                if(data.equips) data.equips.forEach(p => createPowerCard(p.name, parseInt(p.base), p.page, p.type, 'equip-container', p.desc, p.cost, true, p.free));
-                
-                document.getElementById('knowledge-container').innerHTML = '';
-                if(data.knowledges) data.knowledges.forEach(p => createPowerCard(p.name, parseInt(p.base), p.page, p.type, 'knowledge-container', p.desc, p.cost, false, p.free));
-                
-                document.getElementById('traits-container').innerHTML = '';
-                if(data.traits) data.traits.forEach(p => createPowerCard(p.name, parseInt(p.base), p.page, p.type, 'traits-container', p.desc, p.cost, false, p.free));
-
-                setTimeout(() => {
-                   if(data.powers) data.powers.forEach((p, i) => document.querySelectorAll('#powers-container .free-check')[i].checked = p.free);
-                   if(data.equips) data.equips.forEach((p, i) => document.querySelectorAll('#equip-container .free-check')[i].checked = p.free);
-                   if(data.knowledges) data.knowledges.forEach((p, i) => document.querySelectorAll('#knowledge-container .free-check')[i].checked = p.free);
-                   if(data.traits) data.traits.forEach((p, i) => document.querySelectorAll('#traits-container .free-check')[i].checked = p.free);
-                   calcPax();
-                }, 100);
-            } catch (err) { console.error(err); alert('Erro ao ler arquivo: ' + err.message); }
-        };
-        reader.readAsText(file);
-        input.value = '';
-    }
-    
-    window.onload = () => calcPax();
+    document.querySelectorAll('.attr-base, .attr-bonus').forEach(el => {
+        el.addEventListener('input', calcStats);
+    });
+};
 </script>
-
 </body>
 </html>
