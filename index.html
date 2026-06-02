@@ -4,620 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Dossiê: Justice League Unlimited</title>
+    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-dark: #050a10;
-            --panel-bg: #0f1926;
-            --dc-blue: #0078f0;
-            --dc-red: #e62429;
-            --dc-gold: #f2ce16;
-            --text-main: #e0e0e0;
-            --text-dim: #8899a6;
-            --border-color: #1f3a52;
-            --success: #00ff9d;
-            --danger: #ff003c;
-            --warning: #ff9800;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            font-family: 'Roboto', sans-serif;
-            color: var(--text-main);
-            padding: 0;
-            padding-top: 80px;
-        }
-
-        /* ========== PAX BAR RESPONSIVO ========== */
-        .pax-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: rgba(11, 19, 29, 0.98);
-            border-bottom: 3px solid var(--dc-gold);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 5%;
-            z-index: 1000;
-            backdrop-filter: blur(8px);
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .bar-left, .bar-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-
-        .pax-info {
-            font-family: 'Teko', sans-serif;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: baseline;
-            gap: 8px;
-            background: rgba(0,0,0,0.4);
-            padding: 5px 12px;
-            border-radius: 30px;
-        }
-
-        .pax-value {
-            font-weight: bold;
-            color: #fff;
-            font-size: 1.6rem;
-            line-height: 1;
-        }
-
-        .pax-label {
-            color: var(--dc-blue);
-            letter-spacing: 1px;
-            font-size: 1rem;
-        }
-
-        .roteiro-ctrl {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(0,0,0,0.4);
-            padding: 5px 15px;
-            border-radius: 30px;
-            border: 1px solid var(--dc-blue);
-        }
-
-        .roteiro-btn {
-            background: none;
-            border: none;
-            color: var(--dc-gold);
-            font-size: 1.2rem;
-            cursor: pointer;
-            font-weight: bold;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-        }
-
-        .roteiro-val {
-            font-family: 'Teko', sans-serif;
-            font-size: 1.4rem;
-            color: #fff;
-            min-width: 30px;
-            text-align: center;
-        }
-
-        .crisis-btn {
-            background: transparent;
-            border: 2px solid var(--dc-red);
-            color: var(--dc-red);
-            font-family: 'Teko', sans-serif;
-            font-size: 1rem;
-            padding: 4px 15px;
-            cursor: pointer;
-            border-radius: 20px;
-        }
-
-        .crisis-btn.active {
-            background: var(--dc-red);
-            color: #fff;
-        }
-
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0,0,0,0.4);
-            padding: 5px 12px;
-            border-radius: 30px;
-        }
-
-        .user-info button {
-            background: none;
-            border: none;
-            color: var(--dc-gold);
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-
-        .status-online {
-            width: 8px;
-            height: 8px;
-            background: #00ff00;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        .status-offline {
-            width: 8px;
-            height: 8px;
-            background: #ff4444;
-            border-radius: 50%;
-            display: inline-block;
-        }
-
-        /* ========== CONTAINER PRINCIPAL ========== */
-        .dossier-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* ========== CABEÇALHO ========== */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
-            border-bottom: 2px solid var(--dc-red);
-            padding-bottom: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        h1 {
-            font-family: 'Teko', sans-serif;
-            font-size: 2.5rem;
-            line-height: 1;
-            color: #fff;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .subtitle {
-            font-family: 'Teko', sans-serif;
-            font-size: 1.2rem;
-            color: var(--dc-blue);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-        }
-
-        .tier-selector {
-            display: flex;
-            gap: 5px;
-        }
-
-        .tier-btn {
-            width: 40px;
-            height: 40px;
-            background: #000;
-            border: 1px solid var(--border-color);
-            color: var(--text-dim);
-            font-family: 'Teko', sans-serif;
-            font-size: 1.4rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-
-        .tier-btn.active {
-            background: var(--dc-blue);
-            color: #fff;
-            border-color: var(--dc-blue);
-        }
-
-        /* ========== GRIDS RESPONSIVAS ========== */
-        .grid-3, .grid-2 {
-            display: grid;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .grid-3 { grid-template-columns: repeat(3, 1fr); }
-        .grid-2 { grid-template-columns: repeat(2, 1fr); }
-        .grid-6 { 
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            body { padding-top: 120px; }
-            .grid-3 { grid-template-columns: 1fr; }
-            .grid-2 { grid-template-columns: 1fr; }
-            .grid-6 { grid-template-columns: repeat(2, 1fr); }
-            .pax-bar { padding: 10px 5%; }
-            .bar-left, .bar-right { width: 100%; justify-content: center; }
-            h1 { font-size: 1.8rem; }
-        }
-
-        @media (max-width: 480px) {
-            .grid-6 { grid-template-columns: 1fr; }
-            .tier-selector { order: -1; width: 100%; justify-content: center; }
-            header { flex-direction: column; align-items: center; text-align: center; }
-        }
-
-        /* ========== INPUTS E FORMULÁRIOS ========== */
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .input-group label {
-            color: var(--dc-blue);
-            font-size: 0.75rem;
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        input, select {
-            background: rgba(0,0,0,0.3);
-            border: none;
-            border-bottom: 1px solid var(--border-color);
-            color: #fff;
-            font-size: 1rem;
-            padding: 10px;
-            transition: 0.3s;
-            width: 100%;
-            border-radius: 5px;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-bottom-color: var(--dc-blue);
-            background: rgba(0, 120, 240, 0.1);
-        }
-
-        /* ========== TÍTULOS ========== */
-        h2 {
-            font-family: 'Teko', sans-serif;
-            font-size: 1.8rem;
-            color: var(--dc-gold);
-            text-transform: uppercase;
-            border-bottom: 1px solid var(--border-color);
-            margin: 30px 0 15px 0;
-            padding-left: 12px;
-            display: flex;
-            align-items: center;
-        }
-
-        h2::before {
-            content: '';
-            display: inline-block;
-            width: 10px;
-            height: 25px;
-            background-color: var(--dc-gold);
-            margin-right: 12px;
-        }
-
-        /* ========== ATRIBUTOS ========== */
-        .stat-box {
-            background: #080e16;
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            text-align: center;
-            border-radius: 8px;
-        }
-
-        .stat-split {
-            display: flex;
-            gap: 8px;
-            justify-content: center;
-            margin-bottom: 8px;
-        }
-
-        .stat-split input {
-            text-align: center;
-            font-size: 0.9rem;
-            padding: 6px;
-            width: 70px;
-        }
-
-        .stat-total {
-            font-size: 1.6rem;
-            font-family: 'Teko', sans-serif;
-            color: var(--dc-gold);
-            font-weight: bold;
-            display: block;
-        }
-
-        .stat-label-small {
-            font-size: 0.6rem;
-            color: #666;
-            text-transform: uppercase;
-            display: block;
-        }
-
-        .limit-error {
-            border-color: var(--danger) !important;
-            background: rgba(255, 0, 60, 0.1);
-        }
-
-        .limit-text {
-            font-size: 0.6rem;
-            color: var(--danger);
-            display: none;
-        }
-
-        .limit-error .limit-text {
-            display: block;
-        }
-
-        /* ========== CARDS DE PODERES ========== */
-        .add-bar {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            background: rgba(0,0,0,0.2);
-            padding: 12px;
-            border-radius: 8px;
-        }
-
-        .add-bar select {
-            flex: 2;
-            min-width: 200px;
-        }
-
-        .btn-add {
-            background: var(--dc-blue);
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            font-family: 'Teko', sans-serif;
-            font-size: 1.1rem;
-            cursor: pointer;
-            border-radius: 5px;
-            white-space: nowrap;
-        }
-
-        .power-card {
-            background: rgba(255,255,255,0.03);
-            border-left: 4px solid var(--dc-blue);
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            position: relative;
-        }
-
-        .power-card.equip {
-            border-left-color: #fff;
-        }
-
-        .power-header {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-
-        .power-name {
-            font-weight: bold;
-            color: var(--dc-gold);
-            font-size: 1rem;
-        }
-
-        .power-meta {
-            font-size: 0.7rem;
-            color: var(--text-dim);
-        }
-
-        .cost-ctrl {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(0,0,0,0.3);
-            padding: 4px 10px;
-            border-radius: 5px;
-            flex-wrap: wrap;
-        }
-
-        .cost-ctrl input {
-            width: 55px;
-            text-align: center;
-            padding: 4px;
-        }
-
-        .btn-remove {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: none;
-            border: none;
-            color: #ff6666;
-            cursor: pointer;
-            font-size: 1.1rem;
-        }
-
-        .editable-box {
-            background: rgba(0,0,0,0.2);
-            border: 1px solid var(--border-color);
-            padding: 10px;
-            min-height: 60px;
-            border-radius: 5px;
-            font-size: 0.85rem;
-            line-height: 1.4;
-            outline: none;
-            white-space: pre-wrap;
-        }
-
-        .editable-box:focus {
-            border-color: var(--dc-blue);
-        }
-
-        /* ========== STATUS DE COMBATE ========== */
-        .combat-panel {
-            background: rgba(255,255,255,0.03);
-            padding: 15px;
-            border-radius: 8px;
-            border: 1px solid var(--border-color);
-        }
-
-        .condition-btn {
-            background: #1a1a2e;
-            border: 1px solid var(--border-color);
-            color: var(--text-dim);
-            padding: 8px;
-            text-align: center;
-            font-size: 0.75rem;
-            cursor: pointer;
-            border-radius: 5px;
-            width: 100%;
-            margin-bottom: 5px;
-        }
-
-        .condition-btn.active {
-            background: var(--dc-red);
-            color: white;
-            border-color: var(--dc-red);
-        }
-
-        /* ========== BOTÕES FLUTUANTES ========== */
-        .action-bar {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-            z-index: 100;
-        }
-
-        .fab-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            border: none;
-            color: white;
-            font-size: 1.3rem;
-            cursor: pointer;
-            background: var(--dc-blue);
-            transition: 0.2s;
-        }
-
-        .fab-btn:hover {
-            transform: scale(1.05);
-        }
-
-        .btn-print {
-            background: var(--dc-red);
-        }
-
-        /* ========== MODAIS RESPONSIVOS ========== */
-        .login-overlay, .character-select {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .login-modal, .character-modal {
-            background: #0f1926;
-            border: 2px solid var(--dc-gold);
-            border-radius: 15px;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-        }
-
-        .login-modal h2, .character-modal h2 {
-            color: var(--dc-gold);
-            text-align: center;
-            margin-bottom: 20px;
-            font-size: 1.8rem;
-        }
-
-        .login-modal input, .character-modal input {
-            width: 100%;
-            margin-bottom: 15px;
-            background: #1a1a2e;
-            border: 1px solid #333;
-            color: #fff;
-            padding: 12px;
-            border-radius: 5px;
-        }
-
-        .login-modal button, .character-modal button {
-            width: 100%;
-            padding: 12px;
-            background: var(--dc-gold);
-            border: none;
-            font-weight: bold;
-            cursor: pointer;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-
-        .character-item {
-            background: #1a1a2e;
-            border: 1px solid #333;
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 5px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .character-name {
-            color: var(--dc-gold);
-            font-weight: bold;
-        }
-
-        /* ========== IMPRESSÃO ========== */
-        @media print {
-            .pax-bar, .action-bar, .add-bar, .btn-remove, .login-overlay, .character-select {
-                display: none !important;
-            }
-            body {
-                background: white;
-                color: black;
-                padding: 0;
-            }
-            .dossier-container {
-                background: white;
-                border: none;
-            }
-            h1, h2, .subtitle {
-                color: black;
-            }
-            .stat-box, .power-card {
-                border-color: #ccc;
-                background: #f9f9f9;
-            }
-        }
-    </style>
 </head>
 <body>
 
@@ -629,8 +17,8 @@
         <input type="password" id="loginPass" placeholder="SENHA">
         <button onclick="doLogin()">ENTRAR</button>
         <button onclick="showRegister()">CRIAR CONTA</button>
-        <div id="loginError" style="color:#ff4444; text-align:center; margin-top:10px;"></div>
-        <div id="serverStatus" style="text-align:center; margin-top:10px; font-size:0.7rem;"></div>
+        <div id="loginError" class="error-msg"></div>
+        <div id="serverStatus" class="server-status"></div>
     </div>
 </div>
 
@@ -642,17 +30,17 @@
         <input type="password" id="regConfirm" placeholder="CONFIRMAR SENHA">
         <button onclick="doRegister()">REGISTRAR</button>
         <button onclick="showLogin()">VOLTAR</button>
-        <div id="regError" style="color:#ff4444; text-align:center; margin-top:10px;"></div>
+        <div id="regError" class="error-msg"></div>
     </div>
 </div>
 
 <div id="charSelectOverlay" class="character-select" style="display: none;">
     <div class="character-modal">
         <h2>🎭 SELECIONE SEU HERÓI</h2>
-        <div id="characterList" style="max-height:300px; overflow-y:auto; margin-bottom:20px;"></div>
+        <div id="characterList" class="character-list"></div>
         <button onclick="createNewCharacter()">+ NOVO HERÓI</button>
-        <button onclick="showImportModal()" style="background:#2a6b2a;">📥 IMPORTAR CÓDIGO</button>
-        <button onclick="logout()" style="background:#4a0000; margin-top:10px;">🚪 SAIR</button>
+        <button onclick="showImportModal()" class="btn-import">📥 IMPORTAR CÓDIGO</button>
+        <button onclick="logout()" class="btn-logout">🚪 SAIR</button>
     </div>
 </div>
 
@@ -660,7 +48,7 @@
 <div class="pax-bar">
     <div class="bar-left">
         <div class="pax-info"><span class="pax-label">RANK</span> <span id="rankDisplay" class="pax-value">D</span></div>
-        <div class="pax-info"><span class="pax-label">PAX</span> <span id="paxSpentDisplay" class="pax-value">0</span> <span style="color:#666;">/</span> <span id="paxMaxDisplay" class="pax-value">40</span></div>
+        <div class="pax-info"><span class="pax-label">PAX</span> <span id="paxSpentDisplay" class="pax-value">0</span> <span class="pax-separator">/</span> <span id="paxMaxDisplay" class="pax-value">40</span></div>
     </div>
     <div class="bar-right">
         <div class="pax-info"><span class="pax-label">ROTEIRO</span><div class="roteiro-ctrl"><button class="roteiro-btn" onclick="changeRoteiro(-1)">-</button><span id="roteiroVal" class="roteiro-val">0</span><button class="roteiro-btn" onclick="changeRoteiro(1)">+</button></div></div>
@@ -668,9 +56,9 @@
         <div id="userInfo" class="user-info" style="display:none;">
             <span id="userNameDisplay"></span>
             <span id="connectionStatus" class="status-online"></span>
-            <button onclick="showCharacterSelect()">📁</button>
-            <button onclick="saveCurrentToServer()">💾</button>
-            <button onclick="showShareModal()">🔗</button>
+            <button onclick="showCharacterSelect()" class="icon-btn">📁</button>
+            <button onclick="saveCurrentToServer()" class="icon-btn save-btn">💾</button>
+            <button onclick="showShareModal()" class="icon-btn share-btn">🔗</button>
         </div>
     </div>
 </div>
@@ -684,7 +72,7 @@
 
     <div class="grid-3">
         <div class="input-group"><label>IDENTIDADE CIVIL</label><input type="text" id="civilID"></div>
-        <div class="input-group"><label>NOME DE HERÓI</label><input type="text" id="heroName" style="color:#f2ce16; font-weight:bold;"></div>
+        <div class="input-group"><label>NOME DE HERÓI</label><input type="text" id="heroName" class="hero-name"></div>
         <div class="input-group"><label>MENTOR / GRUPO</label><input type="text" id="mentor"></div>
     </div>
 
@@ -732,15 +120,15 @@
     <div class="grid-2">
         <div class="combat-panel">
             <div class="grid-2">
-                <div class="input-group"><label>DETERMINAÇÃO</label><input type="number" id="det" readonly style="color:#ff4444; font-weight:bold;"></div>
+                <div class="input-group"><label>DETERMINAÇÃO</label><input type="number" id="det" readonly class="det-value"></div>
                 <div class="input-group"><label>DEFESA</label><input type="number" id="def" readonly></div>
-                <div class="input-group"><label>RD</label><input type="number" id="rd" value="0"></div>
+                <div class="input-group"><label>REDUÇÃO DANO (RD)</label><input type="number" id="rd" value="0"></div>
                 <div class="input-group"><label>INICIATIVA</label><input type="number" id="init" readonly></div>
             </div>
         </div>
         <div>
             <label>CONDIÇÕES</label>
-            <div>
+            <div class="conditions-grid">
                 <button class="condition-btn" onclick="toggleCond(this)">CANSADO</button>
                 <button class="condition-btn" onclick="toggleCond(this)">ARRANHADO</button>
                 <button class="condition-btn" onclick="toggleCond(this)">FERIDO</button>
@@ -755,219 +143,21 @@
 
     <h2>ANOTAÇÕES</h2>
     <div class="editable-box" contenteditable="true" id="notes"></div>
+
+    <h2>USO DE PONTOS DE ROTEIRO</h2>
+    <div class="editable-box help-text">
+        <b>• GARANTIR SUCESSO:</b> Gaste 1 para sucesso automático<br>
+        <b>• SOBREVIVER:</b> Gaste 1 para anular ataque mortal<br>
+        <b>• REESCREVER:</b> Gaste 1 para item/aliado preparado<br>
+        <b>• INTRODUZIR FATO:</b> Gaste 1 para criar detalhe
+    </div>
 </div>
 
 <div class="action-bar">
-    <button class="fab-btn" onclick="saveSheet()">💾</button>
+    <button class="fab-btn btn-save" onclick="saveSheet()">💾</button>
     <button class="fab-btn btn-print" onclick="window.print()">🖨️</button>
 </div>
 
-<script>
-// ==================== CONFIGURAÇÃO ====================
-const API_URL = 'https://ficha-rpg-2-0.onrender.com/api';
-
-let currentUser = null;
-let currentCharacter = null;
-let currentTierVal = 'D';
-
-const TIERS = {
-    'D': { pax: 40, det: 12, def: 8, attrLimit: 6, powerLimit: 2 },
-    'C': { pax: 60, det: 15, def: 10, attrLimit: 9, powerLimit: 2 },
-    'B': { pax: 80, det: 18, def: 12, attrLimit: 12, powerLimit: 3 },
-    'A': { pax: 100, det: 21, def: 14, attrLimit: 15, powerLimit: 4 },
-    'S': { pax: 120, det: 25, def: 16, attrLimit: 18, powerLimit: 5 }
-};
-
-// ========== FUNÇÕES DA INTERFACE ==========
-function setTier(btn, tier) {
-    document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    currentTierVal = tier;
-    document.getElementById('rankDisplay').innerText = tier;
-    document.getElementById('paxMaxDisplay').innerText = TIERS[tier].pax;
-    document.getElementById('tierValue').value = tier;
-    calcPax();
-}
-
-function toggleCond(btn) { btn.classList.toggle('active'); }
-function changeRoteiro(delta) {
-    let val = parseInt(document.getElementById('roteiroVal').innerText) || 0;
-    val += delta;
-    if (val < 0) val = 0;
-    document.getElementById('roteiroVal').innerText = val;
-}
-function toggleCrisis() { document.getElementById('crisisBtn').classList.toggle('active'); }
-
-// ========== ORIGEM E ARQUÉTIPO ==========
-function applyOriginLogic() {
-    const origin = document.getElementById('origin').value;
-    document.getElementById('pot_bonus').value = 0;
-    document.getElementById('res_bonus').value = 0;
-    document.getElementById('agi_bonus').value = 0;
-    document.getElementById('men_bonus').value = 0;
-    
-    if (origin === 'Kryptoniano') {
-        document.getElementById('pot_bonus').value = 3;
-        document.getElementById('res_bonus').value = 3;
-    } else if (origin === 'Thanagariano') {
-        document.getElementById('agi_bonus').value = 2;
-        document.getElementById('pot_bonus').value = 1;
-    } else if (origin === 'Marciano') {
-        document.getElementById('men_bonus').value = 3;
-    } else if (origin === 'Velocista') {
-        document.getElementById('agi_bonus').value = 3;
-    }
-    calcPax();
-}
-
-function applyArchetypeLogic() { calcPax(); }
-
-// ========== ADICIONAR ITENS ==========
-function addFromSelect() {
-    const select = document.getElementById('powerSelect');
-    const val = select.value;
-    if(!val) return;
-    const parts = val.split('|');
-    createPowerCard(parts[0], parseInt(parts[1]), parts[2], parts[3] || 'grad', 'powers-container', '');
-    select.value = "";
-}
-
-function createPowerCard(name, cost, page, type, containerId, savedDesc = '') {
-    const container = document.getElementById(containerId);
-    const div = document.createElement('div');
-    div.className = 'power-card';
-    div.dataset.base = cost;
-    
-    let costInput = '';
-    if (type === 'grad') {
-        costInput = `Grau: <input type="number" class="p-grade" value="1" min="1" max="5" style="width:50px;" onchange="updatePowerCost(this, ${cost})"> = <span class="p-total">${cost}</span> PAX`;
-    } else {
-        costInput = `<input type="number" class="p-cost" value="${cost}" readonly style="width:50px;"> PAX`;
-    }
-    
-    div.innerHTML = `
-        <button class="btn-remove" onclick="removePower(this)">✕</button>
-        <div class="power-header">
-            <div class="power-name">${name}</div>
-            <div class="power-meta">${page}</div>
-            <div class="cost-ctrl">${costInput}</div>
-        </div>
-        <div class="editable-box p-desc" contenteditable="true" placeholder="Descrição detalhada..."></div>
-        <div class="limit-text">⚠️ LIMITE DE GRAU EXCEDIDO!</div>
-    `;
-    container.appendChild(div);
-    calcPax();
-}
-
-function updatePowerCost(input, base) {
-    const grade = parseInt(input.value) || 1;
-    const total = grade * base;
-    input.parentElement.querySelector('.p-total').innerText = total;
-    calcPax();
-}
-
-function removePower(btn) { btn.parentElement.remove(); calcPax(); }
-
-// ========== CÁLCULO PAX ==========
-function calcPax() {
-    let totalSpent = 0;
-    const tierData = TIERS[currentTierVal];
-    
-    document.querySelectorAll('.stat-box').forEach(box => {
-        const base = parseInt(box.querySelector('.attr-base').value) || 0;
-        const bonus = parseInt(box.querySelector('.attr-bonus').value) || 0;
-        const total = base + bonus;
-        box.querySelector('.stat-total').innerText = total > 0 ? '+' + total : total;
-        if (total > tierData.attrLimit) box.classList.add('limit-error'); else box.classList.remove('limit-error');
-        if (base > 0) totalSpent += (base / 3) * 5;
-    });
-    
-    document.querySelectorAll('.power-card').forEach(card => {
-        let cost = 0;
-        if (card.querySelector('.p-total')) cost = parseInt(card.querySelector('.p-total').innerText) || 0;
-        else if (card.querySelector('.p-cost')) cost = parseInt(card.querySelector('.p-cost').value) || 0;
-        totalSpent += cost;
-    });
-    
-    document.getElementById('paxSpentDisplay').innerText = Math.ceil(totalSpent);
-    const status = document.getElementById('paxStatus');
-    if(totalSpent > tierData.pax) status.innerText = "⚠️ EXCEDIDO!";
-    else status.innerText = "OK";
-    
-    const esp = (parseInt(document.getElementById('esp_base').value)||0) + (parseInt(document.getElementById('esp_bonus').value)||0);
-    const res = (parseInt(document.getElementById('res_base').value)||0) + (parseInt(document.getElementById('res_bonus').value)||0);
-    const agi = (parseInt(document.getElementById('agi_base').value)||0) + (parseInt(document.getElementById('agi_bonus').value)||0);
-    
-    document.getElementById('det').value = tierData.det + esp;
-    document.getElementById('def').value = tierData.def + res;
-    document.getElementById('init').value = agi;
-}
-
-// ========== BACKEND (SIMPLIFICADO) ==========
-async function checkServerConnection() {
-    const statusDiv = document.getElementById('serverStatus');
-    try {
-        const response = await fetch(API_URL.replace('/api', '/'));
-        if (response.ok) {
-            statusDiv.innerHTML = '✅ Servidor conectado';
-            statusDiv.style.color = '#00ff9d';
-            document.getElementById('connectionStatus').className = 'status-online';
-        }
-    } catch {
-        statusDiv.innerHTML = '⚠️ Servidor offline';
-        statusDiv.style.color = '#ff4444';
-        document.getElementById('connectionStatus').className = 'status-offline';
-    }
-}
-
-async function doLogin() {
-    const username = document.getElementById('loginUser').value.trim();
-    const password = document.getElementById('loginPass').value;
-    if (!username || !password) { document.getElementById('loginError').innerText = 'Preencha os campos!'; return; }
-    currentUser = username;
-    document.getElementById('loginOverlay').style.display = 'none';
-    showCharacterSelect();
-}
-
-async function doRegister() {
-    const username = document.getElementById('regUser').value.trim();
-    const password = document.getElementById('regPass').value;
-    const confirm = document.getElementById('regConfirm').value;
-    if (password !== confirm) { document.getElementById('regError').innerText = 'Senhas não conferem!'; return; }
-    document.getElementById('regError').style.color = '#00ff9d';
-    document.getElementById('regError').innerText = '✅ Conta criada!';
-    setTimeout(() => showLogin(), 1500);
-}
-
-function showRegister() { document.getElementById('loginOverlay').style.display = 'none'; document.getElementById('registerOverlay').style.display = 'flex'; }
-function showLogin() { document.getElementById('registerOverlay').style.display = 'none'; document.getElementById('loginOverlay').style.display = 'flex'; }
-function logout() { currentUser = null; location.reload(); }
-
-function showCharacterSelect() {
-    document.getElementById('userNameDisplay').innerText = currentUser;
-    document.getElementById('charSelectOverlay').style.display = 'flex';
-    document.getElementById('dossierContainer').style.display = 'block';
-    document.getElementById('userInfo').style.display = 'flex';
-}
-
-function createNewCharacter() {
-    currentCharacter = 'char_' + Date.now();
-    document.getElementById('charSelectOverlay').style.display = 'none';
-    calcPax();
-}
-
-function saveCurrentToServer() { alert('Personagem salvo!'); }
-function saveSheet() { saveCurrentToServer(); }
-function showShareModal() { alert('Funcionalidade de compartilhamento em breve!'); }
-function showImportModal() { alert('Digite o código de importação:'); }
-
-// Inicialização
-window.onload = () => {
-    checkServerConnection();
-    setInterval(checkServerConnection, 30000);
-    calcPax();
-    document.querySelectorAll('.attr-base, .attr-bonus').forEach(el => el.addEventListener('input', calcPax));
-};
-</script>
+<script src="script.js"></script>
 </body>
 </html>
