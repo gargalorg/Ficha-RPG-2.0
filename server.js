@@ -4,12 +4,12 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express.json());
 
-// Rota raiz (para não dar erro "Cannot GET /")
+// Rota raiz
 app.get('/', (req, res) => {
     res.json({
         message: 'JLU RPG Backend',
@@ -151,23 +151,6 @@ app.get('/api/share/:code', (req, res) => {
     res.json(shareData.data);
 });
 
-// Rota OPTIONS para CORS
-app.options('/api/auth', (req, res) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
-    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-    res.sendStatus(200);
-});
-
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Servidor rodando em http://localhost:${PORT}`);
-    console.log(`📋 Endpoints disponíveis:`);
-    console.log(`   GET    / - Status do servidor`);
-    console.log(`   POST   /api/auth - Login/Registro`);
-    console.log(`   POST   /api/character/:username/:charId - Salvar personagem`);
-    console.log(`   GET    /api/characters/:username - Listar personagens`);
-    console.log(`   GET    /api/character/:username/:charId - Carregar personagem`);
-    console.log(`   DELETE /api/character/:username/:charId - Deletar personagem`);
-    console.log(`   POST   /api/share - Criar código de compartilhamento`);
-    console.log(`   GET    /api/share/:code - Resgatar por código`);
 });
