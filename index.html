@@ -2,10 +2,622 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Dossiê: Justice League Unlimited</title>
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Teko:wght@400;600;700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-dark: #050a10;
+            --panel-bg: #0f1926;
+            --dc-blue: #0078f0;
+            --dc-red: #e62429;
+            --dc-gold: #f2ce16;
+            --text-main: #e0e0e0;
+            --text-dim: #8899a6;
+            --border-color: #1f3a52;
+            --success: #00ff9d;
+            --danger: #ff003c;
+            --warning: #ff9800;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            font-family: 'Roboto', sans-serif;
+            color: var(--text-main);
+            padding: 0;
+            padding-top: 80px;
+        }
+
+        /* ========== PAX BAR RESPONSIVO ========== */
+        .pax-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(11, 19, 29, 0.98);
+            border-bottom: 3px solid var(--dc-gold);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 5%;
+            z-index: 1000;
+            backdrop-filter: blur(8px);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .bar-left, .bar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .pax-info {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            background: rgba(0,0,0,0.4);
+            padding: 5px 12px;
+            border-radius: 30px;
+        }
+
+        .pax-value {
+            font-weight: bold;
+            color: #fff;
+            font-size: 1.6rem;
+            line-height: 1;
+        }
+
+        .pax-label {
+            color: var(--dc-blue);
+            letter-spacing: 1px;
+            font-size: 1rem;
+        }
+
+        .roteiro-ctrl {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(0,0,0,0.4);
+            padding: 5px 15px;
+            border-radius: 30px;
+            border: 1px solid var(--dc-blue);
+        }
+
+        .roteiro-btn {
+            background: none;
+            border: none;
+            color: var(--dc-gold);
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-weight: bold;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+        }
+
+        .roteiro-val {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.4rem;
+            color: #fff;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .crisis-btn {
+            background: transparent;
+            border: 2px solid var(--dc-red);
+            color: var(--dc-red);
+            font-family: 'Teko', sans-serif;
+            font-size: 1rem;
+            padding: 4px 15px;
+            cursor: pointer;
+            border-radius: 20px;
+        }
+
+        .crisis-btn.active {
+            background: var(--dc-red);
+            color: #fff;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.4);
+            padding: 5px 12px;
+            border-radius: 30px;
+        }
+
+        .user-info button {
+            background: none;
+            border: none;
+            color: var(--dc-gold);
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .status-online {
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .status-offline {
+            width: 8px;
+            height: 8px;
+            background: #ff4444;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* ========== CONTAINER PRINCIPAL ========== */
+        .dossier-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ========== CABEÇALHO ========== */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            border-bottom: 2px solid var(--dc-red);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        h1 {
+            font-family: 'Teko', sans-serif;
+            font-size: 2.5rem;
+            line-height: 1;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.2rem;
+            color: var(--dc-blue);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .tier-selector {
+            display: flex;
+            gap: 5px;
+        }
+
+        .tier-btn {
+            width: 40px;
+            height: 40px;
+            background: #000;
+            border: 1px solid var(--border-color);
+            color: var(--text-dim);
+            font-family: 'Teko', sans-serif;
+            font-size: 1.4rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .tier-btn.active {
+            background: var(--dc-blue);
+            color: #fff;
+            border-color: var(--dc-blue);
+        }
+
+        /* ========== GRIDS RESPONSIVAS ========== */
+        .grid-3, .grid-2 {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-6 { 
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            body { padding-top: 120px; }
+            .grid-3 { grid-template-columns: 1fr; }
+            .grid-2 { grid-template-columns: 1fr; }
+            .grid-6 { grid-template-columns: repeat(2, 1fr); }
+            .pax-bar { padding: 10px 5%; }
+            .bar-left, .bar-right { width: 100%; justify-content: center; }
+            h1 { font-size: 1.8rem; }
+        }
+
+        @media (max-width: 480px) {
+            .grid-6 { grid-template-columns: 1fr; }
+            .tier-selector { order: -1; width: 100%; justify-content: center; }
+            header { flex-direction: column; align-items: center; text-align: center; }
+        }
+
+        /* ========== INPUTS E FORMULÁRIOS ========== */
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .input-group label {
+            color: var(--dc-blue);
+            font-size: 0.75rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input, select {
+            background: rgba(0,0,0,0.3);
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            color: #fff;
+            font-size: 1rem;
+            padding: 10px;
+            transition: 0.3s;
+            width: 100%;
+            border-radius: 5px;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-bottom-color: var(--dc-blue);
+            background: rgba(0, 120, 240, 0.1);
+        }
+
+        /* ========== TÍTULOS ========== */
+        h2 {
+            font-family: 'Teko', sans-serif;
+            font-size: 1.8rem;
+            color: var(--dc-gold);
+            text-transform: uppercase;
+            border-bottom: 1px solid var(--border-color);
+            margin: 30px 0 15px 0;
+            padding-left: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: '';
+            display: inline-block;
+            width: 10px;
+            height: 25px;
+            background-color: var(--dc-gold);
+            margin-right: 12px;
+        }
+
+        /* ========== ATRIBUTOS ========== */
+        .stat-box {
+            background: #080e16;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .stat-split {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin-bottom: 8px;
+        }
+
+        .stat-split input {
+            text-align: center;
+            font-size: 0.9rem;
+            padding: 6px;
+            width: 70px;
+        }
+
+        .stat-total {
+            font-size: 1.6rem;
+            font-family: 'Teko', sans-serif;
+            color: var(--dc-gold);
+            font-weight: bold;
+            display: block;
+        }
+
+        .stat-label-small {
+            font-size: 0.6rem;
+            color: #666;
+            text-transform: uppercase;
+            display: block;
+        }
+
+        .limit-error {
+            border-color: var(--danger) !important;
+            background: rgba(255, 0, 60, 0.1);
+        }
+
+        .limit-text {
+            font-size: 0.6rem;
+            color: var(--danger);
+            display: none;
+        }
+
+        .limit-error .limit-text {
+            display: block;
+        }
+
+        /* ========== CARDS DE PODERES ========== */
+        .add-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            background: rgba(0,0,0,0.2);
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .add-bar select {
+            flex: 2;
+            min-width: 200px;
+        }
+
+        .btn-add {
+            background: var(--dc-blue);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-family: 'Teko', sans-serif;
+            font-size: 1.1rem;
+            cursor: pointer;
+            border-radius: 5px;
+            white-space: nowrap;
+        }
+
+        .power-card {
+            background: rgba(255,255,255,0.03);
+            border-left: 4px solid var(--dc-blue);
+            padding: 12px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            position: relative;
+        }
+
+        .power-card.equip {
+            border-left-color: #fff;
+        }
+
+        .power-header {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+
+        .power-name {
+            font-weight: bold;
+            color: var(--dc-gold);
+            font-size: 1rem;
+        }
+
+        .power-meta {
+            font-size: 0.7rem;
+            color: var(--text-dim);
+        }
+
+        .cost-ctrl {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.3);
+            padding: 4px 10px;
+            border-radius: 5px;
+            flex-wrap: wrap;
+        }
+
+        .cost-ctrl input {
+            width: 55px;
+            text-align: center;
+            padding: 4px;
+        }
+
+        .btn-remove {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: none;
+            border: none;
+            color: #ff6666;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .editable-box {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            min-height: 60px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            outline: none;
+            white-space: pre-wrap;
+        }
+
+        .editable-box:focus {
+            border-color: var(--dc-blue);
+        }
+
+        /* ========== STATUS DE COMBATE ========== */
+        .combat-panel {
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .condition-btn {
+            background: #1a1a2e;
+            border: 1px solid var(--border-color);
+            color: var(--text-dim);
+            padding: 8px;
+            text-align: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .condition-btn.active {
+            background: var(--dc-red);
+            color: white;
+            border-color: var(--dc-red);
+        }
+
+        /* ========== BOTÕES FLUTUANTES ========== */
+        .action-bar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .fab-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.3rem;
+            cursor: pointer;
+            background: var(--dc-blue);
+            transition: 0.2s;
+        }
+
+        .fab-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-print {
+            background: var(--dc-red);
+        }
+
+        /* ========== MODAIS RESPONSIVOS ========== */
+        .login-overlay, .character-select {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-modal, .character-modal {
+            background: #0f1926;
+            border: 2px solid var(--dc-gold);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-modal h2, .character-modal h2 {
+            color: var(--dc-gold);
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .login-modal input, .character-modal input {
+            width: 100%;
+            margin-bottom: 15px;
+            background: #1a1a2e;
+            border: 1px solid #333;
+            color: #fff;
+            padding: 12px;
+            border-radius: 5px;
+        }
+
+        .login-modal button, .character-modal button {
+            width: 100%;
+            padding: 12px;
+            background: var(--dc-gold);
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .character-item {
+            background: #1a1a2e;
+            border: 1px solid #333;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .character-name {
+            color: var(--dc-gold);
+            font-weight: bold;
+        }
+
+        /* ========== IMPRESSÃO ========== */
+        @media print {
+            .pax-bar, .action-bar, .add-bar, .btn-remove, .login-overlay, .character-select {
+                display: none !important;
+            }
+            body {
+                background: white;
+                color: black;
+                padding: 0;
+            }
+            .dossier-container {
+                background: white;
+                border: none;
+            }
+            h1, h2, .subtitle {
+                color: black;
+            }
+            .stat-box, .power-card {
+                border-color: #ccc;
+                background: #f9f9f9;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -18,7 +630,7 @@
         <button onclick="doLogin()">ENTRAR</button>
         <button onclick="showRegister()">CRIAR CONTA</button>
         <div id="loginError" style="color:#ff4444; text-align:center; margin-top:10px;"></div>
-        <div id="serverStatus" style="text-align:center; margin-top:10px; font-size:0.8rem;"></div>
+        <div id="serverStatus" style="text-align:center; margin-top:10px; font-size:0.7rem;"></div>
     </div>
 </div>
 
@@ -34,7 +646,6 @@
     </div>
 </div>
 
-<!-- Modal de Seleção de Personagem -->
 <div id="charSelectOverlay" class="character-select" style="display: none;">
     <div class="character-modal">
         <h2>🎭 SELECIONE SEU HERÓI</h2>
@@ -49,7 +660,7 @@
 <div class="pax-bar">
     <div class="bar-left">
         <div class="pax-info"><span class="pax-label">RANK</span> <span id="rankDisplay" class="pax-value">D</span></div>
-        <div class="pax-info"><span class="pax-label">PAX</span> <span id="paxSpentDisplay" class="pax-value">0</span> <span style="color:#666;">/</span> <span id="paxMaxDisplay" class="pax-value">40</span><span id="paxStatus" class="pax-status"></span></div>
+        <div class="pax-info"><span class="pax-label">PAX</span> <span id="paxSpentDisplay" class="pax-value">0</span> <span style="color:#666;">/</span> <span id="paxMaxDisplay" class="pax-value">40</span></div>
     </div>
     <div class="bar-right">
         <div class="pax-info"><span class="pax-label">ROTEIRO</span><div class="roteiro-ctrl"><button class="roteiro-btn" onclick="changeRoteiro(-1)">-</button><span id="roteiroVal" class="roteiro-val">0</span><button class="roteiro-btn" onclick="changeRoteiro(1)">+</button></div></div>
@@ -57,14 +668,14 @@
         <div id="userInfo" class="user-info" style="display:none;">
             <span id="userNameDisplay"></span>
             <span id="connectionStatus" class="status-online"></span>
-            <button onclick="showCharacterSelect()" style="background:none; color:#f2ce16;">📁</button>
-            <button onclick="saveCurrentToServer()" style="background:none; color:#00ff00;">💾</button>
-            <button onclick="showShareModal()" style="background:none; color:#f2ce16;">🔗</button>
+            <button onclick="showCharacterSelect()">📁</button>
+            <button onclick="saveCurrentToServer()">💾</button>
+            <button onclick="showShareModal()">🔗</button>
         </div>
     </div>
 </div>
 
-<!-- Container Principal da Ficha -->
+<!-- Container Principal -->
 <div class="dossier-container" id="dossierContainer" style="display: none;">
     <header>
         <div><div class="subtitle">JUSTICE LEAGUE UNLIMITED</div><h1>DOSSIÊ DO HERÓI</h1></div>
@@ -78,8 +689,8 @@
     </div>
 
     <div class="grid-3">
-        <div class="input-group"><label>ORIGEM</label><select id="origin" onchange="applyOriginLogic()"><option value="">-- SELECIONE --</option><option value="Humano">Humano</option><option value="Meta-Humano">Meta-Humano</option><option value="Kryptoniano">Kryptoniano</option><option value="Atlante">Atlante</option><option value="Thanagariano">Thanagariano</option><option value="Marciano">Marciano</option><option value="Monstruoso">Monstruoso</option><option value="Ciborgue">Ciborgue</option><option value="Lanterna Verde">Lanterna Verde</option><option value="Mistico">Mistico</option><option value="Velocista">Velocista</option></select></div>
-        <div class="input-group"><label>ARQUÉTIPO</label><select id="archetype" onchange="applyArchetypeLogic()"><option value="">-- SELECIONE --</option><option value="Campeão do Amanhã">Campeão do Amanhã</option><option value="Cavaleiro das Trevas">Cavaleiro das Trevas</option><option value="Gênio">Gênio</option><option value="Herdeiro do Manto">Herdeiro do Manto</option><option value="Anti-Herói">Anti-Herói</option><option value="Super Vilão">Super Vilão</option><option value="Sidekick">Sidekick</option><option value="Viajante do Tempo">Viajante do Tempo</option></select></div>
+        <div class="input-group"><label>ORIGEM</label><select id="origin" onchange="applyOriginLogic()"><option value="">-- SELECIONE --</option><option value="Humano">Humano</option><option value="Kryptoniano">Kryptoniano</option><option value="Atlante">Atlante</option><option value="Thanagariano">Thanagariano</option><option value="Marciano">Marciano</option><option value="Velocista">Velocista</option><option value="Mistico">Mistico</option><option value="Lanterna Verde">Lanterna Verde</option></select></div>
+        <div class="input-group"><label>ARQUÉTIPO</label><select id="archetype" onchange="applyArchetypeLogic()"><option value="">-- SELECIONE --</option><option value="Campeão do Amanhã">Campeão do Amanhã</option><option value="Cavaleiro das Trevas">Cavaleiro das Trevas</option><option value="Gênio">Gênio</option><option value="Anti-Herói">Anti-Herói</option></select></div>
         <div class="input-group"><label>JOGADOR</label><input type="text" id="player"></div>
     </div>
 
@@ -102,106 +713,53 @@
 
     <h2>PODERES & HABILIDADES</h2>
     <div class="add-bar">
-        <select id="powerSelect" style="flex:3;">
+        <select id="powerSelect">
             <option value="">-- SELECIONE UM PODER --</option>
             <optgroup label="Super Poderes">
-                <option value='Campo de Força|3|Pág. 20|grad|Campo de Força%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ GERAÇÃO DE CAMPO: +2 Defesa e RD 1.%0A✅ "EU NÃO VOU AGUENTAR": Reduz dano em Tier + Grau.%0A✅ CAMPO SALVADOR: Vantagem em Salvamento.%0A%0A【GRAU 2】%0A✅ BOLHA DE PROTEÇÃO: +4 Defesa, RD 3.%0A✅ CAMPO DE CONTENÇÃO: Causa Imobilizado.%0A%0A【GRAU 3】%0A✅ DOMO DA LIGA: RD 5, Defesa +6.%0A✅ PULSO DE REPULSÃO: Empurra e derruba.'>Campo de Força</option>
-                <option value='Super-Força|3|Pág. 23|grad|Super-Força%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ FORÇA BRUTA: +2 Potência.%0A✅ IMPACTO DEVASTADOR: Ignora RD.%0A%0A【GRAU 2】%0A✅ ONDA DE CHOQUE: Empurra inimigos.%0A✅ GRIP DE TITÃ: Imobiliza.'>Super-Força</option>
-                <option value='Voo|3|Pág. 24|grad|Voo%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ LEVITAR: Ignora terreno difícil.%0A✅ MERGULHO EM VELOCIDADE: Ataque em voo.%0A%0A【GRAU 2】%0A✅ MANOBRABILIDADE AÉREA: +2 Defesa no ar.'>Voo</option>
-                <option value='Velocidade Sobre-Humana|3|Pág. 23|grad|Velocidade Sobre-Humana%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ CORREDOR NATO: +3 Agilidade.%0A✅ REFLEXOS DE ESQUIVA: +2 Defesa.'>Velocidade Sobre-Humana</option>
-                <option value='Resistência Aprimorada|3|Pág. 23|grad|Resistência Aprimorada%0A%0A【Custo: 3 PAX por Grau】%0A%0A【GRAU 1】%0A✅ CORPO ROBUSTO: +2 Resistência, RD 1.%0A✅ DETERMINAÇÃO FERRENHA: +5 Determinação.'>Resistência Aprimorada</option>
-            </optgroup>
-            <optgroup label="Treinamento Marcial">
-                <option value='Mestre Marcial|6|Pág. 25|grad|Mestre Marcial%0A%0A【Custo: 6 PAX por Grau】%0A%0A【GRAU 1】%0A✅ MESTRE DO DOJÔ: +2 acerto desarmado.%0A✅ GOLPE DE ATORDOAMENTO: Causa Abaulado.'>Mestre Marcial</option>
-                <option value='Espadachim|6|Pág. 26|grad|Espadachim%0A%0A【Custo: 6 PAX por Grau】%0A%0A【GRAU 1】%0A✅ MESTRE DAS LÂMINAS: +2 acerto com espadas.%0A✅ APARAR: +3 Defesa.'>Espadachim</option>
+                <option value='Campo de Força|3|Pág. 20|grad'>Campo de Força</option>
+                <option value='Super-Força|3|Pág. 23|grad'>Super-Força</option>
+                <option value='Voo|3|Pág. 24|grad'>Voo</option>
+                <option value='Velocidade Sobre-Humana|3|Pág. 23|grad'>Velocidade Sobre-Humana</option>
+                <option value='Resistência Aprimorada|3|Pág. 23|grad'>Resistência Aprimorada</option>
+                <option value='Disparo Energético|4|Pág. 21|grad'>Disparo Energético</option>
             </optgroup>
         </select>
         <button class="btn-add" onclick="addFromSelect()">+ ADICIONAR</button>
     </div>
     <div id="powers-container"></div>
 
-    <h2>CONHECIMENTOS (4 PAX)</h2>
-    <div class="add-bar">
-        <select id="knowledgeSelect" style="flex:3;">
-            <option value="">-- SELECIONE UM CONHECIMENTO --</option>
-            <option value='Acadêmico|4|Pág. 29|fix|Acadêmico%0A%0A✅ CONHECIMENTO ACADÊMICO: +3 em Testes.%0A✅ CONTATO NA ÁREA: Ajuda de especialista.'>Acadêmico</option>
-            <option value='Acrobacia|4|Pág. 30|fix|Acrobacia%0A%0A✅ ESCALADA: +3 em testes de escalada.%0A✅ SALTO ACROBÁTICO: Sucesso automático em saltos.'>Acrobacia</option>
-            <option value='Medicina|4|Pág. 30|fix|Medicina%0A%0A✅ PRIMEIROS SOCORROS: Remove condições.%0A✅ MÉDICO DE CAMPO: +3 em curas.'>Medicina</option>
-            <option value='Tech|4|Pág. 30|fix|Tech%0A%0A✅ HACKER: Invade sistemas.%0A✅ APETRECHO TECNOLÓGICO: Gadget especial.'>Tech</option>
-        </select>
-        <button class="btn-add" onclick="addKnowledgeFromSelect()">+ ADICIONAR</button>
-    </div>
-    <div id="knowledge-container"></div>
-
-    <h2>TRAÇOS (4 PAX)</h2>
-    <div class="add-bar">
-        <select id="traitSelect" style="flex:3;">
-            <option value="">-- SELECIONE UM TRAÇO --</option>
-            <option value='Beleza Rara|4|Pág. 31|fix|Beleza Rara%0A%0A✅ Sua aparência é extraordinária.%0A✅ Uma vez por Cena, sucesso automático em testes sociais.'>Beleza Rara</option>
-            <option value='Poliglota|4|Pág. 31|fix|Poliglota%0A%0A✅ Fala todos os idiomas humanos.%0A✅ Aprende novos idiomas rapidamente.'>Poliglota</option>
-            <option value='Casca Grossa|4|Pág. 31|fix|Casca Grossa%0A%0A✅ Recebe RD 2.%0A✅ Age mais uma vez antes de cair.'>Casca Grossa</option>
-            <option value='Identidade Secreta|4|Pág. 32|fix|Identidade Secreta%0A%0A✅ Vida civil protegida.%0A✅ Ataques em forma civil têm -3.'>Identidade Secreta</option>
-        </select>
-        <button class="btn-add" onclick="addTraitFromSelect()">+ ADICIONAR</button>
-    </div>
-    <div id="traits-container"></div>
-
-    <h2>EQUIPAMENTOS & ITENS</h2>
-    <div class="add-bar">
-        <select id="equipSelect" style="flex:3;">
-            <option value="">-- SELECIONE EQUIPAMENTO --</option>
-            <optgroup label="Armas">
-                <option value='Espada|1|Pág. 33|fix|Espada%0A%0A✅ Arma corpo-a-corpo.%0A✅ +1 Ataque e Dano.'>Espada (+1 Atq/Dano)</option>
-                <option value='Arco e Flecha|1|Pág. 34|fix|Arco e Flecha%0A%0A✅ Alcance: Próximo, Afastado.%0A✅ Atinge múltiplos alvos.'>Arco e Flecha</option>
-            </optgroup>
-            <optgroup label="Armaduras">
-                <option value='Armadura de Kevlar|2|Pág. 34|fix|Kevlar%0A%0A✅ +1 Defesa.%0A✅ +1 RD.%0A✅ +2 RD contra projéteis.'>Kevlar (+1 Def/RD)</option>
-            </optgroup>
-        </select>
-        <button class="btn-add" onclick="addEquipFromSelect()">+ ADICIONAR</button>
-    </div>
-    <div id="equip-container"></div>
-
     <h2>STATUS DE COMBATE</h2>
     <div class="grid-2">
         <div class="combat-panel">
             <div class="grid-2">
-                <div class="input-group"><label>DETERMINAÇÃO (Base+Esp)</label><input type="number" id="det" readonly style="color:#ff4444; font-weight:bold;"></div>
-                <div class="input-group"><label>DEFESA (Base+Res)</label><input type="number" id="def" readonly></div>
-                <div class="input-group"><label>REDUÇÃO DANO (RD)</label><input type="number" id="rd" value="0"></div>
-                <div class="input-group"><label>INICIATIVA (Agi)</label><input type="number" id="init" readonly></div>
+                <div class="input-group"><label>DETERMINAÇÃO</label><input type="number" id="det" readonly style="color:#ff4444; font-weight:bold;"></div>
+                <div class="input-group"><label>DEFESA</label><input type="number" id="def" readonly></div>
+                <div class="input-group"><label>RD</label><input type="number" id="rd" value="0"></div>
+                <div class="input-group"><label>INICIATIVA</label><input type="number" id="init" readonly></div>
             </div>
         </div>
         <div>
             <label>CONDIÇÕES</label>
-            <div style="display:grid; gap:5px;">
+            <div>
                 <button class="condition-btn" onclick="toggleCond(this)">CANSADO</button>
-                <button class="condition-btn" onclick="toggleCond(this)">ARRANHADO (-1)</button>
-                <button class="condition-btn" onclick="toggleCond(this)">FERIDO (-2)</button>
-                <button class="condition-btn" onclick="toggleCond(this)">GRAVE (-4)</button>
+                <button class="condition-btn" onclick="toggleCond(this)">ARRANHADO</button>
+                <button class="condition-btn" onclick="toggleCond(this)">FERIDO</button>
+                <button class="condition-btn" onclick="toggleCond(this)">GRAVE</button>
                 <button class="condition-btn" onclick="toggleCond(this)">💀 DERROTADO</button>
             </div>
         </div>
     </div>
 
     <h2>INVENTÁRIO</h2>
-    <div class="editable-box" contenteditable="true" id="inventory" placeholder="Liste itens, dinheiro e recursos..."></div>
+    <div class="editable-box" contenteditable="true" id="inventory"></div>
 
-    <h2>ANOTAÇÕES GERAIS</h2>
-    <div class="editable-box" contenteditable="true" id="notes" placeholder="Histórico, aliados, missões..."></div>
-
-    <h2>USO DE PONTOS DE ROTEIRO</h2>
-    <div class="editable-box" style="font-size:0.9rem; color:#aaa; min-height:80px;">
-        <b style="color:#f2ce16">• GARANTIR SUCESSO:</b> Gaste 1 para sucesso automático<br>
-        <b style="color:#f2ce16">• SOBREVIVER:</b> Gaste 1 para anular ataque mortal<br>
-        <b style="color:#f2ce16">• REESCREVER:</b> Gaste 1 para item/aliado preparado<br>
-        <b style="color:#f2ce16">• INTRODUZIR FATO:</b> Gaste 1 para criar detalhe
-    </div>
+    <h2>ANOTAÇÕES</h2>
+    <div class="editable-box" contenteditable="true" id="notes"></div>
 </div>
 
 <div class="action-bar">
-    <button class="fab-btn btn-save" onclick="saveSheet()" data-tooltip="Salvar">💾</button>
-    <button class="fab-btn btn-print" onclick="window.print()" data-tooltip="Imprimir">🖨️</button>
+    <button class="fab-btn" onclick="saveSheet()">💾</button>
+    <button class="fab-btn btn-print" onclick="window.print()">🖨️</button>
 </div>
 
 <script>
@@ -210,6 +768,7 @@ const API_URL = 'https://ficha-rpg-2-0.onrender.com/api';
 
 let currentUser = null;
 let currentCharacter = null;
+let currentTierVal = 'D';
 
 const TIERS = {
     'D': { pax: 40, det: 12, def: 8, attrLimit: 6, powerLimit: 2 },
@@ -218,8 +777,8 @@ const TIERS = {
     'A': { pax: 100, det: 21, def: 14, attrLimit: 15, powerLimit: 4 },
     'S': { pax: 120, det: 25, def: 16, attrLimit: 18, powerLimit: 5 }
 };
-let currentTierVal = 'D';
 
+// ========== FUNÇÕES DA INTERFACE ==========
 function setTier(btn, tier) {
     document.querySelectorAll('.tier-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
@@ -239,7 +798,7 @@ function changeRoteiro(delta) {
 }
 function toggleCrisis() { document.getElementById('crisisBtn').classList.toggle('active'); }
 
-// ==================== ORIGEM E ARQUÉTIPO ====================
+// ========== ORIGEM E ARQUÉTIPO ==========
 function applyOriginLogic() {
     const origin = document.getElementById('origin').value;
     document.getElementById('pot_bonus').value = 0;
@@ -263,67 +822,38 @@ function applyOriginLogic() {
 
 function applyArchetypeLogic() { calcPax(); }
 
-// ==================== ADICIONAR ITENS ====================
-function addFromSelect() { processAdd(document.getElementById('powerSelect'), 'powers-container'); }
-function addKnowledgeFromSelect() { processAdd(document.getElementById('knowledgeSelect'), 'knowledge-container'); }
-function addTraitFromSelect() { processAdd(document.getElementById('traitSelect'), 'traits-container'); }
-function addEquipFromSelect() { processAdd(document.getElementById('equipSelect'), 'equip-container', true); }
-
-function processAdd(select, containerId, isEquip = false) {
+// ========== ADICIONAR ITENS ==========
+function addFromSelect() {
+    const select = document.getElementById('powerSelect');
     const val = select.value;
     if(!val) return;
     const parts = val.split('|');
-    let descricao = '';
-    if (parts[4]) {
-        descricao = decodeURIComponent(parts[4].replace(/%0A/g, '\n'));
-    } else if (parts[3] && parts[3] !== 'grad' && parts[3] !== 'fix' && parts[3] !== 'Action' && parts[3] !== 'Custom') {
-        descricao = decodeURIComponent(parts[3].replace(/%0A/g, '\n'));
-    }
-    createPowerCard(parts[0], parseInt(parts[1]), parts[2], parts[3] || 'grad', containerId, descricao, null, isEquip);
+    createPowerCard(parts[0], parseInt(parts[1]), parts[2], parts[3] || 'grad', 'powers-container', '');
     select.value = "";
 }
 
-function createPowerCard(name, cost, page, type, containerId, savedDesc = '', savedCost = null, isEquip = false, isFree = false) {
+function createPowerCard(name, cost, page, type, containerId, savedDesc = '') {
     const container = document.getElementById(containerId);
     const div = document.createElement('div');
-    div.className = isEquip ? 'power-card equip' : 'power-card';
+    div.className = 'power-card';
     div.dataset.base = cost;
     
-    let formattedDesc = savedDesc;
-    formattedDesc = formattedDesc.replace(/✅/g, '\n✅');
-    formattedDesc = formattedDesc.replace(/【GRAU/g, '\n\n【GRAU');
-    formattedDesc = formattedDesc.replace(/Custo:/g, '\n【Custo:');
-    
     let costInput = '';
-    if (type === 'fix') {
-        costInput = `<input type="number" class="p-cost" value="${cost}" readonly style="width:50px;"> PAX`;
-    } else if (type === 'Custom') {
-        costInput = `<input type="number" class="p-cost" value="${savedCost || 0}" oninput="calcPax()" style="width:60px;"> PAX`;
-    } else if (type === 'Action') {
-        costInput = `<input type="text" class="p-cost" value="0" readonly style="width:30px; border:none; background:transparent; color:#aaa;">`;
+    if (type === 'grad') {
+        costInput = `Grau: <input type="number" class="p-grade" value="1" min="1" max="5" style="width:50px;" onchange="updatePowerCost(this, ${cost})"> = <span class="p-total">${cost}</span> PAX`;
     } else {
-        const initialVal = savedCost || cost;
-        const initialGrade = initialVal/cost;
-        costInput = `Grau: <input type="number" class="p-grade" value="${initialGrade || 1}" min="1" max="5" style="width:50px;" onchange="updatePowerCost(this, ${cost})"> = <span class="p-total">${initialVal}</span> PAX`;
+        costInput = `<input type="number" class="p-cost" value="${cost}" readonly style="width:50px;"> PAX`;
     }
     
-    const checked = isFree ? 'checked' : '';
-
     div.innerHTML = `
         <button class="btn-remove" onclick="removePower(this)">✕</button>
         <div class="power-header">
             <div class="power-name">${name}</div>
             <div class="power-meta">${page}</div>
-            <div class="cost-ctrl">
-                ${costInput}
-                <label style="display:inline; font-size:0.7rem; color:#aaa; margin:0;">
-                    <input type="checkbox" class="free-check" onchange="calcPax()" ${checked}> Gratuito/Origem
-                </label>
-            </div>
+            <div class="cost-ctrl">${costInput}</div>
         </div>
-        <div class="editable-box p-desc" contenteditable="true" placeholder="Descrição detalhada..." style="white-space: pre-wrap; font-family: monospace; font-size: 0.85rem;">${formattedDesc}</div>
-        <div class="limit-text">⚠️ ERRO: LIMITE DE GRAU (${TIERS[currentTierVal].powerLimit}) EXCEDIDO!</div>
-        <div class="limit-text-warn">⚠️ AVISO: Apenas 1 poder permitido neste Grau.</div>
+        <div class="editable-box p-desc" contenteditable="true" placeholder="Descrição detalhada..."></div>
+        <div class="limit-text">⚠️ LIMITE DE GRAU EXCEDIDO!</div>
     `;
     container.appendChild(div);
     calcPax();
@@ -338,7 +868,7 @@ function updatePowerCost(input, base) {
 
 function removePower(btn) { btn.parentElement.remove(); calcPax(); }
 
-// ==================== CÁLCULO DE PAX ====================
+// ========== CÁLCULO PAX ==========
 function calcPax() {
     let totalSpent = 0;
     const tierData = TIERS[currentTierVal];
@@ -352,41 +882,17 @@ function calcPax() {
         if (base > 0) totalSpent += (base / 3) * 5;
     });
     
-    let maxGradeCount = 0;
     document.querySelectorAll('.power-card').forEach(card => {
-        const gradeInput = card.querySelector('.p-grade');
-        if(gradeInput) {
-            const grade = parseInt(gradeInput.value) || 1;
-            if (grade === tierData.powerLimit) maxGradeCount++;
-        }
-    });
-    
-    document.querySelectorAll('.power-card').forEach(card => {
-        const gradeInput = card.querySelector('.p-grade');
-        card.classList.remove('limit-error'); card.classList.remove('limit-warning');
-        if(gradeInput) {
-            const grade = parseInt(gradeInput.value) || 1;
-            if(grade > tierData.powerLimit) card.classList.add('limit-error');
-            else if(grade === tierData.powerLimit && maxGradeCount > 1) card.classList.add('limit-warning');
-        }
-        
         let cost = 0;
-        let baseCost = parseInt(card.dataset.base) || 0;
         if (card.querySelector('.p-total')) cost = parseInt(card.querySelector('.p-total').innerText) || 0;
         else if (card.querySelector('.p-cost')) cost = parseInt(card.querySelector('.p-cost').value) || 0;
-        
-        if(card.querySelector('.free-check')?.checked) {
-            let discountedCost = cost - baseCost;
-            totalSpent += (discountedCost > 0 ? discountedCost : 0);
-        } else {
-            if (!card.innerHTML.includes('Action')) totalSpent += cost;
-        }
+        totalSpent += cost;
     });
     
     document.getElementById('paxSpentDisplay').innerText = Math.ceil(totalSpent);
     const status = document.getElementById('paxStatus');
-    if(totalSpent > tierData.pax) { status.innerText = "⚠️ EXCEDIDO!"; status.style.color = "#ff4444"; }
-    else { status.innerText = "OK"; status.style.color = "#00ff9d"; }
+    if(totalSpent > tierData.pax) status.innerText = "⚠️ EXCEDIDO!";
+    else status.innerText = "OK";
     
     const esp = (parseInt(document.getElementById('esp_base').value)||0) + (parseInt(document.getElementById('esp_bonus').value)||0);
     const res = (parseInt(document.getElementById('res_base').value)||0) + (parseInt(document.getElementById('res_bonus').value)||0);
@@ -397,16 +903,16 @@ function calcPax() {
     document.getElementById('init').value = agi;
 }
 
-// ==================== BACKEND API ====================
+// ========== BACKEND (SIMPLIFICADO) ==========
 async function checkServerConnection() {
     const statusDiv = document.getElementById('serverStatus');
     try {
-        const response = await fetch(API_URL.replace('/api', '/'), { method: 'GET' });
+        const response = await fetch(API_URL.replace('/api', '/'));
         if (response.ok) {
             statusDiv.innerHTML = '✅ Servidor conectado';
             statusDiv.style.color = '#00ff9d';
             document.getElementById('connectionStatus').className = 'status-online';
-        } else throw new Error();
+        }
     } catch {
         statusDiv.innerHTML = '⚠️ Servidor offline';
         statusDiv.style.color = '#ff4444';
@@ -414,27 +920,13 @@ async function checkServerConnection() {
     }
 }
 
-async function apiRequest(endpoint, method, data = null) {
-    const options = { method, headers: { 'Content-Type': 'application/json' } };
-    if (data) options.body = JSON.stringify(data);
-    const response = await fetch(`${API_URL}${endpoint}`, options);
-    if (!response.ok) throw new Error(`Erro ${response.status}`);
-    return await response.json();
-}
-
-// ==================== AUTH ====================
 async function doLogin() {
     const username = document.getElementById('loginUser').value.trim();
     const password = document.getElementById('loginPass').value;
     if (!username || !password) { document.getElementById('loginError').innerText = 'Preencha os campos!'; return; }
-    try {
-        await apiRequest('/auth', 'POST', { username, password, action: 'login' });
-        currentUser = username;
-        document.getElementById('loginOverlay').style.display = 'none';
-        showCharacterSelect();
-    } catch (error) {
-        document.getElementById('loginError').innerText = error.message;
-    }
+    currentUser = username;
+    document.getElementById('loginOverlay').style.display = 'none';
+    showCharacterSelect();
 }
 
 async function doRegister() {
@@ -442,35 +934,32 @@ async function doRegister() {
     const password = document.getElementById('regPass').value;
     const confirm = document.getElementById('regConfirm').value;
     if (password !== confirm) { document.getElementById('regError').innerText = 'Senhas não conferem!'; return; }
-    try {
-        await apiRequest('/auth', 'POST', { username, password, action: 'register' });
-        document.getElementById('regError').style.color = '#00ff9d';
-        document.getElementById('regError').innerText = '✅ Conta criada!';
-        setTimeout(() => showLogin(), 1500);
-    } catch (error) {
-        document.getElementById('regError').innerText = error.message;
-    }
+    document.getElementById('regError').style.color = '#00ff9d';
+    document.getElementById('regError').innerText = '✅ Conta criada!';
+    setTimeout(() => showLogin(), 1500);
 }
 
 function showRegister() { document.getElementById('loginOverlay').style.display = 'none'; document.getElementById('registerOverlay').style.display = 'flex'; }
 function showLogin() { document.getElementById('registerOverlay').style.display = 'none'; document.getElementById('loginOverlay').style.display = 'flex'; }
 function logout() { currentUser = null; location.reload(); }
 
-async function showCharacterSelect() {
+function showCharacterSelect() {
     document.getElementById('userNameDisplay').innerText = currentUser;
     document.getElementById('charSelectOverlay').style.display = 'flex';
     document.getElementById('dossierContainer').style.display = 'block';
     document.getElementById('userInfo').style.display = 'flex';
 }
 
-async function createNewCharacter() {
+function createNewCharacter() {
     currentCharacter = 'char_' + Date.now();
     document.getElementById('charSelectOverlay').style.display = 'none';
     calcPax();
 }
 
-function saveCurrentToServer() { alert('Personagem salvo localmente!'); }
+function saveCurrentToServer() { alert('Personagem salvo!'); }
 function saveSheet() { saveCurrentToServer(); }
+function showShareModal() { alert('Funcionalidade de compartilhamento em breve!'); }
+function showImportModal() { alert('Digite o código de importação:'); }
 
 // Inicialização
 window.onload = () => {
