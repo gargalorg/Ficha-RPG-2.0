@@ -48,7 +48,7 @@
 <div class="pax-bar">
     <div class="bar-left">
         <div class="pax-info"><span class="pax-label">RANK</span> <span id="rankDisplay" class="pax-value">D</span></div>
-        <div class="pax-info"><span class="pax-label">PAX</span> <span id="paxSpentDisplay" class="pax-value">0</span> <span class="pax-separator">/</span> <span id="paxMaxDisplay" class="pax-value">40</span></div>
+        <div class="pax-info"><span class="pax-label">PAX</span> <span id="paxSpentDisplay" class="pax-value">0</span> <span class="pax-separator">/</span> <span id="paxMaxDisplay" class="pax-value">40</span><span id="paxStatus" class="pax-status"></span></div>
     </div>
     <div class="bar-right">
         <div class="pax-info"><span class="pax-label">ROTEIRO</span><div class="roteiro-ctrl"><button class="roteiro-btn" onclick="changeRoteiro(-1)">-</button><span id="roteiroVal" class="roteiro-val">0</span><button class="roteiro-btn" onclick="changeRoteiro(1)">+</button></div></div>
@@ -63,7 +63,7 @@
     </div>
 </div>
 
-<!-- Container Principal -->
+<!-- Container Principal da Ficha -->
 <div class="dossier-container" id="dossierContainer" style="display: none;">
     <header>
         <div><div class="subtitle">JUSTICE LEAGUE UNLIMITED</div><h1>DOSSIÊ DO HERÓI</h1></div>
@@ -77,8 +77,31 @@
     </div>
 
     <div class="grid-3">
-        <div class="input-group"><label>ORIGEM</label><select id="origin" onchange="applyOriginLogic()"><option value="">-- SELECIONE --</option><option value="Humano">Humano</option><option value="Kryptoniano">Kryptoniano</option><option value="Atlante">Atlante</option><option value="Thanagariano">Thanagariano</option><option value="Marciano">Marciano</option><option value="Velocista">Velocista</option><option value="Mistico">Mistico</option><option value="Lanterna Verde">Lanterna Verde</option></select></div>
-        <div class="input-group"><label>ARQUÉTIPO</label><select id="archetype" onchange="applyArchetypeLogic()"><option value="">-- SELECIONE --</option><option value="Campeão do Amanhã">Campeão do Amanhã</option><option value="Cavaleiro das Trevas">Cavaleiro das Trevas</option><option value="Gênio">Gênio</option><option value="Anti-Herói">Anti-Herói</option></select></div>
+        <div class="input-group"><label>ORIGEM</label><select id="origin" onchange="applyOriginLogic()">
+            <option value="">-- SELECIONE --</option>
+            <option value="Humano">Humano</option>
+            <option value="Meta-Humano">Meta-Humano</option>
+            <option value="Kryptoniano">Kryptoniano</option>
+            <option value="Atlante">Atlante</option>
+            <option value="Thanagariano">Thanagariano</option>
+            <option value="Marciano">Marciano</option>
+            <option value="Monstruoso">Monstruoso</option>
+            <option value="Ciborgue">Ciborgue</option>
+            <option value="Lanterna Verde">Lanterna Verde</option>
+            <option value="Mistico">Mistico</option>
+            <option value="Velocista">Velocista</option>
+        </select></div>
+        <div class="input-group"><label>ARQUÉTIPO</label><select id="archetype" onchange="applyArchetypeLogic()">
+            <option value="">-- SELECIONE --</option>
+            <option value="Campeão do Amanhã">Campeão do Amanhã</option>
+            <option value="Cavaleiro das Trevas">Cavaleiro das Trevas</option>
+            <option value="Gênio">Gênio</option>
+            <option value="Herdeiro do Manto">Herdeiro do Manto</option>
+            <option value="Anti-Herói">Anti-Herói</option>
+            <option value="Super Vilão">Super Vilão</option>
+            <option value="Sidekick">Sidekick</option>
+            <option value="Viajante do Tempo">Viajante do Tempo</option>
+        </select></div>
         <div class="input-group"><label>JOGADOR</label><input type="text" id="player"></div>
     </div>
 
@@ -110,39 +133,124 @@
                 <option value='Velocidade Sobre-Humana|3|Pág. 23|grad'>Velocidade Sobre-Humana</option>
                 <option value='Resistência Aprimorada|3|Pág. 23|grad'>Resistência Aprimorada</option>
                 <option value='Disparo Energético|4|Pág. 21|grad'>Disparo Energético</option>
+                <option value='Garras/Presas|3|Pág. 20|grad'>Garras/Presas</option>
+                <option value='Telepatia|4|Pág. 22|grad'>Telepatia</option>
+                <option value='Intangibilidade|4|Pág. 22|grad'>Intangibilidade</option>
+                <option value='Metamorfo|5|Pág. 22|grad'>Metamorfo</option>
+                <option value='Manipulação Elemental|3|Pág. 22|grad'>Manipulação Elemental</option>
+                <option value='Comunicação Animal|3|Pág. 22|grad'>Comunicação Animal</option>
+                <option value='Força de Aceleração|6|Pág. 21|grad'>Força de Aceleração</option>
+                <option value='Construtos de Luz|5|Pág. 24|grad'>Construtos de Luz</option>
+            </optgroup>
+            <optgroup label="Treinamento Marcial">
+                <option value='Mestre Marcial|6|Pág. 25|grad'>Mestre Marcial</option>
+                <option value='Espadachim|6|Pág. 26|grad'>Espadachim</option>
+                <option value='Atirador|6|Pág. 26|grad'>Atirador</option>
             </optgroup>
         </select>
         <button class="btn-add" onclick="addFromSelect()">+ ADICIONAR</button>
     </div>
     <div id="powers-container"></div>
 
+    <h2>CONHECIMENTOS (4 PAX)</h2>
+    <div class="add-bar">
+        <select id="knowledgeSelect">
+            <option value="">-- SELECIONE UM CONHECIMENTO --</option>
+            <option value='Acadêmico|4|Pág. 29|fix'>Acadêmico</option>
+            <option value='Acrobacia|4|Pág. 30|fix'>Acrobacia</option>
+            <option value='Medicina|4|Pág. 30|fix'>Medicina</option>
+            <option value='Subterfúgio|4|Pág. 30|fix'>Subterfúgio</option>
+            <option value='Tech|4|Pág. 30|fix'>Tech</option>
+        </select>
+        <button class="btn-add" onclick="addKnowledgeFromSelect()">+ ADICIONAR</button>
+    </div>
+    <div id="knowledge-container"></div>
+
+    <h2>TRAÇOS (4 PAX)</h2>
+    <div class="add-bar">
+        <select id="traitSelect">
+            <option value="">-- SELECIONE UM TRAÇO --</option>
+            <option value='Beleza Rara|4|Pág. 31|fix'>Beleza Rara</option>
+            <option value='Poliglota|4|Pág. 31|fix'>Poliglota</option>
+            <option value='Contato Confiável|4|Pág. 31|fix'>Contato Confiável</option>
+            <option value='Casca Grossa|4|Pág. 31|fix'>Casca Grossa</option>
+            <option value='Frase de Efeito|4|Pág. 31|fix'>Frase de Efeito</option>
+            <option value='Gadgets de Bolso|4|Pág. 31|fix'>Gadgets de Bolso</option>
+            <option value='Voz da Multidão|4|Pág. 32|fix'>Voz da Multidão</option>
+            <option value='Influencer|4|Pág. 32|fix'>Influencer</option>
+            <option value='Identidade Secreta|4|Pág. 32|fix'>Identidade Secreta</option>
+            <option value='Dupla Dinâmica|4|Pág. 32|fix'>Dupla Dinâmica</option>
+            <option value='Filiação|4|Pág. 32|fix'>Filiação</option>
+        </select>
+        <button class="btn-add" onclick="addTraitFromSelect()">+ ADICIONAR</button>
+    </div>
+    <div id="traits-container"></div>
+
+    <h2>EQUIPAMENTOS & ITENS</h2>
+    <div class="add-bar">
+        <select id="equipSelect">
+            <option value="">-- SELECIONE EQUIPAMENTO --</option>
+            <optgroup label="Armas Marciais (1 PAX)">
+                <option value='Espada|1|Pág. 33|fix'>Espada (+1 Atq/Dano)</option>
+                <option value='Bastão|1|Pág. 33|fix'>Bastão (+1 Atq/Dano)</option>
+                <option value='Faca|1|Pág. 33|fix'>Faca (+1 Atq/Dano)</option>
+                <option value='Tridente|1|Pág. 33|fix'>Tridente (+1 Atq/Dano)</option>
+                <option value='Clava|1|Pág. 33|fix'>Clava (+1 Atq/Dano)</option>
+            </optgroup>
+            <optgroup label="Armas à Distância (1 PAX)">
+                <option value='Arco e Flecha|1|Pág. 34|fix'>Arco e Flecha</option>
+                <option value='Pistola|1|Pág. 34|fix'>Pistola</option>
+                <option value='Rifle de Precisão|1|Pág. 34|fix'>Rifle de Precisão</option>
+                <option value='Metralhadora|1|Pág. 34|fix'>Metralhadora</option>
+            </optgroup>
+            <optgroup label="Armaduras">
+                <option value='Armadura de Promethium|3|Pág. 34|fix'>Promethium (+2 Def/RD)</option>
+                <option value='Armadura de Amazonium|4|Pág. 34|fix'>Amazonium (+1 Def/Agi/RD)</option>
+                <option value='Armadura de Metal Enésimo|6|Pág. 34|fix'>Metal Enésimo (+1 Def/RD, Voo)</option>
+                <option value='Traje de Kevlar|2|Pág. 34|fix'>Kevlar (+1 Def/RD)</option>
+                <option value='Armadura de Apokolips|5|Pág. 34|fix'>Apokolips (+3 Def/RD, -2 Agi)</option>
+            </optgroup>
+            <optgroup label="Apetrechos (1 PAX)">
+                <option value='Bomba de Fumaça|1|Pág. 35|fix'>Bomba de Fumaça</option>
+                <option value='Arma de Gancho|1|Pág. 35|fix'>Arma de Gancho</option>
+                <option value='Spray Curativo|1|Pág. 35|fix'>Spray Curativo</option>
+                <option value='Rastreador|1|Pág. 35|fix'>Rastreador</option>
+                <option value='Respirador|1|Pág. 35|fix'>Respirador</option>
+                <option value='Máscara Alteradora|1|Pág. 35|fix'>Máscara Alteradora</option>
+                <option value='P.E.M.|1|Pág. 35|fix'>P.E.M.</option>
+            </optgroup>
+        </select>
+        <button class="btn-add" onclick="addEquipFromSelect()">+ ADICIONAR</button>
+    </div>
+    <div id="equip-container"></div>
+
     <h2>STATUS DE COMBATE</h2>
     <div class="grid-2">
         <div class="combat-panel">
             <div class="grid-2">
-                <div class="input-group"><label>DETERMINAÇÃO</label><input type="number" id="det" readonly class="det-value"></div>
-                <div class="input-group"><label>DEFESA</label><input type="number" id="def" readonly></div>
+                <div class="input-group"><label>DETERMINAÇÃO (Base+Esp)</label><input type="number" id="det" readonly class="det-value"></div>
+                <div class="input-group"><label>DEFESA (Base+Res)</label><input type="number" id="def" readonly></div>
                 <div class="input-group"><label>REDUÇÃO DANO (RD)</label><input type="number" id="rd" value="0"></div>
-                <div class="input-group"><label>INICIATIVA</label><input type="number" id="init" readonly></div>
+                <div class="input-group"><label>INICIATIVA (Agi)</label><input type="number" id="init" readonly></div>
             </div>
         </div>
         <div>
             <label>CONDIÇÕES</label>
             <div class="conditions-grid">
                 <button class="condition-btn" onclick="toggleCond(this)">CANSADO</button>
-                <button class="condition-btn" onclick="toggleCond(this)">ARRANHADO</button>
-                <button class="condition-btn" onclick="toggleCond(this)">FERIDO</button>
-                <button class="condition-btn" onclick="toggleCond(this)">GRAVE</button>
+                <button class="condition-btn" onclick="toggleCond(this)">ARRANHADO (-1)</button>
+                <button class="condition-btn" onclick="toggleCond(this)">FERIDO (-2)</button>
+                <button class="condition-btn" onclick="toggleCond(this)">GRAVE (-4)</button>
                 <button class="condition-btn" onclick="toggleCond(this)">💀 DERROTADO</button>
             </div>
         </div>
     </div>
 
     <h2>INVENTÁRIO</h2>
-    <div class="editable-box" contenteditable="true" id="inventory"></div>
+    <div class="editable-box" contenteditable="true" id="inventory" placeholder="Liste itens, dinheiro e recursos..."></div>
 
-    <h2>ANOTAÇÕES</h2>
-    <div class="editable-box" contenteditable="true" id="notes"></div>
+    <h2>ANOTAÇÕES GERAIS</h2>
+    <div class="editable-box" contenteditable="true" id="notes" placeholder="Histórico, aliados, missões..."></div>
 
     <h2>USO DE PONTOS DE ROTEIRO</h2>
     <div class="editable-box help-text">
@@ -158,6 +266,7 @@
     <button class="fab-btn btn-print" onclick="window.print()">🖨️</button>
 </div>
 
+<script src="powers.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
