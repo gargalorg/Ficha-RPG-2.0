@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dossiê: Justice League Unlimited</title>
-    <link rel="stylesheet" href="style.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #050a10; font-family: 'Roboto', sans-serif; padding: 20px; color: #e0e0e0; padding-top: 100px; }
         .pax-bar { position: fixed; top: 0; left: 0; right: 0; height: 80px; background: rgba(11, 19, 29, 0.98); border-bottom: 3px solid #f2ce16; display: flex; align-items: center; justify-content: space-between; padding: 0 5%; z-index: 1000; }
         .bar-left, .bar-right { display: flex; align-items: center; gap: 30px; }
-        .pax-info { font-family: 'Courier New', monospace; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; background: #00000088; padding: 5px 15px; border-radius: 8px; }
+        .pax-info { font-family: monospace; font-size: 1.2rem; display: flex; align-items: center; gap: 10px; background: #00000088; padding: 5px 15px; border-radius: 8px; }
         .pax-value { font-weight: bold; color: #f2ce16; font-size: 1.8rem; }
         .roteiro-ctrl { display: flex; gap: 10px; align-items: center; }
         .roteiro-btn { background: #2a2a3e; border: 1px solid #f2ce16; color: #f2ce16; width: 30px; height: 30px; cursor: pointer; border-radius: 5px; }
@@ -55,7 +54,6 @@
         .user-info { display: flex; align-items: center; gap: 10px; background: #1a1a2e; padding: 5px 15px; border-radius: 20px; }
         .status-online { width: 10px; height: 10px; background: #00ff00; border-radius: 50%; display: inline-block; }
         .status-offline { width: 10px; height: 10px; background: #ff4444; border-radius: 50%; display: inline-block; }
-        .share-code { background: #1a1a2e; padding: 15px; text-align: center; font-size: 1.3rem; letter-spacing: 2px; margin: 15px 0; border-radius: 8px; }
         @media (max-width: 800px) { .grid-3, .grid-2 { grid-template-columns: 1fr; } .grid-6 { grid-template-columns: repeat(2,1fr); } }
     </style>
 </head>
@@ -167,46 +165,86 @@
 
 <script>
 // ==================== CONFIGURAÇÃO ====================
-// USE A URL DO SEU SERVIDOR AQUI!
+// ⚠️ ALTERE ESTA URL PARA A URL DO SEU BACKEND ⚠️
 const API_URL = 'https://shiny-winner-7qqqrrg6pjwhr7g6-3000.app.github.dev/api';
 
 let currentUser = null;
 let currentCharacter = null;
-let isOnline = true;
 
-// Verificar conexão
+// Verificar conexão com o servidor
 async function checkServerConnection() {
+    const statusDiv = document.getElementById('serverStatus');
+    const connectionSpan = document.getElementById('connectionStatus');
+    
     try {
-        const response = await fetch(`${API_URL.replace('/api', '')}/`);
-        isOnline = response.ok;
-        document.getElementById('serverStatus').innerHTML = isOnline ? '✅ Servidor conectado' : '⚠️ Servidor offline';
-        const statusSpan = document.getElementById('connectionStatus');
-        if (statusSpan) statusSpan.className = isOnline ? 'status-online' : 'status-offline';
-    } catch {
-        isOnline = false;
-        document.getElementById('serverStatus').innerHTML = '⚠️ Servidor offline';
-        const statusSpan = document.getElementById('connectionStatus');
-        if (statusSpan) statusSpan.className = 'status-offline';
+        // Tenta acessar a raiz do servidor
+        const response = await fetch(API_URL.replace('/api', '/'), {
+            method: 'GET',
+            mode: 'cors'
+        });
+        
+        if (response.ok) {
+            statusDiv.innerHTML = '✅ Servidor conectado';
+            statusDiv.style.color = '#00ff9d';
+            if (connectionSpan) connectionSpan.className = 'status-online';
+            console.log('✅ Servidor online');
+        } else {
+            throw new Error('Servidor não respondeu');
+        }
+    } catch (error) {
+        statusDiv.innerHTML = '⚠️ Servidor offline - Verifique se o backend está rodando';
+        statusDiv.style.color = '#ff4444';
+        if (connectionSpan) connectionSpan.className = 'status-offline';
+        console.error('❌ Erro de conexão:', error);
     }
 }
 
-// API Request
+// API Request com timeout
 async function apiRequest(endpoint, method, data = null) {
-    const options = { method, headers: { 'Content-Type': 'application/json' } };
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 10000);
+    
+    const options = {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+        mode: 'cors'
+    };
     if (data) options.body = JSON.stringify(data);
     
-    const response = await fetch(`${API_URL}${endpoint}`, options);
-    if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Erro na requisição');
+    try {
+        const response = await fetch(`${API_URL}${endpoint}`, options);
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+            let errorMsg = `Erro ${response.status}`;
+            try {
+                const errorData = await response.json();
+                errorMsg = errorData.error || errorMsg;
+            } catch(e) {}
+            throw new Error(errorMsg);
+        }
+        return await response.json();
+    } catch (error) {
+        clearTimeout(timeoutId);
+        if (error.name === 'AbortError') {
+            throw new Error('Timeout - Servidor não respondeu');
+        }
+        throw error;
     }
-    return await response.json();
 }
 
 // ==================== AUTH ====================
 async function doLogin() {
     const username = document.getElementById('loginUser').value.trim();
     const password = document.getElementById('loginPass').value;
+    
+    if (!username || !password) {
+        document.getElementById('loginError').innerText = 'Preencha todos os campos!';
+        return;
+    }
+    
+    document.getElementById('loginError').innerText = 'Conectando...';
     
     try {
         const result = await apiRequest('/auth', 'POST', { username, password, action: 'login' });
@@ -216,6 +254,7 @@ async function doLogin() {
         showCharacterSelect();
     } catch (error) {
         document.getElementById('loginError').innerText = error.message;
+        console.error('Login error:', error);
     }
 }
 
@@ -224,17 +263,25 @@ async function doRegister() {
     const password = document.getElementById('regPass').value;
     const confirm = document.getElementById('regConfirm').value;
     
+    if (!username || !password) {
+        document.getElementById('regError').innerText = 'Preencha todos os campos!';
+        return;
+    }
+    
     if (password !== confirm) {
         document.getElementById('regError').innerText = 'Senhas não conferem!';
         return;
     }
     
+    document.getElementById('regError').innerText = 'Criando conta...';
+    
     try {
         await apiRequest('/auth', 'POST', { username, password, action: 'register' });
         document.getElementById('regError').style.color = '#00ff9d';
-        document.getElementById('regError').innerText = 'Conta criada! Faça login.';
+        document.getElementById('regError').innerText = '✅ Conta criada! Faça login.';
         setTimeout(() => showLogin(), 1500);
     } catch (error) {
+        document.getElementById('regError').style.color = '#ff4444';
         document.getElementById('regError').innerText = error.message;
     }
 }
@@ -262,7 +309,8 @@ function logout() {
 async function loadCharacters() {
     try {
         return await apiRequest(`/characters/${currentUser}`, 'GET');
-    } catch {
+    } catch (error) {
+        console.error('Erro ao carregar personagens:', error);
         return {};
     }
 }
@@ -288,9 +336,11 @@ async function showCharacterSelect() {
             div.className = 'character-item';
             div.innerHTML = `
                 <div><div class="character-name">${data.heroName || 'Herói'}</div><div style="font-size:0.8rem;">Tier ${data.tier || 'D'}</div></div>
-                <div><button onclick="loadCharacter('${id}')" style="background:#2a6b2a; margin-right:5px;">▶</button>
-                <button onclick="deleteCharacter('${id}')" style="background:#4a0000;">🗑</button>
-                <button onclick="shareExistingCharacter('${id}')" style="background:#f2ce16; color:#000;">🔗</button></div>
+                <div>
+                    <button onclick="loadCharacter('${id}')" style="background:#2a6b2a; margin-right:5px; padding:5px 10px; border:none; border-radius:3px; cursor:pointer;">▶</button>
+                    <button onclick="deleteCharacter('${id}')" style="background:#4a0000; margin-right:5px; padding:5px 10px; border:none; border-radius:3px; cursor:pointer;">🗑</button>
+                    <button onclick="shareExistingCharacter('${id}')" style="background:#f2ce16; color:#000; padding:5px 10px; border:none; border-radius:3px; cursor:pointer;">🔗</button>
+                </div>
             `;
             container.appendChild(div);
         }
@@ -404,9 +454,9 @@ async function saveCurrentToServer() {
     
     try {
         await saveCharacter(currentCharacter, sheetData);
-        alert('Personagem salvo com sucesso!');
+        alert('✅ Personagem salvo com sucesso!');
     } catch (error) {
-        alert('Erro ao salvar: ' + error.message);
+        alert('❌ Erro ao salvar: ' + error.message);
     }
 }
 
@@ -422,7 +472,7 @@ async function shareExistingCharacter(charId) {
     try {
         const charData = await apiRequest(`/character/${currentUser}/${charId}`, 'GET');
         const result = await apiRequest('/share', 'POST', { characterData: charData });
-        alert(`Código: ${result.shareCode}\nCompartilhe com seus amigos!`);
+        alert(`🔗 Código: ${result.shareCode}\n\nCompartilhe com seus amigos!`);
         navigator.clipboard.writeText(result.shareCode);
     } catch (error) {
         alert('Erro ao compartilhar: ' + error.message);
@@ -444,15 +494,15 @@ async function importByCode(shareCode) {
         const charData = await apiRequest(`/share/${shareCode}`, 'GET');
         const newId = 'import_' + Date.now();
         await saveCharacter(newId, charData);
-        alert('Herói importado com sucesso!');
+        alert('✅ Herói importado com sucesso!');
         showCharacterSelect();
     } catch (error) {
-        alert('Código inválido ou expirado!');
+        alert('❌ Código inválido ou expirado!');
     }
 }
 
 // ==================== FUNÇÕES DA FICHA ====================
-const TIERS = {
+const TIERS_DATA = {
     'D': { det: 12, def: 8 }, 'C': { det: 15, def: 10 },
     'B': { det: 18, def: 12 }, 'A': { det: 21, def: 14 },
     'S': { det: 25, def: 16 }
@@ -477,7 +527,7 @@ function toggleCrisis() { document.getElementById('crisisBtn').classList.toggle(
 
 function calcStats() {
     const tier = document.getElementById('tierValue').value;
-    const tierData = TIERS[tier] || TIERS['D'];
+    const tierData = TIERS_DATA[tier] || TIERS_DATA['D'];
     
     const esp = (parseInt(document.getElementById('esp_base').value)||0) + (parseInt(document.getElementById('esp_bonus').value)||0);
     const res = (parseInt(document.getElementById('res_base').value)||0) + (parseInt(document.getElementById('res_bonus').value)||0);
